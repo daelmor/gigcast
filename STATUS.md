@@ -1,50 +1,54 @@
 # Status
 
-Last updated: 2026-10-30 (end of M3).
+Last updated: 2026-10-30 (end of M4 and M5).
 
 ## Deployed
 
-- **Live demo:** https://gigcast.gentlegrass-9cbc951b.eastus.azurecontainerapps.io (Azure Container Apps, subscription "Fegora", resource group `rg-gigcast`, one always-on replica). Postgres on Neon (project `gigcast`, branch `production`). Claude on Vertex AI in Google Cloud project `n1-data` through the mounted service-account file.
-- Deploy with `./deploy/azure-container-apps.sh` after loading the local env file; `docs/deploy.md` has every setting. The first deployment (M2 image) was verified live with a real brief started through the public API: Ricardo Arjona in Guatemala City, status complete, 22 tool calls and 22 Qloo calls (fresh Neon database, so no cache hits), 0 of 18 grounded picks downgraded, 1,757 heatmap cells, locality matched by id, 385 s end to end on Vertex AI from Azure.
-- The M3 image goes out by rerunning the same script.
+- **Live demo:** https://gigcast.gentlegrass-9cbc951b.eastus.azurecontainerapps.io (Azure Container Apps, subscription "Fegora", resource group `rg-gigcast`, one always-on replica). Postgres on Neon (project `gigcast`, branch `production`). Claude on Vertex AI in Google Cloud project `n1-data` through the mounted service-account file. A scheduled job (`gigcast-ingest`, every six hours) refreshes the news store through `POST /api/jobs/ingest`.
+- Deploy with `./deploy/azure-container-apps.sh` after loading the local env file; `docs/deploy.md` explains every setting.
+- Demo mode: the landing's "See a finished brief" cards open the newest complete brief of each featured market; every Qloo response behind them is cached in Postgres, so a rerun of the same inputs is fast even if the hackathon key slows down (`QLOO_MODE=replay` serves the cache only if the key dies).
 
-## Milestone: M3 Counterfactual and drafts — done
+## Milestones M4 Risk layer and M5 Ship — done
 
-### What works
+### What works (M4)
 
-- **Counterfactual run.** Every brief now runs a second, cheaper call in parallel: the same lineup and sponsor question with every data tool removed (`emit_counterfactual` only, effort medium). The server matches each LLM-only name against the entities Qloo returned in the main run and against the grounded picks, and the document shows the two columns side by side under "Would this work without Qloo?" with a summary ("1 of 3 LLM-only sponsor picks appear in Qloo's results, 1 also chosen by the grounded run"), confidence pills, and per-pick checks ("also picked by the grounded run" / "in Qloo's results" / "not in Qloo's results for this run"). LLM-only picks are never labeled grounded. The Markdown export has the same section as a table. Older briefs show a one-line note instead.
-- **Sponsor outreach drafts page** at `/brief/:id/drafts`: every draft in full with copy buttons and `mailto:` links that open the promoter's own email client; a banner states nothing is ever sent by gigcast. Linked from the sponsors section and the brief toolbar.
-- **Pricing evidence.** The pricing section shows the price-level distribution of the places Qloo returned near the heat (four `$` bars) and the heatmap price-level quantiles, the proxy behind the suggested tiers.
-- **Print to PDF.** Print styles hide the chrome and the table of contents, break pages per section, keep cards whole, open every collapsed block (drafts, trace) before printing, and the MapLibre canvas keeps its drawing buffer so the map prints. Verified with Chromium's print emulation and PDF export.
-- **Streaming across runs.** SSE ids are now the event storage ids, monotonic across the main and counterfactual runs; the client dedupes by run and sequence and resumes with one `Last-Event-ID`. The live page shows the main run's trace and a status line for the LLM-only comparison.
-- Quality gates: `pnpm check` 0 errors, `pnpm lint` clean, `pnpm test` 197 unit tests, `pnpm test:e2e` 4 Playwright tests (the happy path now also asserts the counterfactual panel).
+- **News ingestion** (`src/lib/server/risk/ingest.ts`): Google News RSS searches per market in Spanish and English (events, security, politics and health, weather and transport, plus artist and venue queries) and the market's local outlets, deduplicated by canonical url and title, stored as headline, snippet, source, date and link. First live run for Guatemala City: 10 of 10 feeds, 457 items seen, 202 stored.
+- **Classification** on `claude-haiku-4-5` in batches of 15 with one structured tool call: category (eleven categories), severity 1 to 5, affected entities, time horizon, confidence, one-line "so what". Irrelevant items are kept out of the feed.
+- **Deterministic context**: public holidays and long weekends (Nager.Date, long weekends computed locally), the climate observed on the window dates in the last five years and monthly normals (Open-Meteo ERA5 archive), US State Department and UK FCDO travel advisories. All cached in Postgres or memory.
+- **Market risk score**: severity- and confidence-weighted, time-decayed, squashed to 0 to 100 with quiet / watch / loud wording; calibrated so ordinary news days read as quiet or watch.
+- **Two new agent tools**: `market_calendar` and `risk_feed`. Their requests are recorded as external sources (not Qloo calls) and the server verifies every risk item's url against what the feed returned. Live CLI brief with the risk layer (Ricardo Arjona, Guatemala City): complete in 491 s, 23 tool calls, 21 Qloo calls with 9 cache hits, 1 of 22 checks downgraded (the model cited open-meteo.com as a risk source, which is not a feed item), six grounded risks with their source links, calendar and climate in the panel.
+- **Risk panel** in the document (score, items grouped by category with source links and labels, context cards for holidays, long weekends, climate and advisories) and the **market dashboard** at `/market/:slug` (score, filters, feed, advisories, six months of calendar, monthly climate chart, recent briefs, "new brief for this market"). Checked with real data for Guatemala City: score 39 "watch", 13 relevant items, 2 advisories.
+- `POST /api/jobs/ingest` with a bearer secret (503 when unconfigured, 401 on a bad token), per-market or all markets, 240 s budget.
+
+### What works (M5)
+
+- `/about`: what it is, why Qloo is load-bearing (endpoint by endpoint), the three labels and how the server verifies them, an architecture diagram, the data sources with terms notes, honesty notes, links. "About" in the header.
+- Landing: "See a finished brief" with the newest complete brief per featured market, plus the market dashboard links.
+- README: "Why Qloo is load-bearing" table, Mermaid architecture diagram, run instructions, environment table, market dashboards and ingestion. `docs/submission.md` holds the Devpost description.
+- Quality gates: `pnpm check` 0 errors, `pnpm lint` clean, `pnpm test` 215 unit tests, `pnpm test:e2e` 5 Playwright tests.
 
 ### Decisions taken without blocking (see docs/decisions.md)
 
-- Azure Container Apps and Neon per David; the Cloud Run script stays as the alternative. Neon's CLI tooling (`neon.ts`, two packages) lives in devDependencies.
-- The counterfactual never calls Qloo and is compared by name only; a name match is reported as "in Qloo's results", never as grounded.
-- Drafts open the promoter's own mail client through `mailto:`; the product never sends email.
+- Outlets seeded only where a feed answered live; `TODO(David)` markers in `src/lib/markets.ts` for Soy502, elPeriódico, Listín Diario, El Caribe, El Universal, Milenio, Excélsior, La Prensa (Panamá and Nicaragua), La Prensa Gráfica and elsalvador.com.
+- Haiku runs without thinking (it rejects adaptive thinking); the planner stays on `claude-opus-4-6` per David.
+- `risk_feed` refreshes a stale market inline with a 45 s budget so a brief never waits long for news; the scheduled job does the bulk work.
 
 ### Still open for David
 
-Nothing blocking. Optional: enable Claude 5.5 in `n1-data` and set `CLAUDE_PLANNER_MODEL` on the container app.
-
-### Next (M4 Risk layer)
-
-- News ingestion job (`POST /api/jobs/ingest`, shared secret, scheduled from Azure), Haiku classification into the risk categories with severity and a one-line "so what"; the `news_items` and `news_classifications` tables already exist.
-- Holidays and long weekends, climate normals for the dates, travel advisories, each with its source; the `market_calendar` and `risk_feed` tools for the agent; the risk panel in the document and the market dashboard at `/market/:slug`.
-- David fills the `TODO(David)` outlet lists per market when asked.
+1. Fill the `TODO(David)` outlet feeds if you know working RSS urls for those outlets.
+2. Review `docs/submission.md` and the final product name (still "gigcast") before submitting on Devpost.
+3. Optional: enable Claude 5.5 in `n1-data` and set `CLAUDE_PLANNER_MODEL` on the container app.
 
 ### Known limitations
 
-- A brief takes 5 to 11 minutes at effort high; the counterfactual adds no wall time because it runs in parallel. The live page streams progress and the link keeps working if the tab is closed.
-- Container Apps ingress closes long HTTP requests after about four minutes; the SSE client reconnects with `Last-Event-ID` and the server replays, which is why the stream is resumable.
-- The event hub is per process; the app runs one replica. The Postgres fallback keeps a second replica correct, with updates every 2 s instead of instantly.
-- Qloo venue inventory is thin in Central America; the venues section leans on the promoter's own venue and on bars, restaurants and hotels near the heat.
-- The risk panel is `no_coverage` until M4; demo mode, the landing's example brief and `/about` arrive in M5.
-- The dev-only `/dev/preview` route renders the sample brief and returns 404 in production.
+- A brief takes 5 to 11 minutes at effort high; the page streams progress and the link keeps working if the tab is closed.
+- News classification reads headlines and snippets only; weather reports and sports violence can land in the feed with low severity. The risk score is a news-volume signal, not a safety judgment, and the UI says so.
+- Open-Meteo values are observations at the same dates in past years, not a forecast; the panel labels them that way.
+- Competing-events detection relies on the news feed; there is no ticketing API integration.
+- The event hub is per process; the app runs one replica (Postgres fallback keeps a second replica correct, with 2 s polling).
+- The dev-only routes `/dev/preview` and `/dev/market-preview` return 404 in production.
 
 ### Environment notes
 
-- Local: Node 26, pnpm 12, Docker (`gigcast-db-1` Postgres 16 on 5432 for tests), Playwright browsers installed, `gh` as `daelmor`, `az` logged in to "Fegora", Google Cloud SDK installed but not authenticated. The local env file now points `DATABASE_URL` at Neon (pulled by `neon init`); the end-to-end suite pins the Docker database.
-- Secrets never enter the repo: Qloo key, Neon URL and the GCP service-account JSON live in the gitignored env file and `_secrets/`, and on Azure as Container Apps secrets.
+- Local: Node 26, pnpm 12, Docker (`gigcast-db-1` Postgres 16 for the end-to-end tests), Playwright browsers, `gh` as `daelmor`, `az` logged in to "Fegora". The local env file points `DATABASE_URL` at Neon; `pnpm dev` therefore reads and writes the production database.
+- Secrets never enter the repo: Qloo key, Neon URL, the GCP service-account JSON and the ingest secret live in the gitignored env file, `_secrets/`, and Azure Container Apps secrets.
