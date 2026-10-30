@@ -90,6 +90,10 @@
 	async function onready(m: MaplibreMap) {
 		const maplibre = await import('maplibre-gl');
 
+		// Dense markets return thousands of geohash cells; scale the intensity down with the count
+		// and square the weight so the gradient shows where the strong cells are instead of a
+		// single saturated blob.
+		const k = Math.min(1, Math.max(0.15, 500 / Math.max(1, cells.length)));
 		m.addSource('cells', { type: 'geojson', data: cellsGeoJSON(dimension) });
 		m.addLayer({
 			id: 'cells-heat',
@@ -97,9 +101,9 @@
 			source: 'cells',
 			maxzoom: 14,
 			paint: {
-				'heatmap-weight': ['interpolate', ['linear'], ['get', 'w'], 0, 0, 1, 1],
-				'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 8, 0.8, 14, 2],
-				'heatmap-radius': ['interpolate', ['exponential', 2], ['zoom'], 8, 14, 11, 38, 14, 90],
+				'heatmap-weight': ['^', ['get', 'w'], 2],
+				'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 8, 0.8 * k, 14, 2 * k],
+				'heatmap-radius': ['interpolate', ['exponential', 2], ['zoom'], 8, 12, 11, 28, 14, 80],
 				'heatmap-color': [
 					'interpolate',
 					['linear'],
@@ -117,7 +121,7 @@
 					1,
 					'rgba(49,46,129,0.95)'
 				],
-				'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 12, 0.9, 14, 0]
+				'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 12, 0.8, 14, 0]
 			}
 		});
 		m.addLayer({
