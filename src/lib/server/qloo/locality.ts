@@ -173,9 +173,48 @@ export async function resolveLocality(
 }
 
 /** Queries to try for "city, country" input: localized spellings first when we know them. */
+/** English country names for the query string; a plain name passes through unchanged. */
+const COUNTRY_NAMES: Record<string, string> = {
+	GT: 'Guatemala',
+	SV: 'El Salvador',
+	HN: 'Honduras',
+	NI: 'Nicaragua',
+	CR: 'Costa Rica',
+	PA: 'Panama',
+	BZ: 'Belize',
+	DO: 'Dominican Republic',
+	PR: 'Puerto Rico',
+	CU: 'Cuba',
+	JM: 'Jamaica',
+	MX: 'Mexico',
+	CO: 'Colombia',
+	VE: 'Venezuela',
+	EC: 'Ecuador',
+	PE: 'Peru',
+	BO: 'Bolivia',
+	CL: 'Chile',
+	AR: 'Argentina',
+	UY: 'Uruguay',
+	PY: 'Paraguay',
+	BR: 'Brazil',
+	US: 'United States',
+	CA: 'Canada',
+	ES: 'Spain',
+	GB: 'United Kingdom',
+	FR: 'France',
+	DE: 'Germany',
+	IT: 'Italy',
+	PT: 'Portugal'
+};
+
+export function countryDisplayName(country: string): string {
+	const code = country.trim().toUpperCase();
+	return COUNTRY_NAMES[code] ?? country.trim();
+}
+
 export function localityQueries(city: string, country: string): string[] {
 	const code = country.trim().toUpperCase();
-	const out = [`${city}, ${country}`];
+	const out = [`${city}, ${countryDisplayName(country)}`];
 	const normalizedCity = normalizeText(city);
 	if (code === 'PA' && /panama city|ciudad de panama|panama/.test(normalizedCity)) {
 		out.unshift('Distrito Panamá');

@@ -191,6 +191,17 @@ export class QlooClient {
 		const { status, body, latencyMs } = await this.fetchWithRetry(endpoint, normalized, ref);
 		const fetchedAt = new Date().toISOString();
 		this.stats.liveCalls++;
+		// Validate before caching so a malformed 200 is never served from cache later.
+		if (status === 200 && !schema.safeParse(body).success) {
+			this.onRequest?.({
+				...ref,
+				cacheHit: false,
+				status,
+				latencyMs,
+				error: 'unexpected response shape'
+			});
+			return this.finish(ref, status, body, schema, false, fetchedAt, latencyMs);
+		}
 		// Cache successes and deterministic client errors; never 429/5xx.
 		if (status === 200 || (status >= 400 && status < 429)) {
 			const entry = {
