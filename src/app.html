@@ -8,6 +8,35 @@
 			name="description"
 			content="Booking Briefs for concert promoters, grounded in Qloo Taste AI."
 		/>
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f6fc" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#100c28" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/manifest.webmanifest" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="gigcast" />
+		<meta property="og:title" content="gigcast: Booking Briefs grounded in Qloo" />
+		<meta
+			property="og:description"
+			content="An artist, a city and a date window become a brief a promoter can take to a sponsor: audience map, lineup, sponsors, venues, pricing and risks, every claim labeled grounded, inferred or no coverage."
+		/>
+		<meta property="og:image" content="/og.png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<script>
+			// Apply the stored theme before the first paint. "system" (or nothing) leaves the
+			// attribute off so the prefers-color-scheme rules in the token file decide.
+			(function () {
+				try {
+					var t = localStorage.getItem('gigcast-theme');
+					if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+				} catch (e) {
+					/* storage blocked */
+				}
+			})();
+		</script>
 		%sveltekit.head%
 		<!-- Default title; placed after the page head so a page's own <title> wins -->
 		<title>gigcast</title>
