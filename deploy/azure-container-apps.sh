@@ -26,8 +26,9 @@ ENV_NAME="${ENV_NAME:-cae-gigcast}"
 MIN_REPLICAS="${MIN_REPLICAS:-1}"
 MAX_REPLICAS="${MAX_REPLICAS:-1}"
 
-# Shared secret for POST /api/jobs/ingest; generated when absent (the job and the app get the same value).
-INGEST_JOB_SECRET="${INGEST_JOB_SECRET:-$(openssl rand -hex 24)}"
+# Shared secret for POST /api/jobs/ingest. Reused from the running app when not given, generated
+# on the very first deploy; the job and the app always get the same value.
+INGEST_JOB_SECRET="${INGEST_JOB_SECRET:-}"
 JOB_NAME="${JOB_NAME:-gigcast-ingest}"
 INGEST_CRON="${INGEST_CRON:-0 */6 * * *}"
 
@@ -38,6 +39,10 @@ INGEST_CRON="${INGEST_CRON:-0 */6 * * *}"
 [ -r "$GOOGLE_APPLICATION_CREDENTIALS" ] || { echo "cannot read $GOOGLE_APPLICATION_CREDENTIALS" >&2; exit 1; }
 
 SUB_ID="$(az account show --query id -o tsv)"
+if [ -z "${INGEST_JOB_SECRET}" ]; then
+  INGEST_JOB_SECRET="$(az containerapp secret show -n "${APP}" -g "${RG}" --secret-name ingest-job-secret --query value -o tsv 2>/dev/null || true)"
+fi
+INGEST_JOB_SECRET="${INGEST_JOB_SECRET:-$(openssl rand -hex 24)}"
 SUB_NAME="$(az account show --query name -o tsv)"
 # Registry names are global and alphanumeric; derive a stable one from the subscription.
 ACR="${ACR:-gigcast$(printf '%s' "$SUB_ID" | tr -d '-' | cut -c1-10)}"
@@ -148,11 +153,11 @@ properties:
           cpu: 0.25
           memory: 0.5Gi
 YAML
+# `job update --yaml` does not accept the full spec, so an existing job is recreated.
 if az containerapp job show -n "${JOB_NAME}" -g "${RG}" -o none 2>/dev/null; then
-  az containerapp job update -n "${JOB_NAME}" -g "${RG}" --yaml "${JOB_SPEC}" -o none
-else
-  az containerapp job create -n "${JOB_NAME}" -g "${RG}" --yaml "${JOB_SPEC}" -o none
+  az containerapp job delete -n "${JOB_NAME}" -g "${RG}" --yes -o none
 fi
+az containerapp job create -n "${JOB_NAME}" -g "${RG}" --yaml "${JOB_SPEC}" -o none
 rm -f "${JOB_SPEC}"
 
 say "Waiting for the new revision"
