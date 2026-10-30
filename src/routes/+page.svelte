@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { FEATURED_MARKETS } from '$lib/markets';
+	import ExampleBriefs from '$lib/components/landing/ExampleBriefs.svelte';
 	import RecentBriefs from '$lib/components/shell/RecentBriefs.svelte';
 
 	let { data } = $props();
@@ -39,6 +40,8 @@
 		the brief is reasoning on top of those results, and it is labeled as such.
 	</p>
 </section>
+
+<ExampleBriefs briefs={data.examples} />
 
 <section class="mt-12">
 	<h2 class="text-lg font-semibold">Featured markets</h2>
