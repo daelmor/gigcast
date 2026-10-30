@@ -6,7 +6,8 @@
 	import { FEATURED_MARKETS, KNOWN_MARKETS, findMarket, type KnownMarket } from '$lib/markets';
 	import { COUNTRIES, OTHER_COUNTRY, debounce, type FormState } from './form';
 
-	let { form, error }: { form: FormState; error?: string } = $props();
+	let { form, error, onpicked }: { form: FormState; error?: string; onpicked?: () => void } =
+		$props();
 
 	const others = KNOWN_MARKETS.filter((m) => !m.featured);
 
@@ -45,16 +46,31 @@
 		form.localityEntityId = r.entityId;
 		form.localityName = r.name;
 		point = r.lat !== undefined && r.lon !== undefined ? [r.lon, r.lat] : undefined;
+		// Close the list and show the choice in the input; the next step is the artist.
+		search.cancel();
+		controller?.abort();
+		query = r.name;
+		results = [];
+		status = 'idle';
+		onpicked?.();
+	}
+
+	function closeResults() {
+		results = [];
+		if (status === 'done') status = 'idle';
 	}
 
 	const search = debounce(async (q: string, c: string) => {
 		controller?.abort();
-		controller = new AbortController();
+		const own = new AbortController();
+		controller = own;
+		// A search that never answers must not leave the spinner forever.
+		const timer = setTimeout(() => own.abort(new DOMException('timeout', 'TimeoutError')), 12_000);
 		status = 'loading';
 		try {
 			const res = await fetch(
 				`/api/search/localities?q=${encodeURIComponent(q)}&country=${encodeURIComponent(c)}`,
-				{ signal: controller.signal }
+				{ signal: own.signal }
 			);
 			if (!res.ok) throw new Error(String(res.status));
 			results = localitySearchResponseSchema.parse(await res.json()).results;
@@ -63,6 +79,8 @@
 			if (e instanceof DOMException && e.name === 'AbortError') return;
 			results = [];
 			status = 'error';
+		} finally {
+			clearTimeout(timer);
 		}
 	}, 300);
 
@@ -158,6 +176,7 @@
 				type="text"
 				bind:value={query}
 				oninput={onInput}
+				onkeydown={(e) => e.key === 'Escape' && closeResults()}
 				placeholder="Search a city"
 				aria-label="City name"
 				autocomplete="off"
@@ -208,7 +227,7 @@
 
 		{#if results.length > 0}
 			<ul class="mt-2 divide-y divide-zinc-100 rounded-lg ring-1 ring-zinc-200">
-				{#each results as r (r.entityId)}
+				{#each results as r, i (i)}
 					<li>
 						<button
 							type="button"

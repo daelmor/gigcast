@@ -9,6 +9,10 @@
 	import { onMount } from 'svelte';
 	import type { Map as MaplibreMap } from 'maplibre-gl';
 	import 'maplibre-gl/dist/maplibre-gl.css';
+	// MapLibre resolves its worker as `new URL('./maplibre-gl-worker.mjs', import.meta.url)`,
+	// which points at a file the bundler never emits (404 in production, "Worker failed to
+	// load"). Import the self-contained worker as an asset and hand MapLibre its real URL.
+	import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 	import { env } from '$env/dynamic/public';
 
 	export const DEFAULT_MAP_STYLE = 'https://tiles.openfreemap.org/styles/positron';
@@ -45,6 +49,7 @@
 			try {
 				const maplibre = await import('maplibre-gl');
 				if (cancelled) return;
+				maplibre.setWorkerUrl(maplibreWorkerUrl);
 				created = new maplibre.Map({
 					container,
 					style: env.PUBLIC_MAP_STYLE_URL || DEFAULT_MAP_STYLE,
