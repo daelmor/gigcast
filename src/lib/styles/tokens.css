@@ -1,0 +1,213 @@
+/*
+ * gigcast design tokens. Generated from the design system's tokens.json (v1) and kept as the
+ * single source of colour in the app: every colour utility in src/ resolves to one of these.
+ *
+ * Themes: Light is the default. Dark applies when the OS prefers dark and no explicit choice
+ * was made, or when <html data-theme="dark">. <html data-theme="light"> forces Light.
+ */
+:root,
+[data-theme='light'] {
+	--surface: #f7f6fc;
+	--surface-raised: #ffffff;
+	--surface-sunken: #efedf8;
+	--line: #e1def0;
+	--line-strong: #8c87b3;
+	--ink: #141034;
+	--ink-muted: #57527a;
+	--ink-subtle: #6e6a8f;
+	--signal: #4800f8;
+	--signal-soft: #ece6ff;
+	--action: #4800f8;
+	--action-hover: #3a00c8;
+	--on-action: #ffffff;
+	--pulse: #7000fc;
+	--beam: #00f0fa;
+	--on-beam: #100c28;
+	--beam-text: #006b75;
+	--night: #100c28;
+	--focus-ring: #4800f8;
+	--grounded: #0b7a55;
+	--grounded-soft: #e3f6ee;
+	--inferred: #94570a;
+	--inferred-soft: #fdf1dc;
+	--no-coverage: #64618a;
+	--no-coverage-soft: #eeedf5;
+	--positive: var(--grounded);
+	--positive-soft: var(--grounded-soft);
+	--caution: var(--inferred);
+	--caution-soft: var(--inferred-soft);
+	--critical: #c0263e;
+	--critical-soft: #fce8ec;
+	--heat-1: #e4dcff;
+	--heat-2: #b49dff;
+	--heat-3: #7a4dff;
+	--heat-4: #4800f8;
+	--heat-5: #1e0b6e;
+	--chart-1: var(--signal);
+	--chart-2: #0093a0;
+	--chart-3: #c25a00;
+	--chart-muted: #b4b0cf;
+	--shadow-raised: 0 1px 2px rgba(20, 16, 52, 0.06), 0 4px 16px rgba(20, 16, 52, 0.06);
+	--shadow-overlay: 0 12px 40px rgba(20, 16, 52, 0.18);
+	color-scheme: light;
+}
+
+/* Dark theme values, used by both the explicit attribute and the OS preference below. */
+[data-theme='dark'] {
+	--surface: #100c28;
+	--surface-raised: #19143a;
+	--surface-sunken: #0a081c;
+	--line: #2c2654;
+	--line-strong: #6a63a6;
+	--ink: #eeedf8;
+	--ink-muted: #aba6cc;
+	--ink-subtle: #8f8ab3;
+	--signal: #9b7bff;
+	--signal-soft: #241a5c;
+	--action: #4800f8;
+	--action-hover: #5a1aff;
+	--on-action: #ffffff;
+	--pulse: #7000fc;
+	--beam: #00f0fa;
+	--on-beam: #100c28;
+	--beam-text: #00f0fa;
+	--night: #100c28;
+	--focus-ring: #00f0fa;
+	--grounded: #3dd39b;
+	--grounded-soft: #0d2e25;
+	--inferred: #f5b14c;
+	--inferred-soft: #33240a;
+	--no-coverage: #a3a0c4;
+	--no-coverage-soft: #221e40;
+	--positive: var(--grounded);
+	--positive-soft: var(--grounded-soft);
+	--caution: var(--inferred);
+	--caution-soft: var(--inferred-soft);
+	--critical: #ff7a8e;
+	--critical-soft: #3a1020;
+	--heat-1: #2a1f6b;
+	--heat-2: #4a2bc9;
+	--heat-3: #7a4dff;
+	--heat-4: #5fa8ff;
+	--heat-5: #00f0fa;
+	--chart-1: var(--signal);
+	--chart-2: #00f0fa;
+	--chart-3: #ffa04d;
+	--chart-muted: #4a4478;
+	--shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
+	--shadow-overlay: 0 12px 40px rgba(0, 0, 0, 0.6);
+	color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		--surface: #100c28;
+		--surface-raised: #19143a;
+		--surface-sunken: #0a081c;
+		--line: #2c2654;
+		--line-strong: #6a63a6;
+		--ink: #eeedf8;
+		--ink-muted: #aba6cc;
+		--ink-subtle: #8f8ab3;
+		--signal: #9b7bff;
+		--signal-soft: #241a5c;
+		--action: #4800f8;
+		--action-hover: #5a1aff;
+		--on-action: #ffffff;
+		--pulse: #7000fc;
+		--beam: #00f0fa;
+		--on-beam: #100c28;
+		--beam-text: #00f0fa;
+		--night: #100c28;
+		--focus-ring: #00f0fa;
+		--grounded: #3dd39b;
+		--grounded-soft: #0d2e25;
+		--inferred: #f5b14c;
+		--inferred-soft: #33240a;
+		--no-coverage: #a3a0c4;
+		--no-coverage-soft: #221e40;
+		--positive: var(--grounded);
+		--positive-soft: var(--grounded-soft);
+		--caution: var(--inferred);
+		--caution-soft: var(--inferred-soft);
+		--critical: #ff7a8e;
+		--critical-soft: #3a1020;
+		--heat-1: #2a1f6b;
+		--heat-2: #4a2bc9;
+		--heat-3: #7a4dff;
+		--heat-4: #5fa8ff;
+		--heat-5: #00f0fa;
+		--chart-1: var(--signal);
+		--chart-2: #00f0fa;
+		--chart-3: #ffa04d;
+		--chart-muted: #4a4478;
+		--shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
+		--shadow-overlay: 0 12px 40px rgba(0, 0, 0, 0.6);
+		color-scheme: dark;
+	}
+}
+
+/* Print: a brief on paper is black on white whatever the theme. Only the token file holds hex. */
+@media print {
+	:root,
+	[data-theme='light'],
+	[data-theme='dark'] {
+		--surface: #ffffff;
+		--surface-raised: #ffffff;
+		--surface-sunken: #ffffff;
+		--line: #bfbfbf;
+		--line-strong: #000000;
+		--ink: #000000;
+		--ink-muted: #1f1f1f;
+		--ink-subtle: #3d3d3d;
+		--signal: #000000;
+		--signal-soft: #ffffff;
+		--action: #000000;
+		--action-hover: #000000;
+		--on-action: #ffffff;
+		--pulse: #000000;
+		--beam: #000000;
+		--on-beam: #ffffff;
+		--beam-text: #000000;
+		--night: #ffffff;
+		--focus-ring: #000000;
+		--grounded: #000000;
+		--grounded-soft: #ffffff;
+		--inferred: #000000;
+		--inferred-soft: #ffffff;
+		--no-coverage: #000000;
+		--no-coverage-soft: #ffffff;
+		--critical: #000000;
+		--critical-soft: #ffffff;
+		--heat-1: #e6e6e6;
+		--heat-2: #bdbdbd;
+		--heat-3: #8a8a8a;
+		--heat-4: #4d4d4d;
+		--heat-5: #000000;
+		--chart-1: #000000;
+		--chart-2: #555555;
+		--chart-3: #888888;
+		--chart-muted: #cccccc;
+		--shadow-raised: none;
+		--shadow-overlay: none;
+		color-scheme: light;
+	}
+}
+
+:root {
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 24px;
+	--space-6: 32px;
+	--space-7: 48px;
+	--space-8: 64px;
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 16px;
+	--radius-pill: 999px;
+	--font-display: Sora, 'IBM Plex Sans', system-ui, sans-serif;
+	--font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}

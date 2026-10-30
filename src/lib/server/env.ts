@@ -17,6 +17,7 @@ const schema = z.object({
 	// Required only by the ingest job endpoint, which checks it at request time.
 	INGEST_JOB_SECRET: z.string().min(1).optional(),
 	PUBLIC_MAP_STYLE_URL: z.string().url().optional(),
+	PUBLIC_MAP_STYLE_URL_DARK: z.string().url().optional(),
 	APP_BASE_URL: z.string().url().optional(),
 	// Briefs running at the same time in one instance; more are refused with 429.
 	MAX_CONCURRENT_RUNS: z.coerce.number().int().positive().default(2),

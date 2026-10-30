@@ -1,4 +1,5 @@
 <script lang="ts">
+	/** Mono `[S3]` superscripts in signal, linking to the Sources list. Print as plain text. */
 	import { getSourceIndex } from './context';
 	import type { SourceIndex } from './sources';
 
@@ -23,15 +24,13 @@
 </script>
 
 {#if numbers.length > 0}
-	<span class="inline-flex flex-wrap gap-x-1 align-baseline">
+	<span class="inline-flex flex-wrap gap-x-0.5 align-baseline">
 		{#each numbers as n (n)}
-			<sup class="text-[0.7rem] leading-none font-medium">
-				<a
-					href="#source-{n}"
-					class="text-indigo-600 hover:text-indigo-800 hover:underline"
-					aria-label="Source {n}">[S{n}]</a
-				>
-			</sup>
+			<a
+				href="#source-{n}"
+				class="ml-0.5 align-super type-data-sm leading-none text-signal no-underline hover:underline"
+				aria-label="Source {n}">[S{n}]</a
+			>
 		{/each}
 	</span>
 {/if}

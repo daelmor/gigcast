@@ -1,5 +1,11 @@
 <script lang="ts">
-	import Label from '../ui/Label.svelte';
+	import { onMount } from 'svelte';
+	import { theme, watchTheme, withAlpha } from '$lib/client/theme-colors.svelte';
+	import Badge from '../ui/Badge.svelte';
+	import Card from '../ui/Card.svelte';
+	import Chip from '../ui/Chip.svelte';
+	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
+	import type { Tone } from '../ui/tones';
 	import EChart from './EChart.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
@@ -17,18 +23,21 @@
 	);
 	const demoIds = $derived(a.demographics ? [a.demographics.source.toolCallId] : []);
 
-	const trendMeta = {
-		rising: { arrow: '↗', text: 'Rising', cls: 'text-emerald-700 bg-emerald-50' },
-		flat: { arrow: '→', text: 'Flat', cls: 'text-zinc-700 bg-zinc-100' },
-		falling: { arrow: '↘', text: 'Falling', cls: 'text-rose-700 bg-rose-50' },
-		unknown: { arrow: '?', text: 'Unknown', cls: 'text-zinc-500 bg-zinc-100' }
-	} as const;
+	const trendMeta: Record<string, { arrow: string; text: string; tone: Tone }> = {
+		rising: { arrow: '↗', text: 'Rising', tone: 'positive' },
+		flat: { arrow: '→', text: 'Flat', tone: 'neutral' },
+		falling: { arrow: '↘', text: 'Falling', tone: 'critical' },
+		unknown: { arrow: '?', text: 'Unknown', tone: 'neutral' }
+	};
 
 	const trendPoints = $derived(
 		(a.trending?.items ?? []).filter(
 			(p): p is typeof p & { percentile: number } => p.percentile !== null
 		)
 	);
+
+	onMount(() => watchTheme());
+	const c = $derived(theme.colors);
 
 	const sparkOption = $derived({
 		grid: { left: 4, right: 4, top: 6, bottom: 4 },
@@ -44,9 +53,9 @@
 				data: trendPoints.map((p) => p.percentile),
 				smooth: true,
 				symbolSize: 5,
-				lineStyle: { color: '#4f46e5', width: 2 },
-				itemStyle: { color: '#4f46e5' },
-				areaStyle: { color: 'rgba(79,70,229,0.08)' }
+				lineStyle: { color: c['chart-1'], width: 2 },
+				itemStyle: { color: c['chart-1'] },
+				areaStyle: { color: withAlpha(c['chart-1'], 0.1) }
 			}
 		]
 	});
@@ -72,7 +81,7 @@
 				data: entries.map(([k]) => title(k)),
 				axisLine: { show: false },
 				axisTick: { show: false },
-				axisLabel: { color: '#52525b', fontSize: 12 }
+				axisLabel: { color: c['ink-muted'], fontSize: 12, fontFamily: theme.fonts.sans }
 			},
 			series: [
 				{
@@ -81,13 +90,14 @@
 					label: {
 						show: true,
 						position: 'right',
-						color: '#52525b',
+						color: c['ink-muted'],
 						fontSize: 11,
+						fontFamily: theme.fonts.mono,
 						formatter: (p: { value: number }) => p.value.toFixed(2)
 					},
 					data: entries.map(([, v]) => ({
 						value: v,
-						itemStyle: { color: v < 0 ? '#a1a1aa' : '#4f46e5', borderRadius: 3 }
+						itemStyle: { color: v < 0 ? c['chart-muted'] : c['chart-1'], borderRadius: 3 }
 					}))
 				}
 			]
@@ -103,50 +113,45 @@
 </script>
 
 <section aria-labelledby="demand">
-	<SectionHeader id="demand" title="Demand and fit" note={d.note} />
-	<div class="grid gap-4 md:grid-cols-2">
+	<SectionHeader id="demand" kicker="Section 2 · Demand" title="Demand and fit" note={d.note} />
+	<div class="grid gap-space-4 md:grid-cols-2">
 		<!-- Popularity -->
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-			<h3 class="text-sm font-semibold text-zinc-900">Popularity</h3>
+		<Card class="break-inside-avoid">
+			<h3 class="type-heading-3 text-ink">Popularity</h3>
 			{#if d.popularity !== undefined}
-				<p class="mt-2 text-3xl font-semibold text-zinc-900 tabular-nums">
-					{ordinal(d.popularity * 100)}<span class="text-base font-normal text-zinc-500">
-						percentile</span
-					>
+				<p class="mt-space-3 type-numeral text-ink tabular-nums">
+					{ordinal(d.popularity * 100)}<span class="type-body text-ink-muted"> percentile</span>
 				</p>
-				<div class="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-100">
-					<div class="h-full rounded-full bg-indigo-600" style:width={pct(d.popularity)}></div>
+				<div class="mt-space-3 h-1.5 overflow-hidden rounded-pill bg-surface-sunken">
+					<div class="h-full rounded-pill bg-chart-1" style:width={pct(d.popularity)}></div>
 				</div>
-				<p class="mt-2 text-xs text-zinc-500">
+				<p class="mt-space-3 type-small text-ink-subtle">
 					Share of Qloo entities of this kind that the artist out-ranks.
 				</p>
 			{:else}
-				<p class="mt-2 text-sm text-zinc-500">No popularity figure was available.</p>
+				<p class="mt-space-2 type-small text-ink-muted">No popularity figure was available.</p>
 			{/if}
-		</div>
+		</Card>
 
 		<!-- Trend -->
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-			<div class="flex items-center justify-between gap-2">
-				<h3 class="text-sm font-semibold text-zinc-900">Trend</h3>
+		<Card class="break-inside-avoid">
+			<div class="flex flex-wrap items-center justify-between gap-space-2">
+				<h3 class="type-heading-3 text-ink">Trend</h3>
 				{#if d.trend}
-					<span class="flex items-center gap-2"
-						><Label label={d.trend.label} /><SourceMarks sources={trendIds} /></span
+					<span class="flex items-center gap-space-2"
+						><EvidenceLabel label={d.trend.label} /><SourceMarks sources={trendIds} /></span
 					>
 				{/if}
 			</div>
 			{#if d.trend}
-				{@const meta = trendMeta[d.trend.direction]}
-				<div class="mt-2 flex items-center gap-2">
-					<span
-						class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium {meta.cls}"
-						><span aria-hidden="true">{meta.arrow}</span>{meta.text}</span
-					>
+				{@const meta = trendMeta[d.trend.direction] ?? trendMeta.unknown}
+				<div class="mt-space-3">
+					<Badge tone={meta.tone}><span aria-hidden="true">{meta.arrow}</span>{meta.text}</Badge>
 				</div>
-				<p class="mt-2 text-sm text-zinc-700">{d.trend.detail}</p>
+				<p class="mt-space-3 type-body text-ink-muted">{d.trend.detail}</p>
 				{#if trendPoints.length > 1}
 					<EChart
-						class="mt-2 h-16 w-full"
+						class="mt-space-2 h-16 w-full"
 						option={sparkOption}
 						fallback="Trend over time: {trendPoints
 							.map((p) => `${p.date} ${pct(p.percentile)}`)
@@ -154,28 +159,30 @@
 					/>
 				{/if}
 			{:else}
-				<p class="mt-2 text-sm text-zinc-500">No trend data was available for this artist.</p>
+				<p class="mt-space-2 type-small text-ink-muted">
+					No trend data was available for this artist.
+				</p>
 			{/if}
-		</div>
+		</Card>
 
 		<!-- Demographics -->
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200 md:col-span-2">
-			<div class="flex items-center justify-between gap-2">
-				<h3 class="text-sm font-semibold text-zinc-900">Audience demographics</h3>
+		<Card class="break-inside-avoid md:col-span-2">
+			<div class="flex flex-wrap items-center justify-between gap-space-2">
+				<h3 class="type-heading-3 text-ink">Audience demographics</h3>
 				{#if d.demographics}
-					<span class="flex items-center gap-2"
-						><Label label={d.demographics.label} /><SourceMarks sources={demoIds} /></span
+					<span class="flex items-center gap-space-2"
+						><EvidenceLabel label={d.demographics.label} /><SourceMarks sources={demoIds} /></span
 					>
 				{/if}
 			</div>
 			{#if a.demographics && (ageEntries.length > 0 || genderEntries.length > 0)}
-				<p class="mt-1 text-xs text-zinc-500">
-					Affinity relative to the average audience. Zinc bars are under-indexed, indigo
+				<p class="mt-space-1 type-small text-ink-subtle">
+					Affinity relative to the average audience. Muted bars are under-indexed, solid bars
 					over-indexed.
 				</p>
-				<div class="mt-2 grid gap-4 md:grid-cols-2">
+				<div class="mt-space-3 grid gap-space-4 md:grid-cols-2">
 					<div>
-						<p class="text-xs font-medium text-zinc-500 uppercase">Age</p>
+						<p class="type-label text-ink-subtle">Age</p>
 						<EChart
 							class="h-44 w-full"
 							option={ageOption}
@@ -183,15 +190,16 @@
 						/>
 					</div>
 					<div>
-						<p class="text-xs font-medium text-zinc-500 uppercase">Gender</p>
+						<p class="type-label text-ink-subtle">Gender</p>
 						<EChart
 							class="h-20 w-full"
 							option={genderOption}
 							fallback="Gender affinity: {genderEntries.map(([k, v]) => `${k} ${v}`).join(', ')}"
 						/>
 						{#if d.demographics}
-							<p class="mt-2 text-sm text-zinc-700">
-								Gender skew: <span class="font-medium">{d.demographics.genderSkew}</span>.
+							<p class="mt-space-2 type-body text-ink-muted">
+								Gender skew: <span class="font-semibold text-ink">{d.demographics.genderSkew}</span
+								>.
 								{#if d.demographics.topAgeBuckets.length > 0}
 									Top age buckets: {d.demographics.topAgeBuckets
 										.map((b) => AGE_TITLES[b] ?? words(b))
@@ -202,43 +210,41 @@
 					</div>
 				</div>
 			{:else}
-				<p class="mt-2 text-sm text-zinc-500">Qloo returned no demographic data for this artist.</p>
+				<p class="mt-space-2 type-small text-ink-muted">
+					Qloo returned no demographic data for this artist.
+				</p>
 			{/if}
-		</div>
+		</Card>
 
 		<!-- Taste match -->
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200 md:col-span-2">
-			<div class="flex items-center justify-between gap-2">
-				<h3 class="text-sm font-semibold text-zinc-900">Taste match with the city</h3>
+		<Card class="break-inside-avoid md:col-span-2">
+			<div class="flex flex-wrap items-center justify-between gap-space-2">
+				<h3 class="type-heading-3 text-ink">Taste match with the city</h3>
 				{#if d.tasteMatch}
-					<span class="flex items-center gap-2"
-						><Label label={d.tasteMatch.label} /><SourceMarks sources={tasteIds} /></span
+					<span class="flex items-center gap-space-2"
+						><EvidenceLabel label={d.tasteMatch.label} /><SourceMarks sources={tasteIds} /></span
 					>
 				{/if}
 			</div>
 			{#if d.tasteMatch}
-				<div class="mt-2 flex flex-wrap items-start gap-4">
+				<div class="mt-space-3 flex flex-wrap items-start gap-space-4">
 					{#if d.tasteMatch.score !== undefined}
-						<p class="text-3xl font-semibold text-zinc-900 tabular-nums">
-							{pct(d.tasteMatch.score)}
-						</p>
+						<p class="type-numeral text-ink tabular-nums">{pct(d.tasteMatch.score)}</p>
 					{/if}
 					<div class="min-w-0 flex-1 basis-64">
-						<p class="text-sm text-zinc-700">{d.tasteMatch.detail}</p>
+						<p class="type-body text-ink-muted">{d.tasteMatch.detail}</p>
 						{#if d.tasteMatch.sharedTags.length > 0}
-							<div class="mt-2 flex flex-wrap gap-1.5">
+							<div class="mt-space-3 flex flex-wrap gap-space-2">
 								{#each d.tasteMatch.sharedTags as tag, i (i)}
-									<span class="rounded-full bg-indigo-50 px-2 py-0.5 text-xs text-indigo-700"
-										>{tag}</span
-									>
+									<Chip>{tag}</Chip>
 								{/each}
 							</div>
 						{/if}
 					</div>
 				</div>
 			{:else}
-				<p class="mt-2 text-sm text-zinc-500">No taste comparison was available.</p>
+				<p class="mt-space-2 type-small text-ink-muted">No taste comparison was available.</p>
 			{/if}
-		</div>
+		</Card>
 	</div>
 </section>

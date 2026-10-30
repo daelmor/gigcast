@@ -2,53 +2,71 @@
 	import { resolve } from '$app/paths';
 	import type { BriefListItem } from '$lib/api/contracts';
 	import { findMarket } from '$lib/markets';
+	import { Badge, Card, VERDICT_LABEL, VERDICT_TONE } from '$lib/components/ui';
 
 	let { briefs }: { briefs: BriefListItem[] } = $props();
 
-	const verdictStyle: Record<NonNullable<BriefListItem['verdict']>, string> = {
-		promising: 'bg-emerald-50 text-emerald-800 ring-emerald-600/25',
-		mixed: 'bg-amber-50 text-amber-900 ring-amber-600/25',
-		weak: 'bg-rose-50 text-rose-800 ring-rose-600/25',
-		insufficient_data: 'bg-zinc-100 text-zinc-600 ring-zinc-500/25'
+	const parse = (iso: string) => {
+		const [y, m, d] = iso.split('-').map(Number);
+		return { y, m, d };
 	};
-	const verdictText: Record<NonNullable<BriefListItem['verdict']>, string> = {
-		promising: 'Promising',
-		mixed: 'Mixed',
-		weak: 'Weak',
-		insufficient_data: 'Insufficient data'
-	};
+	const MONTHS = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
 
-	const dateWindow = (b: BriefListItem) =>
-		b.dateFrom && b.dateTo && b.dateTo !== b.dateFrom
-			? `${b.dateFrom} to ${b.dateTo}`
-			: (b.dateFrom ?? '');
+	/** "Mar 5–7, 2026", "Mar 30–Apr 2, 2026" or a single day. */
+	function dateWindow(b: BriefListItem): string {
+		if (!b.dateFrom) return '';
+		const a = parse(b.dateFrom);
+		if (!a.y || !a.m || !a.d) return b.dateFrom;
+		const start = `${MONTHS[a.m - 1]} ${a.d}`;
+		if (!b.dateTo || b.dateTo === b.dateFrom) return `${start}, ${a.y}`;
+		const e = parse(b.dateTo);
+		if (!e.y || !e.m || !e.d) return `${start}, ${a.y}`;
+		if (e.y !== a.y) return `${start}, ${a.y}–${MONTHS[e.m - 1]} ${e.d}, ${e.y}`;
+		if (e.m !== a.m) return `${start}–${MONTHS[e.m - 1]} ${e.d}, ${a.y}`;
+		return `${start}–${e.d}, ${a.y}`;
+	}
+
+	const meta = (b: BriefListItem) =>
+		[findMarket(b.marketId ?? '')?.name ?? b.city, dateWindow(b)].filter(Boolean).join(' · ');
 </script>
 
 {#if briefs.length > 0}
-	<section class="mt-12" aria-labelledby="examples-title">
-		<h2 id="examples-title" class="text-lg font-semibold">See a finished brief</h2>
-		<ul class="mt-4 grid gap-4 md:grid-cols-3">
+	<section class="mt-space-7" aria-labelledby="examples-title">
+		<h2 id="examples-title" class="type-heading-1">See a finished brief</h2>
+		<ul class="mt-space-4 grid gap-space-5 md:grid-cols-3">
 			{#each briefs as b (b.id)}
-				<li class="flex flex-col rounded-xl bg-white p-5 ring-1 ring-zinc-200">
-					<div class="flex items-start justify-between gap-2">
-						<span class="font-semibold text-zinc-900">{b.artistName}</span>
+				<Card as="li" interactive class="flex flex-col">
+					<div class="flex items-start justify-between gap-space-2">
+						<span class="type-heading-2">{b.artistName}</span>
 						{#if b.verdict}
-							<span
-								class="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset {verdictStyle[
-									b.verdict
-								]}">{verdictText[b.verdict]}</span
+							<Badge tone={VERDICT_TONE[b.verdict]} class="shrink-0"
+								>{VERDICT_LABEL[b.verdict]}</Badge
 							>
 						{/if}
 					</div>
-					<span class="text-sm text-zinc-500">{findMarket(b.marketId ?? '')?.name ?? b.city}</span>
-					{#if b.headline}<p class="mt-2 text-sm text-zinc-700">{b.headline}</p>{/if}
-					{#if dateWindow(b)}<p class="mt-2 text-xs text-zinc-500">{dateWindow(b)}</p>{/if}
+					<span class="mt-space-1 type-small text-ink-muted tabular-nums">{meta(b)}</span>
+					{#if b.headline}
+						<p class="mt-space-3 line-clamp-2 type-body text-ink">{b.headline}</p>
+					{/if}
 					<a
 						href={resolve('/brief/[id]', { id: b.id })}
-						class="mt-auto pt-4 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+						class="mt-auto rounded-sm pt-space-4 type-small font-semibold text-signal hover:underline"
 						>Open the brief</a
 					>
-				</li>
+				</Card>
 			{/each}
 		</ul>
 	</section>

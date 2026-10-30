@@ -73,7 +73,7 @@
 
 <svg
 	viewBox="0 0 960 520"
-	class="h-auto w-full"
+	class="h-auto w-full font-sans"
 	role="img"
 	aria-labelledby="arch-title arch-desc"
 	font-family="inherit"
@@ -94,13 +94,21 @@
 			markerHeight="7"
 			orient="auto-start-reverse"
 		>
-			<path d="M0 0 L10 5 L0 10 z" fill="#52525b" />
+			<path d="M0 0 L10 5 L0 10 z" class="fill-line-strong" />
 		</marker>
 	</defs>
 
 	{#each arrows as [x1, y1, x2, y2, label, lx, ly] (label + x1 + y1)}
-		<line {x1} {y1} {x2} {y2} stroke="#52525b" stroke-width="1.5" marker-end="url(#arrow)" />
-		<text x={lx} y={ly} font-size="12" fill="#52525b">{label}</text>
+		<line
+			{x1}
+			{y1}
+			{x2}
+			{y2}
+			class="stroke-line-strong"
+			stroke-width="1.5"
+			marker-end="url(#arrow)"
+		/>
+		<text x={lx} y={ly} font-size="12" class="fill-ink-muted">{label}</text>
 	{/each}
 
 	{#each boxes as b (b.title)}
@@ -110,13 +118,16 @@
 			width={b.w}
 			height={b.h}
 			rx="10"
-			fill="#fff"
-			stroke={b.title === 'Claude on Vertex AI' || b.title === 'Qloo API' ? '#4f46e5' : '#d4d4d8'}
+			class="fill-surface-raised {b.title === 'Claude on Vertex AI' || b.title === 'Qloo API'
+				? 'stroke-signal'
+				: 'stroke-line-strong'}"
 			stroke-width="1.5"
 		/>
-		<text x={b.x + 12} y={b.y + 24} font-size="14" font-weight="600" fill="#18181b">{b.title}</text>
+		<text x={b.x + 12} y={b.y + 24} font-size="14" font-weight="600" class="fill-ink"
+			>{b.title}</text
+		>
 		{#each b.lines ?? [] as line, i (line)}
-			<text x={b.x + 12} y={b.y + 46 + i * 18} font-size="12" fill="#52525b">{line}</text>
+			<text x={b.x + 12} y={b.y + 46 + i * 18} font-size="12" class="fill-ink-muted">{line}</text>
 		{/each}
 	{/each}
 </svg>

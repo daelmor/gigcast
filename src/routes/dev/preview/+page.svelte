@@ -6,11 +6,13 @@
 
 <svelte:head><title>Brief preview (dev)</title></svelte:head>
 
-<main class="min-h-screen bg-zinc-50 text-zinc-900">
-	<div class="mx-auto max-w-6xl space-y-4 px-4 pt-6 sm:px-6">
-		<p class="text-xs text-zinc-500">Dev preview with fixtures. Not available in production.</p>
+<div class="min-h-screen bg-surface text-ink">
+	<div class="mx-auto max-w-6xl space-y-space-4 px-4 pt-space-5 sm:px-6">
+		<p class="type-small text-ink-subtle">
+			Dev preview with fixtures. Not available in production.
+		</p>
 		<RunProgress events={sampleEvents} status="complete" />
 		<RunTrace events={sampleEvents} status="complete" />
 	</div>
 	<BriefDocument brief={sampleBrief} />
-</main>
+</div>

@@ -1,0 +1,14 @@
+{
+	"name": "gigcast",
+	"short_name": "gigcast",
+	"description": "Booking Briefs for concert promoters, grounded in Qloo Taste AI.",
+	"start_url": "/",
+	"display": "standalone",
+	"theme_color": "#4800F8",
+	"background_color": "#100C28",
+	"icons": [
+		{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+		{ "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+		{ "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+	]
+}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '../ui/Card.svelte';
 	import type { Brief } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
@@ -6,20 +7,21 @@
 </script>
 
 <section aria-labelledby="questions">
-	<h2 id="questions" class="mb-4 scroll-mt-24 text-xl font-semibold text-zinc-900">
-		Open questions
-	</h2>
+	<header class="mb-space-5 border-b border-line pb-space-4">
+		<p class="mb-space-1 type-label text-ink-subtle">Section 9 · Questions</p>
+		<h2 id="questions" class="scroll-mt-24 type-heading-1 text-ink">Open questions</h2>
+	</header>
 	{#if questions.length === 0}
-		<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			None. The agent had no unresolved questions for the promoter.
 		</p>
 	{:else}
-		<ul class="space-y-2">
+		<ul class="space-y-space-2">
 			{#each questions as q, i (i)}
-				<li class="flex gap-3 rounded-xl bg-white p-4 text-sm text-zinc-800 ring-1 ring-zinc-200">
-					<span class="mt-0.5 font-semibold text-indigo-600" aria-hidden="true">?</span>
+				<Card as="li" class="flex break-inside-avoid gap-space-3 type-body">
+					<span class="font-semibold text-signal" aria-hidden="true">?</span>
 					<span>{q}</span>
-				</li>
+				</Card>
 			{/each}
 		</ul>
 	{/if}

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Label from '../ui/Label.svelte';
+	import Card from '../ui/Card.svelte';
+	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
 	import {
 		LABEL_HELP,
 		type Brief,
@@ -40,61 +41,62 @@
 </script>
 
 <section aria-labelledby="method">
-	<h2 id="method" class="mb-4 scroll-mt-24 text-xl font-semibold text-zinc-900">
-		Method and sources
-	</h2>
-	<div class="grid gap-4 md:grid-cols-2">
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-			<h3 class="text-sm font-semibold text-zinc-900">Run summary</h3>
-			<dl class="mt-2 divide-y divide-zinc-100 text-sm">
+	<header class="mb-space-5 border-b border-line pb-space-4">
+		<p class="mb-space-1 type-label text-ink-subtle">Section 10 · Method</p>
+		<h2 id="method" class="scroll-mt-24 type-heading-1 text-ink">Method and sources</h2>
+	</header>
+	<div class="grid gap-space-4 md:grid-cols-2">
+		<Card class="break-inside-avoid">
+			<h3 class="type-heading-3 text-ink">Run summary</h3>
+			<dl class="mt-space-2 divide-y divide-line type-small">
 				{#each rows as [k, v] (k)}
-					<div class="flex justify-between gap-4 py-1.5">
-						<dt class="text-zinc-500">{k}</dt>
-						<dd class="text-right text-zinc-900 tabular-nums">{v}</dd>
+					<div class="flex justify-between gap-space-4 py-space-2">
+						<dt class="text-ink-muted">{k}</dt>
+						<dd class="text-right text-ink tabular-nums">{v}</dd>
 					</div>
 				{/each}
 			</dl>
 			{#if run.missingSections.length > 0}
-				<p class="mt-3 text-sm text-amber-800">
+				<p class="mt-space-3 rounded-sm bg-caution-soft p-space-3 type-small text-caution">
 					Missing sections: {run.missingSections.map(title).join(', ')}
 				</p>
 			{/if}
 			{#if run.error}
-				<p class="mt-3 rounded-lg bg-rose-50 p-3 text-sm text-rose-800 ring-1 ring-rose-200">
+				<p class="mt-space-3 rounded-sm bg-critical-soft p-space-3 type-small text-critical">
 					{run.error}
 				</p>
 			{/if}
-		</div>
+		</Card>
 
-		<div class="space-y-4">
-			<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-				<h3 class="text-sm font-semibold text-zinc-900">Verification</h3>
-				<p class="mt-1 text-sm text-zinc-700">
+		<div class="space-y-space-4">
+			<Card class="break-inside-avoid">
+				<h3 class="type-heading-3 text-ink">Verification</h3>
+				<p class="mt-space-1 type-body text-ink-muted">
 					{verification.checked} items checked against tool results, {verification.downgraded
 						.length} downgraded.
 				</p>
 				{#if verification.downgraded.length > 0}
-					<ul class="mt-2 space-y-2 text-sm">
+					<ul class="mt-space-3 space-y-space-2 type-small">
 						{#each verification.downgraded as d (d.entityId + d.section)}
-							<li class="rounded-lg bg-amber-50 p-3 ring-1 ring-amber-200">
-								<p class="font-medium text-amber-900">{d.name}</p>
-								<p class="text-xs text-amber-800">{title(d.section)}: {d.reason}</p>
+							<li class="rounded-sm bg-caution-soft p-space-3">
+								<p class="font-semibold text-caution">{d.name}</p>
+								<p class="text-caution">{title(d.section)}: {d.reason}</p>
 							</li>
 						{/each}
 					</ul>
 				{/if}
-			</div>
-			<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-				<h3 class="text-sm font-semibold text-zinc-900">Labels</h3>
-				<ul class="mt-2 space-y-2 text-sm text-zinc-600">
+			</Card>
+			<Card class="break-inside-avoid">
+				<h3 class="type-heading-3 text-ink">Labels</h3>
+				<ul class="mt-space-3 space-y-space-3 type-small text-ink-muted">
 					{#each Object.entries(LABEL_HELP) as [label, help] (label)}
-						<li class="flex items-start gap-2">
-							<Label label={label as LabelType} class="shrink-0" />
+						<li class="flex items-start gap-space-2">
+							<EvidenceLabel label={label as LabelType} class="shrink-0" />
 							<span>{help}</span>
 						</li>
 					{/each}
 				</ul>
-			</div>
+			</Card>
 		</div>
 	</div>
 </section>

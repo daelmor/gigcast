@@ -20,15 +20,15 @@
 </script>
 
 <div>
-	<dl class="grid grid-cols-2 gap-3 sm:grid-cols-5">
+	<dl class="grid grid-cols-2 gap-space-3 sm:grid-cols-5">
 		{#each stats as s (s.label)}
-			<div class="rounded-lg bg-zinc-50 p-3 ring-1 ring-zinc-200">
-				<dt class="text-xs text-zinc-500">{s.label}</dt>
-				<dd class="mt-0.5 font-semibold text-zinc-900 tabular-nums">{s.value}</dd>
+			<div class="rounded-md bg-surface-sunken p-space-3">
+				<dt class="type-small text-ink-muted">{s.label}</dt>
+				<dd class="mt-0.5 type-body font-semibold text-ink tabular-nums">{s.value}</dd>
 			</div>
 		{/each}
 	</dl>
-	<p class="mt-2 text-xs text-zinc-500">
+	<p class="mt-space-2 type-small text-ink-subtle">
 		{#if climate.years.length > 0}Based on the same dates in {climate.years.join(', ')}.{:else}No
 			years of observations were available.{/if}
 		{#if climate.note}{climate.note}{/if}

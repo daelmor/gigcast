@@ -1,8 +1,12 @@
 <script lang="ts">
-	import Label from '../ui/Label.svelte';
+	import Badge from '../ui/Badge.svelte';
+	import Card from '../ui/Card.svelte';
+	import Chip from '../ui/Chip.svelte';
+	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
+	import { CONFIDENCE_TONE } from '../ui/tones';
 	import { comparisonRows, matchLine, summaryLines, type MatchTone } from './counterfactual';
 	import { formatDuration, pct, words } from './format';
-	import type { Brief, Confidence } from '$lib/brief/schema';
+	import type { Brief } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
 
@@ -10,15 +14,10 @@
 	const draft = $derived(panel?.draft);
 	const lines = $derived(panel?.summary ? summaryLines(panel.summary) : undefined);
 
-	const confidenceStyles: Record<Confidence, string> = {
-		low: 'bg-zinc-100 text-zinc-700 ring-zinc-500/25',
-		medium: 'bg-amber-50 text-amber-900 ring-amber-600/25',
-		high: 'bg-indigo-50 text-indigo-800 ring-indigo-600/25'
-	};
 	const toneStyles: Record<MatchTone, { dot: string; text: string }> = {
-		overlap: { dot: 'bg-emerald-600', text: 'font-semibold text-emerald-800' },
-		in_qloo: { dot: 'bg-emerald-500', text: 'text-emerald-700' },
-		absent: { dot: 'bg-zinc-400', text: 'text-zinc-500' }
+		overlap: { dot: 'bg-grounded', text: 'font-semibold text-ink' },
+		in_qloo: { dot: 'bg-grounded', text: 'text-ink-muted' },
+		absent: { dot: 'bg-ink-subtle', text: 'text-ink-subtle' }
 	};
 
 	const blocks = $derived([
@@ -42,11 +41,12 @@
 </script>
 
 <section aria-labelledby="counterfactual">
-	<header class="mb-5">
-		<h2 id="counterfactual" class="scroll-mt-24 text-xl font-semibold text-zinc-900">
+	<header class="mb-space-5 border-b border-line pb-space-4">
+		<p class="mb-space-1 type-label text-ink-subtle">Section 5 · Comparison</p>
+		<h2 id="counterfactual" class="scroll-mt-24 type-heading-1 text-ink">
 			Would this work without Qloo?
 		</h2>
-		<p class="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-700">
+		<p class="mt-space-3 max-w-3xl type-body text-ink-muted">
 			We asked the model the same lineup and sponsor question with every data tool removed. The left
 			column is what it answered from memory; the right column is what the grounded run produced
 			from Qloo's results. The server checked every LLM-only name against the entities Qloo actually
@@ -55,24 +55,22 @@
 	</header>
 
 	{#if !panel}
-		<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			This brief was built before the counterfactual run existed.
 		</p>
 	{:else if panel.status === 'failed'}
-		<p class="rounded-xl bg-rose-50 p-4 text-sm text-rose-800 ring-1 ring-rose-600/20">
+		<p class="rounded-lg bg-critical-soft p-space-4 type-small text-critical">
 			The counterfactual run failed{panel.error ? `: ${panel.error}` : '.'}
 		</p>
 	{:else if panel.status === 'skipped' || !draft}
-		<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			The counterfactual run was skipped for this brief.
 		</p>
 	{:else}
 		{#if lines}
-			<ul class="mb-6 grid gap-3 sm:grid-cols-2">
+			<ul class="mb-space-6 grid gap-space-3 sm:grid-cols-2">
 				{#each [lines.lineup, lines.sponsors] as line, i (i)}
-					<li
-						class="rounded-xl bg-indigo-50/60 p-4 text-sm text-zinc-800 ring-1 ring-indigo-600/15"
-					>
+					<li class="rounded-lg bg-signal-soft p-space-4 type-body text-ink">
 						{line}
 					</li>
 				{/each}
@@ -80,40 +78,32 @@
 		{/if}
 
 		{#each blocks as block (block.key)}
-			<div class="mb-8">
-				<h3 class="mb-3 text-base font-semibold text-zinc-900">{block.title}</h3>
-				<div class="grid gap-6 md:grid-cols-2">
-					<div class="space-y-3">
-						<h4 class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">
-							LLM only (no tools)
-						</h4>
+			<div class="mb-space-6">
+				<h3 class="mb-space-3 type-heading-3 text-ink">{block.title}</h3>
+				<div class="grid gap-space-5 md:grid-cols-2">
+					<div class="space-y-space-3">
+						<h4 class="type-label text-ink-subtle">LLM only (no tools)</h4>
 						{#if block.rows.length === 0}
-							<p class="rounded-xl bg-zinc-50 p-3 text-sm text-zinc-600 ring-1 ring-zinc-200">
+							<p class="rounded-lg bg-surface-sunken p-space-3 type-small text-ink-muted">
 								The model made no picks.
 							</p>
 						{/if}
-						<ul class="space-y-3">
+						<ul class="space-y-space-3">
 							{#each block.rows as row, i (i)}
 								{@const m = matchLine(row.match)}
 								{@const tag = row.pick.role ? words(row.pick.role) : row.pick.category}
-								<li class="rounded-xl bg-white p-3 ring-1 ring-zinc-200">
-									<div class="flex flex-wrap items-center gap-2">
-										<span class="font-semibold text-zinc-900">{row.pick.name}</span>
-										{#if tag}
-											<span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600"
-												>{tag}</span
-											>
-										{/if}
-										<span
-											class="rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset {confidenceStyles[
-												row.pick.confidence
-											]}">{row.pick.confidence} confidence</span
+								<Card as="li" class="break-inside-avoid">
+									<div class="flex flex-wrap items-center gap-space-2">
+										<span class="type-heading-3 text-ink">{row.pick.name}</span>
+										{#if tag}<Chip>{tag}</Chip>{/if}
+										<Badge tone={CONFIDENCE_TONE[row.pick.confidence]}
+											>{row.pick.confidence} confidence</Badge
 										>
 									</div>
-									<p class="mt-2 text-sm leading-relaxed text-zinc-700">{row.pick.why}</p>
-									<div class="mt-2 flex flex-wrap items-center gap-2">
-										<Label label="inferred" />
-										<span class="flex items-center gap-1.5 text-xs {toneStyles[m.tone].text}">
+									<p class="mt-space-2 type-body text-ink-muted">{row.pick.why}</p>
+									<div class="mt-space-3 flex flex-wrap items-center gap-space-2">
+										<EvidenceLabel label="inferred" />
+										<span class="flex items-center gap-1.5 type-small {toneStyles[m.tone].text}">
 											<span
 												class="size-1.5 shrink-0 rounded-full {toneStyles[m.tone].dot}"
 												aria-hidden="true"
@@ -121,37 +111,34 @@
 											{m.text}
 										</span>
 									</div>
-								</li>
+								</Card>
 							{/each}
 						</ul>
 					</div>
 
-					<div class="space-y-3">
-						<h4 class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">
-							Grounded in Qloo
-						</h4>
+					<div class="space-y-space-3">
+						<h4 class="type-label text-ink-subtle">Grounded in Qloo</h4>
 						{#if block.grounded.length === 0}
-							<p class="rounded-xl bg-zinc-50 p-3 text-sm text-zinc-600 ring-1 ring-zinc-200">
+							<p class="rounded-lg bg-surface-sunken p-space-3 type-small text-ink-muted">
 								No grounded picks in this brief.
 							</p>
 						{/if}
-						<ul class="space-y-3">
+						<ul class="space-y-space-3">
 							{#each block.grounded as pick, i (i)}
-								<li class="rounded-xl bg-white p-3 ring-1 ring-zinc-200">
-									<div class="flex items-start justify-between gap-2">
+								<Card as="li" class="break-inside-avoid">
+									<div class="flex items-start justify-between gap-space-2">
 										<div class="min-w-0">
-											<span class="font-semibold text-zinc-900">{pick.name}</span>
-											{#if pick.tag}<span class="ml-1 text-xs text-zinc-500">{pick.tag}</span>{/if}
+											<span class="type-heading-3 text-ink">{pick.name}</span>
+											{#if pick.tag}<span class="ml-1 type-small text-ink-subtle">{pick.tag}</span
+												>{/if}
 										</div>
 										{#if pick.affinity !== undefined}
-											<span class="text-sm font-semibold text-zinc-900 tabular-nums">
-												{pct(pick.affinity)}
-											</span>
+											<span class="type-heading-3 text-ink tabular-nums">{pct(pick.affinity)}</span>
 										{/if}
 									</div>
-									<p class="mt-1.5 line-clamp-2 text-sm text-zinc-700">{pick.why}</p>
-									<div class="mt-2"><Label label={pick.label} /></div>
-								</li>
+									<p class="mt-space-2 line-clamp-2 type-body text-ink-muted">{pick.why}</p>
+									<div class="mt-space-3"><EvidenceLabel label={pick.label} /></div>
+								</Card>
 							{/each}
 						</ul>
 					</div>
@@ -160,7 +147,7 @@
 		{/each}
 
 		{#if draft.caveats.length > 0}
-			<ul class="max-w-3xl list-disc space-y-0.5 pl-5 text-xs text-zinc-500 italic">
+			<ul class="max-w-3xl list-disc space-y-0.5 pl-5 type-small text-ink-subtle italic">
 				{#each draft.caveats as caveat, i (i)}
 					<li>{caveat}</li>
 				{/each}
@@ -169,7 +156,7 @@
 	{/if}
 
 	{#if panel}
-		<p class="mt-4 text-xs text-zinc-500">
+		<p class="mt-space-4 type-small text-ink-subtle">
 			Counterfactual run: {panel.model}{#if tokens !== undefined}
 				· {tokens.toLocaleString('en-US')} tokens{/if}{#if Number.isFinite(duration) && duration >= 0}
 				· {formatDuration(duration)}{/if}

@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { categoryLabel, categoryStyle, riskLevelWord } from './labels';
+	import Badge from '../ui/Badge.svelte';
+	import Card from '../ui/Card.svelte';
+	import Chip from '../ui/Chip.svelte';
+	import { riskLevel } from '../ui/tones';
+	import { categoryLabel } from './labels';
 	import type { RiskScore } from '$lib/brief/schema';
 
 	let { score }: { score: RiskScore } = $props();
 
-	const word = $derived(riskLevelWord(score.value));
-	const bar = $derived(
-		word === 'quiet' ? 'bg-emerald-500' : word === 'watch' ? 'bg-amber-500' : 'bg-rose-500'
-	);
+	const level = $derived(riskLevel(score.value));
 	const cats = $derived(
 		Object.entries(score.byCategory)
 			.filter(([, v]) => v > 0)
@@ -15,45 +16,43 @@
 	);
 </script>
 
-<div class="rounded-xl bg-white p-5 ring-1 ring-zinc-200">
+<Card>
 	<div class="flex flex-wrap items-baseline justify-between gap-2">
-		<p class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">Market risk score</p>
-		<p class="text-sm text-zinc-600">
-			<span class="font-medium text-zinc-900">{score.itemCount}</span> items,
-			<span class="font-medium text-zinc-900">{score.recentCount}</span> from the last 7 days
+		<p class="type-label text-ink-subtle">Market risk score</p>
+		<p class="type-small text-ink-muted">
+			<span class="font-semibold text-ink tabular-nums">{score.itemCount}</span> items,
+			<span class="font-semibold text-ink tabular-nums">{score.recentCount}</span> from the last 7 days
 		</p>
 	</div>
-	<div class="mt-2 flex items-baseline gap-3">
-		<span class="text-4xl font-semibold text-zinc-900 tabular-nums">{score.value}</span>
-		<span class="text-sm text-zinc-500">/ 100</span>
-		<span class="text-lg font-medium text-zinc-800 capitalize">{word}</span>
+	<div class="mt-space-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+		<span class="type-numeral text-ink tabular-nums">{score.value}</span>
+		<span class="type-small text-ink-subtle">/ 100</span>
+		<Badge tone={level.tone}>{level.word}</Badge>
 	</div>
 	<div
-		class="mt-3 h-2 overflow-hidden rounded-full bg-zinc-100"
+		class="mt-space-3 h-2 overflow-hidden rounded-pill bg-surface-sunken"
 		role="meter"
 		aria-valuemin={0}
 		aria-valuemax={100}
 		aria-valuenow={score.value}
-		aria-label="Market risk score, {word}"
+		aria-label="Market risk score, {level.word}"
 	>
-		<div class="h-full rounded-full {bar}" style:width="{score.value}%"></div>
+		<div class="h-full rounded-pill bg-signal" style:width="{score.value}%"></div>
 	</div>
 	{#if cats.length > 0}
-		<ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Score by category">
+		<ul class="mt-space-4 flex flex-wrap gap-space-2" aria-label="Score by category">
 			{#each cats as [category, value] (category)}
-				<li
-					class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset {categoryStyle(
-						category
-					)}"
-				>
-					{categoryLabel(category)}
-					<span class="tabular-nums opacity-75">{value}</span>
+				<li>
+					<Chip>
+						{categoryLabel(category)}
+						<span class="ml-1.5 tabular-nums">{value}</span>
+					</Chip>
 				</li>
 			{/each}
 		</ul>
 	{/if}
-	<p class="mt-3 text-xs text-zinc-500">
+	<p class="mt-space-3 type-small text-ink-subtle">
 		Recent, severe items weigh more; older items decay. It is a news-volume signal, not a safety
 		judgment.
 	</p>
-</div>
+</Card>
