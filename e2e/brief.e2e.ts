@@ -19,8 +19,13 @@ test('a promoter starts a brief, watches the trace and reads the document', asyn
 
 	// The finished document replaces the live view without a reload.
 	await expect(page.locator('h1')).toContainText('Arjona in Guatemala City', { timeout: 60_000 });
-	await expect(page.getByRole('heading', { name: 'Audience map' })).toBeVisible();
-	await expect(page.getByRole('heading', { name: 'Sponsors' })).toBeVisible();
+	await expect(page.getByRole('heading', { name: 'Audience map', level: 2 })).toBeVisible();
+	await expect(page.getByRole('heading', { name: 'Sponsors', level: 2 })).toBeVisible();
+	// The counterfactual run (no tools) finished in parallel and its comparison is in the document.
+	await expect(
+		page.getByRole('heading', { name: 'Would this work without Qloo?', level: 2 })
+	).toBeVisible();
+	await expect(page.getByText('LLM only (no tools)').first()).toBeVisible();
 	await expect(page.locator('[data-label="grounded"]').first()).toBeVisible();
 	await expect(page.locator('[data-label="no_coverage"]').first()).toBeVisible();
 	await expect(page.getByRole('link', { name: 'Markdown' })).toBeVisible();

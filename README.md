@@ -11,7 +11,8 @@ Built for the Qloo Agentic Hackathon. Progress lives in [STATUS.md](STATUS.md); 
 1. `/new` resolves the market (quick picks or a locality search with a country check, because "Panama City" resolves to Florida) and the artist (autocomplete through Qloo `/search`), takes the dates and optional promoter numbers, and calls `POST /api/briefs`.
 2. The server starts the agent loop: Claude on the Anthropic SDK tool runner with twelve typed Qloo tools plus `emit_brief`, streaming, adaptive thinking, a cached system prompt and a tool budget. Every tool records the Qloo request behind it.
 3. Events stream to the browser over SSE (`/api/briefs/:id/events`) and are persisted with the brief; `/brief/:id` shows the live trace, then the document.
-4. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link.
+4. In parallel, a second run answers the lineup and sponsor question with every tool removed. The server checks each of those LLM-only names against what Qloo actually returned, and the brief shows the two columns side by side: what the model guessed and what the data says.
+5. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link, printable to PDF, with the sponsor outreach drafts on their own page.
 
 ## Stack
 
