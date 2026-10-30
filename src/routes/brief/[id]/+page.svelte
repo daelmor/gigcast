@@ -54,6 +54,17 @@
 			: `${record.input.dateFrom} to ${record.input.dateTo}`
 	);
 
+	// Open every <details> for printing (drafts, trace) and restore them afterwards.
+	let reopened: HTMLDetailsElement[] = [];
+	function openAllDetails() {
+		reopened = [...document.querySelectorAll<HTMLDetailsElement>('details:not([open])')];
+		for (const d of reopened) d.open = true;
+	}
+	function restoreDetails() {
+		for (const d of reopened) d.open = false;
+		reopened = [];
+	}
+
 	async function copyLink() {
 		try {
 			await navigator.clipboard.writeText(window.location.href);
@@ -64,6 +75,8 @@
 		}
 	}
 </script>
+
+<svelte:window onbeforeprint={openAllDetails} onafterprint={restoreDetails} />
 
 <svelte:head>
 	<title>{title} · gigcast</title>
@@ -93,6 +106,12 @@
 					class="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 ring-1 ring-zinc-200 hover:bg-zinc-50"
 				>
 					Markdown
+				</a>
+				<a
+					href={resolve('/brief/[id]/drafts', { id: record.id })}
+					class="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 ring-1 ring-zinc-200 hover:bg-zinc-50"
+				>
+					Drafts
 				</a>
 				<button
 					type="button"
