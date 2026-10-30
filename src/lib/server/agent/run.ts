@@ -236,7 +236,11 @@ export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult
 			break;
 		} catch (err) {
 			if (err instanceof Anthropic.APIError || attempt >= 2) {
-				fatalError = err instanceof Error ? err.message : String(err);
+				fatalError = options.signal?.aborted
+					? `The run was aborted: ${options.signal.reason instanceof Error ? options.signal.reason.message : String(options.signal.reason ?? 'no reason given')}`
+					: err instanceof Error
+						? err.message
+						: String(err);
 				emit({ type: 'error', message: fatalError, fatal: true });
 				logger.error({ err, runId }, 'agent run failed');
 				break;

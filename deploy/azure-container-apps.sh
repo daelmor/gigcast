@@ -82,6 +82,7 @@ ENV_VARS=(
   "NODE_ENV=production"
   "PORT=3000"
   "HOST=0.0.0.0"
+  "SHUTDOWN_TIMEOUT=600"
   "QLOO_API_KEY=secretref:qloo-api-key"
   "DATABASE_URL=secretref:database-url"
   "INGEST_JOB_SECRET=secretref:ingest-job-secret"
@@ -95,17 +96,21 @@ if az containerapp show -n "${APP}" -g "${RG}" -o none 2>/dev/null; then
   az containerapp update -n "${APP}" -g "${RG}" -o none \
     --image "${IMAGE}" \
     --min-replicas "${MIN_REPLICAS}" --max-replicas "${MAX_REPLICAS}" \
+    --termination-grace-period 600 \
     --set-env-vars "${ENV_VARS[@]}"
 else
   say "Creating the app"
   # One replica: the live SSE hub is per process (the Postgres fallback keeps a second replica
   # correct). min 1 keeps the agent loop alive after the HTTP request that started it returned.
+  # The 600 s grace period (with SHUTDOWN_TIMEOUT=600 in the app) lets briefs in flight finish
+  # and persist when a new revision replaces the replica.
   az containerapp create -n "${APP}" -g "${RG}" -o none \
     --environment "${ENV_NAME}" \
     --image "${IMAGE}" \
     --registry-server "${ACR}.azurecr.io" --registry-identity system --system-assigned \
     --target-port 3000 --ingress external --transport auto \
     --min-replicas "${MIN_REPLICAS}" --max-replicas "${MAX_REPLICAS}" \
+    --termination-grace-period 600 \
     --cpu 1.0 --memory 2.0Gi \
     --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}" \
     --secret-volume-mount /mnt/secrets \

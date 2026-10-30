@@ -8,7 +8,7 @@ import path from 'node:path';
 import { building, dev } from '$app/environment';
 import type { Handle, HandleServerError, ServerInit } from '@sveltejs/kit';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import { abortAllRuns } from '$lib/server/briefs/manager';
+import { activeRunCount } from '$lib/server/briefs/manager';
 import { failOrphanedRuns, upsertKnownMarkets } from '$lib/server/briefs/store';
 import { getDb } from '$lib/server/db';
 import { getEnv } from '$lib/server/env';
@@ -35,7 +35,12 @@ export const init: ServerInit = async () => {
 		// The app can still serve pages; the first request that needs the database will surface the error.
 		logger.error({ err }, 'database warm-up failed');
 	}
-	process.once('SIGTERM', () => abortAllRuns('server shutting down'));
+	// On SIGTERM the Node adapter stops accepting connections and keeps the process alive for
+	// SHUTDOWN_TIMEOUT seconds (600 on Azure), so in-flight briefs finish and persist; viewers on
+	// the new replica follow them through the database. Aborting here would throw their work away.
+	process.once('SIGTERM', () =>
+		logger.warn({ activeRuns: activeRunCount() }, 'SIGTERM: letting active runs finish')
+	);
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
