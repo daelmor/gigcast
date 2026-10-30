@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { BriefStream } from '$lib/client/brief-stream.svelte';
@@ -94,6 +94,36 @@
 		reopened = [];
 	}
 
+	// Partial or failed briefs (for example a redeploy that interrupted the agent) can be rerun
+	// with the same inputs; the new brief gets its own link.
+	let retrying = $state(false);
+	let retryError = $state<string | undefined>();
+	async function retry() {
+		retrying = true;
+		retryError = undefined;
+		try {
+			const res = await fetch('/api/briefs', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ ...record.input, marketId: record.marketId ?? undefined })
+			});
+			if (res.status === 429) {
+				retryError = 'The agent is busy with other briefs right now. Try again in a few minutes.';
+				return;
+			}
+			if (!res.ok) {
+				retryError = `The brief could not be started (HTTP ${res.status}).`;
+				return;
+			}
+			const { id } = (await res.json()) as { id: string };
+			await goto(resolve('/brief/[id]', { id }));
+		} catch {
+			retryError = 'The brief could not be started. Check your connection and try again.';
+		} finally {
+			retrying = false;
+		}
+	}
+
 	async function copyLink() {
 		try {
 			await navigator.clipboard.writeText(window.location.href);
@@ -118,6 +148,25 @@
 
 <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6">
 	{#if record.brief}
+		{#if record.status === 'partial'}
+			<div
+				class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-amber-50 p-4 ring-1 ring-amber-200 print:hidden"
+			>
+				<p class="text-sm text-amber-900">
+					This brief is incomplete{lastError ? `: ${lastError}` : '.'} You can run it again with the same
+					inputs.
+				</p>
+				<button
+					type="button"
+					onclick={retry}
+					disabled={retrying}
+					class="rounded-lg bg-amber-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-amber-600 disabled:opacity-60"
+				>
+					{retrying ? 'Starting…' : 'Run this brief again'}
+				</button>
+				{#if retryError}<p class="w-full text-sm text-rose-700" role="alert">{retryError}</p>{/if}
+			</div>
+		{/if}
 		<div class="mb-6 flex flex-wrap items-center justify-between gap-3 print:hidden">
 			<p class="text-sm text-zinc-500">
 				Public read-only link. Anyone with the address can read this brief.
@@ -185,12 +234,20 @@
 					{lastError}
 				</p>
 			{/if}
-			<a
-				href={resolve('/new')}
-				class="mt-4 inline-flex rounded-lg bg-rose-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-600"
-			>
-				Start another brief
-			</a>
+			<div class="mt-4 flex flex-wrap items-center gap-3">
+				<button
+					type="button"
+					onclick={retry}
+					disabled={retrying}
+					class="inline-flex rounded-lg bg-rose-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-600 disabled:opacity-60"
+				>
+					{retrying ? 'Starting…' : 'Run this brief again'}
+				</button>
+				<a href={resolve('/new')} class="text-sm font-medium text-rose-800 hover:underline">
+					Start a different brief
+				</a>
+			</div>
+			{#if retryError}<p class="mt-2 text-sm text-rose-700" role="alert">{retryError}</p>{/if}
 		</div>
 		{#if events.length}
 			<div class="mt-8">
