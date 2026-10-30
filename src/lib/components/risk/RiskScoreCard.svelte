@@ -15,21 +15,21 @@
 	);
 </script>
 
-<div class="rounded-xl bg-white p-5 ring-1 ring-zinc-200">
+<div class="bg-white ring-zinc-200 rounded-xl p-5 ring-1">
 	<div class="flex flex-wrap items-baseline justify-between gap-2">
-		<p class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">Market risk score</p>
-		<p class="text-sm text-zinc-600">
-			<span class="font-medium text-zinc-900">{score.itemCount}</span> items,
-			<span class="font-medium text-zinc-900">{score.recentCount}</span> from the last 7 days
+		<p class="text-zinc-500 text-xs font-semibold tracking-wide uppercase">Market risk score</p>
+		<p class="text-zinc-600 text-sm">
+			<span class="text-zinc-900 font-medium">{score.itemCount}</span> items,
+			<span class="text-zinc-900 font-medium">{score.recentCount}</span> from the last 7 days
 		</p>
 	</div>
 	<div class="mt-2 flex items-baseline gap-3">
-		<span class="text-4xl font-semibold text-zinc-900 tabular-nums">{score.value}</span>
-		<span class="text-sm text-zinc-500">/ 100</span>
-		<span class="text-lg font-medium text-zinc-800 capitalize">{word}</span>
+		<span class="text-zinc-900 text-4xl font-semibold tabular-nums">{score.value}</span>
+		<span class="text-zinc-500 text-sm">/ 100</span>
+		<span class="text-zinc-800 text-lg font-medium capitalize">{word}</span>
 	</div>
 	<div
-		class="mt-3 h-2 overflow-hidden rounded-full bg-zinc-100"
+		class="bg-zinc-100 mt-3 h-2 overflow-hidden rounded-full"
 		role="meter"
 		aria-valuemin={0}
 		aria-valuemax={100}
@@ -52,7 +52,7 @@
 			{/each}
 		</ul>
 	{/if}
-	<p class="mt-3 text-xs text-zinc-500">
+	<p class="text-zinc-500 mt-3 text-xs">
 		Recent, severe items weigh more; older items decay. It is a news-volume signal, not a safety
 		judgment.
 	</p>

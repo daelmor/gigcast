@@ -40,53 +40,53 @@
 </script>
 
 <section aria-labelledby="method">
-	<h2 id="method" class="mb-4 scroll-mt-24 text-xl font-semibold text-zinc-900">
+	<h2 id="method" class="text-zinc-900 mb-4 scroll-mt-24 text-xl font-semibold">
 		Method and sources
 	</h2>
 	<div class="grid gap-4 md:grid-cols-2">
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-			<h3 class="text-sm font-semibold text-zinc-900">Run summary</h3>
-			<dl class="mt-2 divide-y divide-zinc-100 text-sm">
+		<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
+			<h3 class="text-zinc-900 text-sm font-semibold">Run summary</h3>
+			<dl class="divide-zinc-100 mt-2 divide-y text-sm">
 				{#each rows as [k, v] (k)}
 					<div class="flex justify-between gap-4 py-1.5">
 						<dt class="text-zinc-500">{k}</dt>
-						<dd class="text-right text-zinc-900 tabular-nums">{v}</dd>
+						<dd class="text-zinc-900 text-right tabular-nums">{v}</dd>
 					</div>
 				{/each}
 			</dl>
 			{#if run.missingSections.length > 0}
-				<p class="mt-3 text-sm text-amber-800">
+				<p class="text-amber-800 mt-3 text-sm">
 					Missing sections: {run.missingSections.map(title).join(', ')}
 				</p>
 			{/if}
 			{#if run.error}
-				<p class="mt-3 rounded-lg bg-rose-50 p-3 text-sm text-rose-800 ring-1 ring-rose-200">
+				<p class="bg-rose-50 text-rose-800 ring-rose-200 mt-3 rounded-lg p-3 text-sm ring-1">
 					{run.error}
 				</p>
 			{/if}
 		</div>
 
 		<div class="space-y-4">
-			<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-				<h3 class="text-sm font-semibold text-zinc-900">Verification</h3>
-				<p class="mt-1 text-sm text-zinc-700">
+			<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
+				<h3 class="text-zinc-900 text-sm font-semibold">Verification</h3>
+				<p class="text-zinc-700 mt-1 text-sm">
 					{verification.checked} items checked against tool results, {verification.downgraded
 						.length} downgraded.
 				</p>
 				{#if verification.downgraded.length > 0}
 					<ul class="mt-2 space-y-2 text-sm">
 						{#each verification.downgraded as d (d.entityId + d.section)}
-							<li class="rounded-lg bg-amber-50 p-3 ring-1 ring-amber-200">
-								<p class="font-medium text-amber-900">{d.name}</p>
-								<p class="text-xs text-amber-800">{title(d.section)}: {d.reason}</p>
+							<li class="bg-amber-50 ring-amber-200 rounded-lg p-3 ring-1">
+								<p class="text-amber-900 font-medium">{d.name}</p>
+								<p class="text-amber-800 text-xs">{title(d.section)}: {d.reason}</p>
 							</li>
 						{/each}
 					</ul>
 				{/if}
 			</div>
-			<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-				<h3 class="text-sm font-semibold text-zinc-900">Labels</h3>
-				<ul class="mt-2 space-y-2 text-sm text-zinc-600">
+			<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
+				<h3 class="text-zinc-900 text-sm font-semibold">Labels</h3>
+				<ul class="text-zinc-600 mt-2 space-y-2 text-sm">
 					{#each Object.entries(LABEL_HELP) as [label, help] (label)}
 						<li class="flex items-start gap-2">
 							<Label label={label as LabelType} class="shrink-0" />

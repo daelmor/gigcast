@@ -90,7 +90,7 @@
 </script>
 
 <div
-	class="relative overflow-hidden rounded-xl bg-zinc-100 {className}"
+	class="bg-zinc-100 relative overflow-hidden rounded-xl {className}"
 	role="img"
 	aria-label={label}
 >
@@ -99,7 +99,7 @@
 	<div bind:this={container} class="h-full w-full"></div>
 	{#if failed}
 		<div
-			class="absolute inset-0 flex items-center justify-center bg-zinc-50 p-4 text-center text-sm text-zinc-500"
+			class="bg-zinc-50 text-zinc-500 absolute inset-0 flex items-center justify-center p-4 text-center text-sm"
 		>
 			The map tiles could not be loaded. The data below does not depend on them.
 		</div>

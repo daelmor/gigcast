@@ -28,51 +28,51 @@
 <div class="mx-auto max-w-3xl">
 	<a
 		href={resolve('/brief/[id]', { id: brief.id })}
-		class="text-sm font-medium text-indigo-600 hover:text-indigo-800 print:hidden"
+		class="text-indigo-600 hover:text-indigo-800 text-sm font-medium print:hidden"
 	>
 		← Back to the brief
 	</a>
-	<h1 class="mt-2 text-2xl font-semibold tracking-tight text-zinc-900">Sponsor outreach drafts</h1>
-	<p class="mt-1 text-sm text-zinc-600">{brief.draft.headline}</p>
+	<h1 class="text-zinc-900 mt-2 text-2xl font-semibold tracking-tight">Sponsor outreach drafts</h1>
+	<p class="text-zinc-600 mt-1 text-sm">{brief.draft.headline}</p>
 
-	<div class="mt-5 rounded-xl bg-amber-50 p-4 text-sm text-amber-900 ring-1 ring-amber-200">
+	<div class="bg-amber-50 text-amber-900 ring-amber-200 mt-5 rounded-xl p-4 text-sm ring-1">
 		These are drafts written by the model from Qloo affinity signals. Review and edit them before
 		use. gigcast never sends anything: the email link only opens your own email app.
 	</div>
 
 	{#if picks.length === 0}
-		<p class="mt-6 rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 mt-6 rounded-xl p-4 text-sm ring-1">
 			No sponsor suggestions in this brief, so there are no drafts.
 		</p>
 	{:else}
 		<ul class="mt-6 space-y-6">
 			{#each picks as pick (pick.entityId)}
 				{@const text = `Subject: ${pick.outreachDraft.subject}\n\n${pick.outreachDraft.body}`}
-				<li class="rounded-xl bg-white p-5 ring-1 ring-zinc-200 print:break-inside-avoid">
+				<li class="bg-white ring-zinc-200 rounded-xl p-5 ring-1 print:break-inside-avoid">
 					<div class="flex items-start justify-between gap-3">
 						<div>
-							<h2 class="text-lg font-semibold text-zinc-900">{pick.name}</h2>
-							{#if pick.category}<p class="text-xs text-zinc-500">{pick.category}</p>{/if}
+							<h2 class="text-zinc-900 text-lg font-semibold">{pick.name}</h2>
+							{#if pick.category}<p class="text-zinc-500 text-xs">{pick.category}</p>{/if}
 						</div>
 						<div class="flex items-center gap-3">
 							<Label label={pick.label} />
 							{#if pick.affinity !== undefined}
 								<div class="text-right">
-									<p class="text-2xl font-semibold text-zinc-900 tabular-nums">
+									<p class="text-zinc-900 text-2xl font-semibold tabular-nums">
 										{pct(pick.affinity)}
 									</p>
-									<p class="text-xs text-zinc-500">affinity</p>
+									<p class="text-zinc-500 text-xs">affinity</p>
 								</div>
 							{/if}
 						</div>
 					</div>
-					<p class="mt-3 text-sm leading-relaxed text-zinc-700">{pick.why}</p>
+					<p class="text-zinc-700 mt-3 text-sm leading-relaxed">{pick.why}</p>
 
-					<p class="mt-4 text-xs font-medium text-zinc-500 uppercase">Subject</p>
-					<p class="text-sm font-medium text-zinc-900">{pick.outreachDraft.subject}</p>
-					<p class="mt-3 text-xs font-medium text-zinc-500 uppercase">Body</p>
+					<p class="text-zinc-500 mt-4 text-xs font-medium uppercase">Subject</p>
+					<p class="text-zinc-900 text-sm font-medium">{pick.outreachDraft.subject}</p>
+					<p class="text-zinc-500 mt-3 text-xs font-medium uppercase">Body</p>
 					<div
-						class="mt-1 rounded-lg bg-zinc-50 p-4 text-sm leading-relaxed whitespace-pre-wrap text-zinc-800 ring-1 ring-zinc-200"
+						class="bg-zinc-50 text-zinc-800 ring-zinc-200 mt-1 rounded-lg p-4 text-sm leading-relaxed whitespace-pre-wrap ring-1"
 					>
 						{pick.outreachDraft.body}
 					</div>
@@ -81,14 +81,14 @@
 						<button
 							type="button"
 							onclick={() => copy(pick.entityId, text)}
-							class="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-indigo-600 ring-1 ring-zinc-300 hover:bg-zinc-50"
+							class="bg-white text-indigo-600 ring-zinc-300 hover:bg-zinc-50 rounded-lg px-3 py-1.5 text-sm font-medium ring-1"
 						>
 							{copied === pick.entityId ? 'Copied' : 'Copy'}
 						</button>
 						<!-- eslint-disable svelte/no-navigation-without-resolve -- mailto: is not an app route -->
 						<a
 							href={mailto(pick.outreachDraft.subject, pick.outreachDraft.body)}
-							class="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+							class="bg-indigo-600 text-white hover:bg-indigo-500 rounded-lg px-3 py-1.5 text-sm font-medium"
 						>
 							Open in your email app
 						</a>

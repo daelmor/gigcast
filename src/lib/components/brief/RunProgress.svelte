@@ -31,13 +31,13 @@
 	});
 </script>
 
-<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200" aria-live="polite">
+<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1" aria-live="polite">
 	<div class="mb-3 flex items-center justify-between gap-3">
-		<h3 class="text-sm font-semibold text-zinc-900">
+		<h3 class="text-zinc-900 text-sm font-semibold">
 			{#if status === 'queued'}Queued{:else if status === 'running'}Building the brief{:else if status === 'failed'}Run
 				failed{:else if status === 'partial'}Brief finished with gaps{:else}Brief ready{/if}
 		</h3>
-		<span class="text-xs text-zinc-500 tabular-nums">{formatDuration(elapsed)}</span>
+		<span class="text-zinc-500 text-xs tabular-nums">{formatDuration(elapsed)}</span>
 	</div>
 	<ol class="flex flex-wrap gap-2">
 		{#each BRIEF_SECTIONS as s (s)}
@@ -59,10 +59,10 @@
 						/></svg
 					>
 				{:else if st === 'in_progress'}
-					<span class="size-2 shrink-0 animate-pulse rounded-full bg-indigo-500" aria-hidden="true"
+					<span class="bg-indigo-500 size-2 shrink-0 animate-pulse rounded-full" aria-hidden="true"
 					></span>
 				{:else}
-					<span class="size-2 shrink-0 rounded-full bg-zinc-300" aria-hidden="true"></span>
+					<span class="bg-zinc-300 size-2 shrink-0 rounded-full" aria-hidden="true"></span>
 				{/if}
 				<span class="whitespace-nowrap">{SECTION_LABELS[s]}</span>
 				<span class="sr-only">{st.replace('_', ' ')}</span>

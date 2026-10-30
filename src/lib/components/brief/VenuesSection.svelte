@@ -27,28 +27,28 @@
 <section aria-labelledby="venues">
 	<SectionHeader id="venues" title="Venues and partners" note={venues.note} />
 	{#if groups.length === 0}
-		<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
 			No venues or partners in this brief.
 		</p>
 	{:else}
 		<div class="space-y-6">
 			{#each groups as group (group.kind)}
 				<div>
-					<h3 class="mb-2 text-sm font-semibold tracking-wide text-zinc-500 uppercase">
+					<h3 class="text-zinc-500 mb-2 text-sm font-semibold tracking-wide uppercase">
 						{group.title}
 					</h3>
 					<ul class="grid gap-3 md:grid-cols-2">
 						{#each group.picks as p (p.entityId)}
-							<li class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
+							<li class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
 								<div class="flex items-start justify-between gap-2">
 									<div class="min-w-0">
-										<h4 class="font-semibold text-zinc-900">{p.name}</h4>
-										{#if p.address}<p class="text-xs text-zinc-500">{p.address}</p>{/if}
+										<h4 class="text-zinc-900 font-semibold">{p.name}</h4>
+										{#if p.address}<p class="text-zinc-500 text-xs">{p.address}</p>{/if}
 									</div>
-									<div class="shrink-0 text-right text-xs text-zinc-600">
+									<div class="text-zinc-600 shrink-0 text-right text-xs">
 										{#if p.priceLevel !== undefined}
 											<p aria-label="Price level {p.priceLevel} of 4">
-												<span class="font-semibold text-zinc-900">{'$'.repeat(p.priceLevel)}</span
+												<span class="text-zinc-900 font-semibold">{'$'.repeat(p.priceLevel)}</span
 												><span class="text-zinc-300">{'$'.repeat(4 - p.priceLevel)}</span>
 											</p>
 										{/if}
@@ -57,7 +57,7 @@
 										{/if}
 									</div>
 								</div>
-								<p class="mt-2 text-sm leading-relaxed text-zinc-700">{p.why}</p>
+								<p class="text-zinc-700 mt-2 text-sm leading-relaxed">{p.why}</p>
 								<div class="mt-3 flex flex-wrap items-center gap-2">
 									<Label label={p.label} />
 									<SourceMarks sources={p.sources} />

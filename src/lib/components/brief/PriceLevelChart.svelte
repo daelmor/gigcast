@@ -49,9 +49,9 @@
 	);
 </script>
 
-<figure class="mt-4 rounded-xl bg-white p-4 ring-1 ring-zinc-200 print:break-inside-avoid">
+<figure class="bg-white ring-zinc-200 mt-4 rounded-xl p-4 ring-1 print:break-inside-avoid">
 	{#if dist.total === 0 && !dist.fromHeatmap}
-		<p class="text-sm text-zinc-600">
+		<p class="text-zinc-600 text-sm">
 			No price-level data came back from Qloo for this area, so the tiers rest on the audience
 			signals alone.
 		</p>
@@ -59,10 +59,10 @@
 		{#if dist.total > 0}
 			<EChart {option} fallback={summary} class="h-44 w-full" />
 		{:else}
-			<p class="text-sm text-zinc-600">No individual places carried a price level.</p>
+			<p class="text-zinc-600 text-sm">No individual places carried a price level.</p>
 		{/if}
 		{#if quantiles.length}
-			<dl class="mt-3 flex flex-wrap gap-x-5 gap-y-1 border-t border-zinc-100 pt-3 text-xs">
+			<dl class="border-zinc-100 mt-3 flex flex-wrap gap-x-5 gap-y-1 border-t pt-3 text-xs">
 				<dt class="text-zinc-500">Heatmap price level (0 to 1)</dt>
 				{#each quantiles as q (q.k)}
 					<dd class="text-zinc-800 tabular-nums">
@@ -73,7 +73,7 @@
 			</dl>
 		{/if}
 	{/if}
-	<figcaption class="mt-3 text-xs text-zinc-500">
+	<figcaption class="text-zinc-500 mt-3 text-xs">
 		Price levels of the places Qloo returned near the heat ({dist.total}
 		{dist.total === 1 ? 'place' : 'places'}), the proxy behind the tiers.
 	</figcaption>

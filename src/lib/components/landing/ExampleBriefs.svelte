@@ -29,9 +29,9 @@
 		<h2 id="examples-title" class="text-lg font-semibold">See a finished brief</h2>
 		<ul class="mt-4 grid gap-4 md:grid-cols-3">
 			{#each briefs as b (b.id)}
-				<li class="flex flex-col rounded-xl bg-white p-5 ring-1 ring-zinc-200">
+				<li class="bg-white ring-zinc-200 flex flex-col rounded-xl p-5 ring-1">
 					<div class="flex items-start justify-between gap-2">
-						<span class="font-semibold text-zinc-900">{b.artistName}</span>
+						<span class="text-zinc-900 font-semibold">{b.artistName}</span>
 						{#if b.verdict}
 							<span
 								class="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset {verdictStyle[
@@ -40,12 +40,12 @@
 							>
 						{/if}
 					</div>
-					<span class="text-sm text-zinc-500">{findMarket(b.marketId ?? '')?.name ?? b.city}</span>
-					{#if b.headline}<p class="mt-2 text-sm text-zinc-700">{b.headline}</p>{/if}
-					{#if dateWindow(b)}<p class="mt-2 text-xs text-zinc-500">{dateWindow(b)}</p>{/if}
+					<span class="text-zinc-500 text-sm">{findMarket(b.marketId ?? '')?.name ?? b.city}</span>
+					{#if b.headline}<p class="text-zinc-700 mt-2 text-sm">{b.headline}</p>{/if}
+					{#if dateWindow(b)}<p class="text-zinc-500 mt-2 text-xs">{dateWindow(b)}</p>{/if}
 					<a
 						href={resolve('/brief/[id]', { id: b.id })}
-						class="mt-auto pt-4 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+						class="text-indigo-600 hover:text-indigo-700 mt-auto pt-4 text-sm font-medium"
 						>Open the brief</a
 					>
 				</li>

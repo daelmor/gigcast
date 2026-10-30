@@ -43,10 +43,10 @@
 
 <section aria-labelledby="counterfactual">
 	<header class="mb-5">
-		<h2 id="counterfactual" class="scroll-mt-24 text-xl font-semibold text-zinc-900">
+		<h2 id="counterfactual" class="text-zinc-900 scroll-mt-24 text-xl font-semibold">
 			Would this work without Qloo?
 		</h2>
-		<p class="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-700">
+		<p class="text-zinc-700 mt-2 max-w-3xl text-sm leading-relaxed">
 			We asked the model the same lineup and sponsor question with every data tool removed. The left
 			column is what it answered from memory; the right column is what the grounded run produced
 			from Qloo's results. The server checked every LLM-only name against the entities Qloo actually
@@ -55,15 +55,15 @@
 	</header>
 
 	{#if !panel}
-		<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
 			This brief was built before the counterfactual run existed.
 		</p>
 	{:else if panel.status === 'failed'}
-		<p class="rounded-xl bg-rose-50 p-4 text-sm text-rose-800 ring-1 ring-rose-600/20">
+		<p class="bg-rose-50 text-rose-800 ring-rose-600/20 rounded-xl p-4 text-sm ring-1">
 			The counterfactual run failed{panel.error ? `: ${panel.error}` : '.'}
 		</p>
 	{:else if panel.status === 'skipped' || !draft}
-		<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
 			The counterfactual run was skipped for this brief.
 		</p>
 	{:else}
@@ -71,7 +71,7 @@
 			<ul class="mb-6 grid gap-3 sm:grid-cols-2">
 				{#each [lines.lineup, lines.sponsors] as line, i (i)}
 					<li
-						class="rounded-xl bg-indigo-50/60 p-4 text-sm text-zinc-800 ring-1 ring-indigo-600/15"
+						class="bg-indigo-50/60 text-zinc-800 ring-indigo-600/15 rounded-xl p-4 text-sm ring-1"
 					>
 						{line}
 					</li>
@@ -81,14 +81,14 @@
 
 		{#each blocks as block (block.key)}
 			<div class="mb-8">
-				<h3 class="mb-3 text-base font-semibold text-zinc-900">{block.title}</h3>
+				<h3 class="text-zinc-900 mb-3 text-base font-semibold">{block.title}</h3>
 				<div class="grid gap-6 md:grid-cols-2">
 					<div class="space-y-3">
-						<h4 class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">
+						<h4 class="text-zinc-500 text-xs font-semibold tracking-wide uppercase">
 							LLM only (no tools)
 						</h4>
 						{#if block.rows.length === 0}
-							<p class="rounded-xl bg-zinc-50 p-3 text-sm text-zinc-600 ring-1 ring-zinc-200">
+							<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-3 text-sm ring-1">
 								The model made no picks.
 							</p>
 						{/if}
@@ -96,11 +96,11 @@
 							{#each block.rows as row, i (i)}
 								{@const m = matchLine(row.match)}
 								{@const tag = row.pick.role ? words(row.pick.role) : row.pick.category}
-								<li class="rounded-xl bg-white p-3 ring-1 ring-zinc-200">
+								<li class="bg-white ring-zinc-200 rounded-xl p-3 ring-1">
 									<div class="flex flex-wrap items-center gap-2">
-										<span class="font-semibold text-zinc-900">{row.pick.name}</span>
+										<span class="text-zinc-900 font-semibold">{row.pick.name}</span>
 										{#if tag}
-											<span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600"
+											<span class="bg-zinc-100 text-zinc-600 rounded-full px-2 py-0.5 text-xs"
 												>{tag}</span
 											>
 										{/if}
@@ -110,7 +110,7 @@
 											]}">{row.pick.confidence} confidence</span
 										>
 									</div>
-									<p class="mt-2 text-sm leading-relaxed text-zinc-700">{row.pick.why}</p>
+									<p class="text-zinc-700 mt-2 text-sm leading-relaxed">{row.pick.why}</p>
 									<div class="mt-2 flex flex-wrap items-center gap-2">
 										<Label label="inferred" />
 										<span class="flex items-center gap-1.5 text-xs {toneStyles[m.tone].text}">
@@ -127,29 +127,29 @@
 					</div>
 
 					<div class="space-y-3">
-						<h4 class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">
+						<h4 class="text-zinc-500 text-xs font-semibold tracking-wide uppercase">
 							Grounded in Qloo
 						</h4>
 						{#if block.grounded.length === 0}
-							<p class="rounded-xl bg-zinc-50 p-3 text-sm text-zinc-600 ring-1 ring-zinc-200">
+							<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-3 text-sm ring-1">
 								No grounded picks in this brief.
 							</p>
 						{/if}
 						<ul class="space-y-3">
 							{#each block.grounded as pick, i (i)}
-								<li class="rounded-xl bg-white p-3 ring-1 ring-zinc-200">
+								<li class="bg-white ring-zinc-200 rounded-xl p-3 ring-1">
 									<div class="flex items-start justify-between gap-2">
 										<div class="min-w-0">
-											<span class="font-semibold text-zinc-900">{pick.name}</span>
-											{#if pick.tag}<span class="ml-1 text-xs text-zinc-500">{pick.tag}</span>{/if}
+											<span class="text-zinc-900 font-semibold">{pick.name}</span>
+											{#if pick.tag}<span class="text-zinc-500 ml-1 text-xs">{pick.tag}</span>{/if}
 										</div>
 										{#if pick.affinity !== undefined}
-											<span class="text-sm font-semibold text-zinc-900 tabular-nums">
+											<span class="text-zinc-900 text-sm font-semibold tabular-nums">
 												{pct(pick.affinity)}
 											</span>
 										{/if}
 									</div>
-									<p class="mt-1.5 line-clamp-2 text-sm text-zinc-700">{pick.why}</p>
+									<p class="text-zinc-700 mt-1.5 line-clamp-2 text-sm">{pick.why}</p>
 									<div class="mt-2"><Label label={pick.label} /></div>
 								</li>
 							{/each}
@@ -160,7 +160,7 @@
 		{/each}
 
 		{#if draft.caveats.length > 0}
-			<ul class="max-w-3xl list-disc space-y-0.5 pl-5 text-xs text-zinc-500 italic">
+			<ul class="text-zinc-500 max-w-3xl list-disc space-y-0.5 pl-5 text-xs italic">
 				{#each draft.caveats as caveat, i (i)}
 					<li>{caveat}</li>
 				{/each}
@@ -169,7 +169,7 @@
 	{/if}
 
 	{#if panel}
-		<p class="mt-4 text-xs text-zinc-500">
+		<p class="text-zinc-500 mt-4 text-xs">
 			Counterfactual run: {panel.model}{#if tokens !== undefined}
 				· {tokens.toLocaleString('en-US')} tokens{/if}{#if Number.isFinite(duration) && duration >= 0}
 				· {formatDuration(duration)}{/if}

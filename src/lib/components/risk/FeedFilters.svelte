@@ -18,9 +18,9 @@
 	}
 </script>
 
-<div class="space-y-3 rounded-xl bg-white p-4 ring-1 ring-zinc-200">
+<div class="bg-white ring-zinc-200 space-y-3 rounded-xl p-4 ring-1">
 	<fieldset>
-		<legend class="mb-1.5 text-xs font-semibold tracking-wide text-zinc-500 uppercase"
+		<legend class="text-zinc-500 mb-1.5 text-xs font-semibold tracking-wide uppercase"
 			>Categories</legend
 		>
 		<div class="flex flex-wrap gap-1.5">
@@ -42,19 +42,19 @@
 				<button
 					type="button"
 					onclick={() => (filters.categories = [])}
-					class="px-1 text-xs text-indigo-600 hover:underline">Clear</button
+					class="text-indigo-600 px-1 text-xs hover:underline">Clear</button
 				>
 			{/if}
 		</div>
 	</fieldset>
 	<div class="flex flex-wrap items-end gap-x-6 gap-y-3 text-sm">
 		<label class="flex flex-col gap-1">
-			<span class="text-xs font-semibold tracking-wide text-zinc-500 uppercase"
+			<span class="text-zinc-500 text-xs font-semibold tracking-wide uppercase"
 				>Minimum severity</span
 			>
 			<select
 				bind:value={filters.minSeverity}
-				class="rounded-lg border-0 py-1.5 text-sm ring-1 ring-zinc-300 focus:ring-2 focus:ring-indigo-600"
+				class="ring-zinc-300 focus:ring-indigo-600 rounded-lg border-0 py-1.5 text-sm ring-1 focus:ring-2"
 			>
 				{#each [1, 2, 3, 4, 5] as n (n)}
 					<option value={n}>{n}{n === 1 ? ' (all)' : '+'}</option>
@@ -62,10 +62,10 @@
 			</select>
 		</label>
 		<label class="flex flex-col gap-1">
-			<span class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">Published</span>
+			<span class="text-zinc-500 text-xs font-semibold tracking-wide uppercase">Published</span>
 			<select
 				bind:value={filters.days}
-				class="rounded-lg border-0 py-1.5 text-sm ring-1 ring-zinc-300 focus:ring-2 focus:ring-indigo-600"
+				class="ring-zinc-300 focus:ring-indigo-600 rounded-lg border-0 py-1.5 text-sm ring-1 focus:ring-2"
 			>
 				{#each DAY_OPTIONS as d (d)}
 					<option value={d}>Last {d} days</option>
@@ -76,7 +76,7 @@
 			<input
 				type="checkbox"
 				bind:checked={filters.mentionsSubjectOnly}
-				class="size-4 rounded text-indigo-600 focus:ring-indigo-600"
+				class="text-indigo-600 focus:ring-indigo-600 size-4 rounded"
 			/>
 			<span class="text-zinc-700">Mentions artist or venue only</span>
 		</label>

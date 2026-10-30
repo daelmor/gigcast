@@ -36,25 +36,25 @@
 </script>
 
 {#if briefs.length === 0}
-	<div class="rounded-xl bg-white p-8 text-center ring-1 ring-zinc-200">
+	<div class="bg-white ring-zinc-200 rounded-xl p-8 text-center ring-1">
 		<p class="text-zinc-600">No briefs yet. Make the first one.</p>
 		<a
 			href={resolve('/new')}
-			class="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+			class="bg-indigo-600 text-white hover:bg-indigo-700 mt-4 inline-block rounded-lg px-4 py-2 text-sm font-medium"
 			>New brief</a
 		>
 	</div>
 {:else}
-	<ul class="divide-y divide-zinc-200 rounded-xl bg-white ring-1 ring-zinc-200">
+	<ul class="divide-zinc-200 bg-white ring-zinc-200 divide-y rounded-xl ring-1">
 		{#each briefs as b (b.id)}
 			<li>
 				<a
 					href={briefHref(b.id)}
-					class="flex flex-col gap-2 px-4 py-3 hover:bg-zinc-50 sm:flex-row sm:items-center sm:justify-between"
+					class="hover:bg-zinc-50 flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
 				>
 					<span class="min-w-0">
-						<span class="block truncate font-medium text-zinc-900">{b.artistName}</span>
-						<span class="block truncate text-sm text-zinc-500">
+						<span class="text-zinc-900 block truncate font-medium">{b.artistName}</span>
+						<span class="text-zinc-500 block truncate text-sm">
 							{b.localityName ?? b.city}, {b.country}{b.dateFrom ? ` · ${b.dateFrom}` : ''}
 						</span>
 					</span>
@@ -66,7 +66,7 @@
 								]}">{verdictText[b.verdict]}</span
 							>
 						{/if}
-						<span class="rounded-full bg-zinc-100 px-2 py-0.5 font-medium text-zinc-700"
+						<span class="bg-zinc-100 text-zinc-700 rounded-full px-2 py-0.5 font-medium"
 							>{statusText[b.status]}</span
 						>
 						<span class="text-zinc-500">{formatDate(b.createdAt)}</span>

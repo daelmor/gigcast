@@ -64,7 +64,7 @@
 <div class="relative {className}" role="img" aria-label={fallback}>
 	<div bind:this={el} class="h-full w-full"></div>
 	{#if !ready}
-		<p class="absolute inset-0 flex items-center justify-center text-xs text-zinc-400">
+		<p class="text-zinc-400 absolute inset-0 flex items-center justify-center text-xs">
 			{fallback}
 		</p>
 	{/if}

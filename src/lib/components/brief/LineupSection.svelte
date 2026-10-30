@@ -42,7 +42,7 @@
 <section aria-labelledby="lineup">
 	<SectionHeader id="lineup" title="Lineup" note={lineup.note} />
 	{#if lineup.picks.length === 0}
-		<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
 			No lineup suggestions in this brief. {lineup.note.label === 'no_coverage'
 				? 'Qloo returned no similar artists for this market.'
 				: ''}
@@ -51,10 +51,10 @@
 		<ul class="grid gap-4 md:grid-cols-2">
 			{#each lineup.picks as pick (pick.entityId)}
 				{@const cand = candidateFor(pick)}
-				<li class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
+				<li class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
 					<div class="flex flex-wrap items-start justify-between gap-2">
 						<div>
-							<h3 class="font-semibold text-zinc-900">{pick.name}</h3>
+							<h3 class="text-zinc-900 font-semibold">{pick.name}</h3>
 							<span
 								class="mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset {roleStyles[
 									pick.role
@@ -63,14 +63,14 @@
 						</div>
 						{#if pick.affinity !== undefined}
 							<div class="text-right">
-								<p class="text-2xl font-semibold text-zinc-900 tabular-nums">
+								<p class="text-zinc-900 text-2xl font-semibold tabular-nums">
 									{pct(pick.affinity)}
 								</p>
-								<p class="text-xs text-zinc-500">affinity</p>
+								<p class="text-zinc-500 text-xs">affinity</p>
 							</div>
 						{/if}
 					</div>
-					<p class="mt-3 text-sm leading-relaxed text-zinc-700">{pick.why}</p>
+					<p class="text-zinc-700 mt-3 text-sm leading-relaxed">{pick.why}</p>
 					<div class="mt-3 flex flex-wrap items-center gap-2">
 						<Label label={pick.label} />
 						<SourceMarks sources={pick.sources} />
@@ -78,21 +78,21 @@
 					{#if cand && ((cand.tags?.length ?? 0) > 0 || Object.keys(cand.explainability ?? {}).length > 0)}
 						{@const weights = topWeights(cand)}
 						<details class="mt-3 text-sm">
-							<summary class="cursor-pointer font-medium text-indigo-600 hover:text-indigo-800">
+							<summary class="text-indigo-600 hover:text-indigo-800 cursor-pointer font-medium">
 								Why Qloo links them
 							</summary>
 							<div class="mt-2 space-y-3">
 								{#if cand.tags && cand.tags.length > 0}
 									<div class="flex flex-wrap gap-1.5">
 										{#each cand.tags as tag, i (i)}
-											<span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700"
+											<span class="bg-zinc-100 text-zinc-700 rounded-full px-2 py-0.5 text-xs"
 												>{tag}</span
 											>
 										{/each}
 									</div>
 								{/if}
 								{#if weights.length > 0}
-									<ul class="space-y-1 text-xs text-zinc-600">
+									<ul class="text-zinc-600 space-y-1 text-xs">
 										{#each weights as w, i (i)}
 											<li class="flex justify-between gap-3">
 												<span><span class="text-zinc-500">{words(w.signal)}:</span> {w.entity}</span

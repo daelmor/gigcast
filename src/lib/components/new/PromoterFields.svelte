@@ -8,11 +8,11 @@
 	const small = 'text-xs font-medium text-zinc-600';
 </script>
 
-<details class="rounded-xl bg-white p-5 ring-1 ring-zinc-200" open={!!error}>
+<details class="bg-white ring-zinc-200 rounded-xl p-5 ring-1" open={!!error}>
 	<summary class="cursor-pointer text-base font-semibold">
-		4. Your own numbers <span class="text-sm font-normal text-zinc-500">(optional)</span>
+		4. Your own numbers <span class="text-zinc-500 text-sm font-normal">(optional)</span>
 	</summary>
-	<p class="mt-2 text-sm text-zinc-500">
+	<p class="text-zinc-500 mt-2 text-sm">
 		Anything you add is used as given and marked as your input in the brief.
 	</p>
 
@@ -41,7 +41,7 @@
 			{#if form.venues.length < MAX_VENUES}
 				<button
 					type="button"
-					class="mt-2 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+					class="text-indigo-600 hover:text-indigo-700 mt-2 text-sm font-medium"
 					onclick={() => form.venues.push({ name: '', capacity: '' })}>Add venue</button
 				>
 			{/if}
@@ -137,7 +137,7 @@
 			{#if form.sales.length < MAX_SALES}
 				<button
 					type="button"
-					class="mt-2 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+					class="text-indigo-600 hover:text-indigo-700 mt-2 text-sm font-medium"
 					onclick={() => form.sales.push({ event: '', date: '', sold: '', capacity: '' })}
 					>Add past event</button
 				>
@@ -153,8 +153,8 @@
 				placeholder="Anything the agent should know: constraints, partners, past issues."
 				bind:value={form.notes}
 			></textarea>
-			<span class="text-xs text-zinc-500">{form.notes.length} / 2000</span>
+			<span class="text-zinc-500 text-xs">{form.notes.length} / 2000</span>
 		</label>
 	</div>
-	{#if error}<p class="mt-3 text-sm text-rose-700" role="alert">{error}</p>{/if}
+	{#if error}<p class="text-rose-700 mt-3 text-sm" role="alert">{error}</p>{/if}
 </details>

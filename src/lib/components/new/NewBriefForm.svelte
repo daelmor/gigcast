@@ -108,20 +108,20 @@
 	/>
 	<ArtistPicker {form} error={errors.artist} />
 
-	<fieldset class="rounded-xl bg-white p-5 ring-1 ring-zinc-200">
+	<fieldset class="bg-white ring-zinc-200 rounded-xl p-5 ring-1">
 		<legend class="px-1 text-base font-semibold">3. Date window</legend>
 		<div class="mt-2 grid gap-3 sm:grid-cols-2">
 			<label class="block">
 				<span class="text-sm font-medium">From</span>
 				<input type="date" class="{dateInput} mt-1" bind:value={form.dateFrom} />
-				{#if errors.dateFrom}<span class="text-sm text-rose-700" role="alert"
+				{#if errors.dateFrom}<span class="text-rose-700 text-sm" role="alert"
 						>{errors.dateFrom}</span
 					>{/if}
 			</label>
 			<label class="block">
 				<span class="text-sm font-medium">To</span>
 				<input type="date" class="{dateInput} mt-1" bind:value={form.dateTo} />
-				{#if errors.dateTo}<span class="text-sm text-rose-700" role="alert">{errors.dateTo}</span
+				{#if errors.dateTo}<span class="text-rose-700 text-sm" role="alert">{errors.dateTo}</span
 					>{/if}
 			</label>
 		</div>
@@ -130,7 +130,7 @@
 	<PromoterFields {form} error={errors.promoter} />
 
 	{#if banner}
-		<div class="rounded-xl bg-rose-50 p-4 text-sm text-rose-800 ring-1 ring-rose-200" role="alert">
+		<div class="bg-rose-50 text-rose-800 ring-rose-200 rounded-xl p-4 text-sm ring-1" role="alert">
 			<p class="font-medium">{banner.message}</p>
 			{#if banner.details?.length}
 				<ul class="mt-2 list-disc pl-5">
@@ -144,11 +144,11 @@
 		<button
 			type="submit"
 			disabled={submitting}
-			class="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white shadow-sm hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-70"
+			class="bg-indigo-600 text-white hover:bg-indigo-700 inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-medium shadow-sm disabled:cursor-not-allowed disabled:opacity-70"
 		>
 			{#if submitting}
 				<span
-					class="size-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+					class="border-white/40 border-t-white size-4 animate-spin rounded-full border-2"
 					aria-hidden="true"
 				></span>
 				Starting the agent…
@@ -158,7 +158,7 @@
 				Generate brief
 			{/if}
 		</button>
-		<p class="text-sm text-zinc-500">
+		<p class="text-zinc-500 text-sm">
 			A brief takes about five minutes. You can watch the agent work.
 		</p>
 	</div>

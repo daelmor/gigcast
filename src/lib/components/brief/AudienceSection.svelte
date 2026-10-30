@@ -52,10 +52,10 @@
 	<SectionHeader id="audience" title="Audience map" note={audience.note} />
 
 	{#if hasMap && heatmap}
-		<div class="rounded-xl bg-white p-3 ring-1 ring-zinc-200">
+		<div class="bg-white ring-zinc-200 rounded-xl p-3 ring-1">
 			{#if heatmap.hasDimensions}
 				<div
-					class="mb-3 inline-flex flex-wrap gap-1 rounded-lg bg-zinc-100 p-1"
+					class="bg-zinc-100 mb-3 inline-flex flex-wrap gap-1 rounded-lg p-1"
 					role="group"
 					aria-label="Map dimension"
 				>
@@ -78,15 +78,15 @@
 				venues={venuePoints}
 				{center}
 			/>
-			<p class="mt-2 text-xs text-zinc-500">
+			<p class="text-zinc-500 mt-2 text-xs">
 				{heatmap.cells.length} heatmap cells <SourceMarks sources={[heatmap.source.toolCallId]} />.
 				Cells are coarse geohashes, not venue-level data.
 			</p>
 		</div>
 	{:else}
-		<div class="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center">
+		<div class="border-zinc-300 bg-zinc-50 rounded-xl border border-dashed p-6 text-center">
 			<svg
-				class="mx-auto size-8 text-zinc-400"
+				class="text-zinc-400 mx-auto size-8"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -99,29 +99,29 @@
 					d="M9 6.75V15m6-6v8.25m.5 3.5-6.5-3-5.5 2.5V6l5.5-2.5 6.5 3 5.5-2.5v11.75l-5.5 2.5Z"
 				/>
 			</svg>
-			<p class="mt-3 flex flex-wrap items-center justify-center gap-2 font-medium text-zinc-900">
+			<p class="text-zinc-900 mt-3 flex flex-wrap items-center justify-center gap-2 font-medium">
 				No heatmap for this market <Label label="no_coverage" />
 			</p>
-			<p class="mx-auto mt-1 max-w-xl text-sm text-zinc-600">
+			<p class="text-zinc-600 mx-auto mt-1 max-w-xl text-sm">
 				Qloo returned no audience cells for this artist and locality, so there is nothing to map.
 			</p>
-			<p class="mx-auto mt-2 max-w-xl text-xs text-zinc-500">{audience.note.summary}</p>
+			<p class="text-zinc-500 mx-auto mt-2 max-w-xl text-xs">{audience.note.summary}</p>
 		</div>
 	{/if}
 
 	<div class="mt-5 grid gap-5 md:grid-cols-2">
 		<div>
-			<h3 class="mb-2 text-sm font-semibold text-zinc-900">Hotspots</h3>
+			<h3 class="text-zinc-900 mb-2 text-sm font-semibold">Hotspots</h3>
 			{#if audience.hotspots.length === 0}
-				<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+				<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
 					No hotspots were identified.
 				</p>
 			{:else}
 				<ul class="space-y-3">
 					{#each audience.hotspots as h, i (i)}
-						<li class="rounded-xl bg-white p-3 ring-1 ring-zinc-200">
-							<p class="font-medium text-zinc-900">{h.name}</p>
-							<p class="mt-1 text-sm text-zinc-700">{h.why}</p>
+						<li class="bg-white ring-zinc-200 rounded-xl p-3 ring-1">
+							<p class="text-zinc-900 font-medium">{h.name}</p>
+							<p class="text-zinc-700 mt-1 text-sm">{h.why}</p>
 							<div class="mt-2 flex flex-wrap items-center gap-2">
 								<Label label={h.label} />
 								<SourceMarks sources={h.sources} />
@@ -132,22 +132,22 @@
 			{/if}
 		</div>
 		<div>
-			<h3 class="mb-2 text-sm font-semibold text-zinc-900">Top neighbourhoods</h3>
+			<h3 class="text-zinc-900 mb-2 text-sm font-semibold">Top neighbourhoods</h3>
 			{#if hoods.length === 0}
-				<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+				<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
 					No neighbourhood ranking was available.
 				</p>
 			{:else}
-				<ul class="space-y-2 rounded-xl bg-white p-3 ring-1 ring-zinc-200">
+				<ul class="bg-white ring-zinc-200 space-y-2 rounded-xl p-3 ring-1">
 					{#each hoods as h (h.entityId)}
 						<li>
 							<div class="flex justify-between gap-2 text-sm">
-								<span class="truncate text-zinc-800">{h.name}</span>
+								<span class="text-zinc-800 truncate">{h.name}</span>
 								<span class="text-zinc-500 tabular-nums">{pct(h.affinity)}</span>
 							</div>
-							<div class="mt-0.5 h-2 overflow-hidden rounded-full bg-zinc-100">
+							<div class="bg-zinc-100 mt-0.5 h-2 overflow-hidden rounded-full">
 								<div
-									class="h-full rounded-full bg-indigo-500"
+									class="bg-indigo-500 h-full rounded-full"
 									style:width="{(h.affinity / hoodMax) * 100}%"
 								></div>
 							</div>
@@ -155,7 +155,7 @@
 					{/each}
 				</ul>
 				{#if brief.artifacts.neighbourhoods}
-					<p class="mt-1 text-xs text-zinc-500">
+					<p class="text-zinc-500 mt-1 text-xs">
 						<SourceMarks sources={[brief.artifacts.neighbourhoods.source.toolCallId]} />
 					</p>
 				{/if}

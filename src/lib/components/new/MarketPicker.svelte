@@ -138,7 +138,7 @@
 	);
 </script>
 
-<fieldset class="rounded-xl bg-white p-5 ring-1 ring-zinc-200">
+<fieldset class="bg-white ring-zinc-200 rounded-xl p-5 ring-1">
 	<legend class="px-1 text-base font-semibold">1. Market</legend>
 
 	<div class="mt-2 grid gap-3 sm:grid-cols-3">
@@ -148,11 +148,11 @@
 				onclick={() => selectMarket(m)}
 				aria-pressed={form.marketId === m.id}
 				class="rounded-xl p-3 text-left ring-1 transition {form.marketId === m.id
-					? 'bg-indigo-50 ring-2 ring-indigo-600'
+					? 'bg-indigo-50 ring-indigo-600 ring-2'
 					: 'bg-white ring-zinc-200 hover:ring-indigo-400'}"
 			>
 				<span class="block font-medium">{m.name}</span>
-				<span class="block text-sm text-zinc-500">{m.countryName}</span>
+				<span class="text-zinc-500 block text-sm">{m.countryName}</span>
 			</button>
 		{/each}
 	</div>
@@ -169,8 +169,8 @@
 		{/each}
 	</div>
 
-	<div class="mt-5 border-t border-zinc-100 pt-4">
-		<p class="text-sm font-medium text-zinc-800">Other city</p>
+	<div class="border-zinc-100 mt-5 border-t pt-4">
+		<p class="text-zinc-800 text-sm font-medium">Other city</p>
 		<div class="mt-2 grid gap-2 sm:grid-cols-[1fr_12rem]">
 			<input
 				type="text"
@@ -180,13 +180,13 @@
 				placeholder="Search a city"
 				aria-label="City name"
 				autocomplete="off"
-				class="w-full rounded-lg border-0 px-3 py-2 ring-1 ring-zinc-300 focus:ring-2 focus:ring-indigo-600"
+				class="ring-zinc-300 focus:ring-indigo-600 w-full rounded-lg border-0 px-3 py-2 ring-1 focus:ring-2"
 			/>
 			<select
 				bind:value={countrySelect}
 				onchange={onInput}
 				aria-label="Country"
-				class="w-full rounded-lg border-0 bg-white px-3 py-2 ring-1 ring-zinc-300 focus:ring-2 focus:ring-indigo-600"
+				class="bg-white ring-zinc-300 focus:ring-indigo-600 w-full rounded-lg border-0 px-3 py-2 ring-1 focus:ring-2"
 			>
 				<option value="" disabled>Country</option>
 				{#each COUNTRIES as c (c.code)}
@@ -202,7 +202,7 @@
 				oninput={onInput}
 				placeholder="ISO code or country name"
 				aria-label="Other country code"
-				class="mt-2 w-full rounded-lg border-0 px-3 py-2 ring-1 ring-zinc-300 focus:ring-2 focus:ring-indigo-600 sm:w-64"
+				class="ring-zinc-300 focus:ring-indigo-600 mt-2 w-full rounded-lg border-0 px-3 py-2 ring-1 focus:ring-2 sm:w-64"
 			/>
 		{/if}
 
@@ -210,9 +210,9 @@
 			{#if query.trim().length >= 2 && !country}
 				<p class="text-zinc-500">Choose a country to search.</p>
 			{:else if status === 'loading'}
-				<p class="flex items-center gap-2 text-zinc-500">
+				<p class="text-zinc-500 flex items-center gap-2">
 					<span
-						class="size-3.5 animate-spin rounded-full border-2 border-zinc-300 border-t-indigo-600"
+						class="border-zinc-300 border-t-indigo-600 size-3.5 animate-spin rounded-full border-2"
 					></span>
 					Searching…
 				</p>
@@ -226,24 +226,24 @@
 		</div>
 
 		{#if results.length > 0}
-			<ul class="mt-2 divide-y divide-zinc-100 rounded-lg ring-1 ring-zinc-200">
+			<ul class="divide-zinc-100 ring-zinc-200 mt-2 divide-y rounded-lg ring-1">
 				{#each results as r, i (i)}
 					<li>
 						<button
 							type="button"
 							onclick={() => selectLocality(r)}
-							class="flex w-full items-center justify-between gap-3 px-3 py-2 text-left hover:bg-zinc-50 {r.acceptable
+							class="hover:bg-zinc-50 flex w-full items-center justify-between gap-3 px-3 py-2 text-left {r.acceptable
 								? ''
 								: 'opacity-55'} {form.localityEntityId === r.entityId ? 'bg-indigo-50' : ''}"
 						>
 							<span class="min-w-0">
 								<span class="block truncate font-medium">{r.name}</span>
 								{#if r.disambiguation}
-									<span class="block truncate text-sm text-zinc-500">{r.disambiguation}</span>
+									<span class="text-zinc-500 block truncate text-sm">{r.disambiguation}</span>
 								{/if}
 							</span>
 							{#if !r.acceptable}
-								<span class="shrink-0 text-xs text-zinc-500">different country</span>
+								<span class="text-zinc-500 shrink-0 text-xs">different country</span>
 							{/if}
 						</button>
 					</li>
@@ -255,7 +255,7 @@
 	<p class="mt-4 text-sm {chosenLabel ? 'text-zinc-700' : 'text-zinc-500'}">
 		{chosenLabel ? `Selected: ${chosenLabel}` : 'No market selected yet.'}
 	</p>
-	{#if error}<p class="mt-1 text-sm text-rose-700" role="alert">{error}</p>{/if}
+	{#if error}<p class="text-rose-700 mt-1 text-sm" role="alert">{error}</p>{/if}
 
 	<BaseMap
 		class="mt-3 h-[220px]"

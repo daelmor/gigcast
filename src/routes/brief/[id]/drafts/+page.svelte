@@ -14,18 +14,18 @@
 {#if data.brief}
 	<DraftsView brief={data.brief} />
 {:else}
-	<div class="mx-auto max-w-2xl rounded-xl bg-amber-50 p-6 ring-1 ring-amber-200">
-		<h1 class="text-xl font-semibold text-amber-900">
+	<div class="bg-amber-50 ring-amber-200 mx-auto max-w-2xl rounded-xl p-6 ring-1">
+		<h1 class="text-amber-900 text-xl font-semibold">
 			{data.status === 'failed' ? 'This brief has no drafts' : 'The brief is still being built'}
 		</h1>
-		<p class="mt-2 text-sm text-amber-900">
+		<p class="text-amber-900 mt-2 text-sm">
 			{data.status === 'failed'
 				? 'The run failed before any sponsor drafts were written.'
 				: 'Outreach drafts appear once the run finishes, which takes about five minutes.'}
 		</p>
 		<a
 			href={resolve('/brief/[id]', { id: data.id })}
-			class="mt-4 inline-flex rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+			class="bg-indigo-600 text-white hover:bg-indigo-500 mt-4 inline-flex rounded-lg px-3 py-1.5 text-sm font-medium"
 		>
 			Back to the brief
 		</a>

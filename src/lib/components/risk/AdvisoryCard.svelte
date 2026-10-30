@@ -18,9 +18,9 @@
 	);
 </script>
 
-<article class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
+<article class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
 	<div class="flex flex-wrap items-center gap-2 text-xs">
-		<span class="font-semibold text-zinc-700">{advisory.source}</span>
+		<span class="text-zinc-700 font-semibold">{advisory.source}</span>
 		{#if advisory.level !== null}
 			<span class="rounded-full px-2 py-0.5 font-medium ring-1 ring-inset {levelStyle}"
 				>Level {advisory.level} of 4</span
@@ -29,10 +29,10 @@
 		{#if advisory.publishedAt}<span class="text-zinc-500">{formatDate(advisory.publishedAt)}</span
 			>{/if}
 	</div>
-	<h3 class="mt-2 font-semibold text-zinc-900">
+	<h3 class="text-zinc-900 mt-2 font-semibold">
 		<ExternalLink href={advisory.url} class="hover:text-indigo-700 hover:underline"
 			>{advisory.title}</ExternalLink
 		>
 	</h3>
-	{#if advisory.summary}<p class="mt-1 text-sm text-zinc-700">{advisory.summary}</p>{/if}
+	{#if advisory.summary}<p class="text-zinc-700 mt-1 text-sm">{advisory.summary}</p>{/if}
 </article>

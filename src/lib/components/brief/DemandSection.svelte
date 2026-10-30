@@ -106,29 +106,29 @@
 	<SectionHeader id="demand" title="Demand and fit" note={d.note} />
 	<div class="grid gap-4 md:grid-cols-2">
 		<!-- Popularity -->
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-			<h3 class="text-sm font-semibold text-zinc-900">Popularity</h3>
+		<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
+			<h3 class="text-zinc-900 text-sm font-semibold">Popularity</h3>
 			{#if d.popularity !== undefined}
-				<p class="mt-2 text-3xl font-semibold text-zinc-900 tabular-nums">
-					{ordinal(d.popularity * 100)}<span class="text-base font-normal text-zinc-500">
+				<p class="text-zinc-900 mt-2 text-3xl font-semibold tabular-nums">
+					{ordinal(d.popularity * 100)}<span class="text-zinc-500 text-base font-normal">
 						percentile</span
 					>
 				</p>
-				<div class="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-100">
-					<div class="h-full rounded-full bg-indigo-600" style:width={pct(d.popularity)}></div>
+				<div class="bg-zinc-100 mt-2 h-1.5 overflow-hidden rounded-full">
+					<div class="bg-indigo-600 h-full rounded-full" style:width={pct(d.popularity)}></div>
 				</div>
-				<p class="mt-2 text-xs text-zinc-500">
+				<p class="text-zinc-500 mt-2 text-xs">
 					Share of Qloo entities of this kind that the artist out-ranks.
 				</p>
 			{:else}
-				<p class="mt-2 text-sm text-zinc-500">No popularity figure was available.</p>
+				<p class="text-zinc-500 mt-2 text-sm">No popularity figure was available.</p>
 			{/if}
 		</div>
 
 		<!-- Trend -->
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
+		<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
 			<div class="flex items-center justify-between gap-2">
-				<h3 class="text-sm font-semibold text-zinc-900">Trend</h3>
+				<h3 class="text-zinc-900 text-sm font-semibold">Trend</h3>
 				{#if d.trend}
 					<span class="flex items-center gap-2"
 						><Label label={d.trend.label} /><SourceMarks sources={trendIds} /></span
@@ -143,7 +143,7 @@
 						><span aria-hidden="true">{meta.arrow}</span>{meta.text}</span
 					>
 				</div>
-				<p class="mt-2 text-sm text-zinc-700">{d.trend.detail}</p>
+				<p class="text-zinc-700 mt-2 text-sm">{d.trend.detail}</p>
 				{#if trendPoints.length > 1}
 					<EChart
 						class="mt-2 h-16 w-full"
@@ -154,14 +154,14 @@
 					/>
 				{/if}
 			{:else}
-				<p class="mt-2 text-sm text-zinc-500">No trend data was available for this artist.</p>
+				<p class="text-zinc-500 mt-2 text-sm">No trend data was available for this artist.</p>
 			{/if}
 		</div>
 
 		<!-- Demographics -->
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200 md:col-span-2">
+		<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1 md:col-span-2">
 			<div class="flex items-center justify-between gap-2">
-				<h3 class="text-sm font-semibold text-zinc-900">Audience demographics</h3>
+				<h3 class="text-zinc-900 text-sm font-semibold">Audience demographics</h3>
 				{#if d.demographics}
 					<span class="flex items-center gap-2"
 						><Label label={d.demographics.label} /><SourceMarks sources={demoIds} /></span
@@ -169,13 +169,13 @@
 				{/if}
 			</div>
 			{#if a.demographics && (ageEntries.length > 0 || genderEntries.length > 0)}
-				<p class="mt-1 text-xs text-zinc-500">
+				<p class="text-zinc-500 mt-1 text-xs">
 					Affinity relative to the average audience. Zinc bars are under-indexed, indigo
 					over-indexed.
 				</p>
 				<div class="mt-2 grid gap-4 md:grid-cols-2">
 					<div>
-						<p class="text-xs font-medium text-zinc-500 uppercase">Age</p>
+						<p class="text-zinc-500 text-xs font-medium uppercase">Age</p>
 						<EChart
 							class="h-44 w-full"
 							option={ageOption}
@@ -183,14 +183,14 @@
 						/>
 					</div>
 					<div>
-						<p class="text-xs font-medium text-zinc-500 uppercase">Gender</p>
+						<p class="text-zinc-500 text-xs font-medium uppercase">Gender</p>
 						<EChart
 							class="h-20 w-full"
 							option={genderOption}
 							fallback="Gender affinity: {genderEntries.map(([k, v]) => `${k} ${v}`).join(', ')}"
 						/>
 						{#if d.demographics}
-							<p class="mt-2 text-sm text-zinc-700">
+							<p class="text-zinc-700 mt-2 text-sm">
 								Gender skew: <span class="font-medium">{d.demographics.genderSkew}</span>.
 								{#if d.demographics.topAgeBuckets.length > 0}
 									Top age buckets: {d.demographics.topAgeBuckets
@@ -202,14 +202,14 @@
 					</div>
 				</div>
 			{:else}
-				<p class="mt-2 text-sm text-zinc-500">Qloo returned no demographic data for this artist.</p>
+				<p class="text-zinc-500 mt-2 text-sm">Qloo returned no demographic data for this artist.</p>
 			{/if}
 		</div>
 
 		<!-- Taste match -->
-		<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200 md:col-span-2">
+		<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1 md:col-span-2">
 			<div class="flex items-center justify-between gap-2">
-				<h3 class="text-sm font-semibold text-zinc-900">Taste match with the city</h3>
+				<h3 class="text-zinc-900 text-sm font-semibold">Taste match with the city</h3>
 				{#if d.tasteMatch}
 					<span class="flex items-center gap-2"
 						><Label label={d.tasteMatch.label} /><SourceMarks sources={tasteIds} /></span
@@ -219,16 +219,16 @@
 			{#if d.tasteMatch}
 				<div class="mt-2 flex flex-wrap items-start gap-4">
 					{#if d.tasteMatch.score !== undefined}
-						<p class="text-3xl font-semibold text-zinc-900 tabular-nums">
+						<p class="text-zinc-900 text-3xl font-semibold tabular-nums">
 							{pct(d.tasteMatch.score)}
 						</p>
 					{/if}
 					<div class="min-w-0 flex-1 basis-64">
-						<p class="text-sm text-zinc-700">{d.tasteMatch.detail}</p>
+						<p class="text-zinc-700 text-sm">{d.tasteMatch.detail}</p>
 						{#if d.tasteMatch.sharedTags.length > 0}
 							<div class="mt-2 flex flex-wrap gap-1.5">
 								{#each d.tasteMatch.sharedTags as tag, i (i)}
-									<span class="rounded-full bg-indigo-50 px-2 py-0.5 text-xs text-indigo-700"
+									<span class="bg-indigo-50 text-indigo-700 rounded-full px-2 py-0.5 text-xs"
 										>{tag}</span
 									>
 								{/each}
@@ -237,7 +237,7 @@
 					</div>
 				</div>
 			{:else}
-				<p class="mt-2 text-sm text-zinc-500">No taste comparison was available.</p>
+				<p class="text-zinc-500 mt-2 text-sm">No taste comparison was available.</p>
 			{/if}
 		</div>
 	</div>

@@ -115,7 +115,7 @@
 				<li>
 					<a
 						href="#{t.id}"
-						class="block rounded-lg px-3 py-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+						class="text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 block rounded-lg px-3 py-1.5"
 						>{t.title}</a
 					>
 				</li>
@@ -125,15 +125,15 @@
 
 	<article class="min-w-0 space-y-12">
 		<header>
-			<h1 class="text-4xl font-semibold tracking-tight text-zinc-900">About gigcast</h1>
-			<p class="mt-3 max-w-2xl text-lg text-zinc-600">
+			<h1 class="text-zinc-900 text-4xl font-semibold tracking-tight">About gigcast</h1>
+			<p class="text-zinc-600 mt-3 max-w-2xl text-lg">
 				What a Booking Brief is, how Qloo grounds it, and where it stops being reliable.
 			</p>
 		</header>
 
 		<section id="what" class="scroll-mt-6">
 			<h2 class="text-xl font-semibold">What it is</h2>
-			<div class="{card} mt-4 space-y-3 text-zinc-700">
+			<div class="{card} text-zinc-700 mt-4 space-y-3">
 				<p>
 					Concert promoters often decide on gut feel: which city, which support act, which sponsor,
 					which price. The data that would help is spread across ticket history, social numbers and
@@ -147,7 +147,7 @@
 				</p>
 				<ul class="flex flex-wrap gap-2 pt-1">
 					{#each parts as p (p)}
-						<li class="rounded-full bg-zinc-100 px-2.5 py-1 text-xs text-zinc-700">{p}</li>
+						<li class="bg-zinc-100 text-zinc-700 rounded-full px-2.5 py-1 text-xs">{p}</li>
 					{/each}
 				</ul>
 			</div>
@@ -155,22 +155,22 @@
 
 		<section id="qloo" class="scroll-mt-6">
 			<h2 class="text-xl font-semibold">Why Qloo is load-bearing</h2>
-			<div class="{card} mt-4 space-y-4 text-zinc-700">
+			<div class="{card} text-zinc-700 mt-4 space-y-4">
 				<p>
 					Qloo's Taste AI is one affinity graph across artists, brands, places, localities and
 					demographics. One graph means a brief can answer "who likes this artist, where do they
 					live, what do they buy, where do they go" with results that connect to each other. These
 					are the endpoints the agent uses.
 				</p>
-				<dl class="divide-y divide-zinc-200 rounded-lg ring-1 ring-zinc-200">
+				<dl class="divide-zinc-200 ring-zinc-200 divide-y rounded-lg ring-1">
 					{#each endpoints as e (e.name)}
 						<div class="grid gap-1 px-4 py-3 sm:grid-cols-[18rem_1fr] sm:gap-4">
-							<dt class="font-mono text-sm break-words text-zinc-900">{e.name}</dt>
-							<dd class="text-sm text-zinc-600">{e.gives}</dd>
+							<dt class="text-zinc-900 font-mono text-sm break-words">{e.name}</dt>
+							<dd class="text-zinc-600 text-sm">{e.gives}</dd>
 						</div>
 					{/each}
 				</dl>
-				<h3 class="pt-2 font-semibold text-zinc-900">The counterfactual</h3>
+				<h3 class="text-zinc-900 pt-2 font-semibold">The counterfactual</h3>
 				<p>
 					Ask the same question without tools and a model returns plausible names that nobody can
 					verify. The brief shows both columns side by side: the tool-backed answer and the LLM-only
@@ -186,11 +186,11 @@
 				{#each labels as l (l)}
 					<li class={card}>
 						<Label label={l} size="md" />
-						<p class="mt-3 text-sm text-zinc-600">{LABEL_HELP[l]}</p>
+						<p class="text-zinc-600 mt-3 text-sm">{LABEL_HELP[l]}</p>
 					</li>
 				{/each}
 			</ul>
-			<p class="mt-4 max-w-3xl text-zinc-700">
+			<p class="text-zinc-700 mt-4 max-w-3xl">
 				The server checks grounded picks. An entity id must appear in a tool result of the same run,
 				and a risk item must cite a url that the risk feed returned. A pick that fails the check is
 				not shown as grounded.
@@ -206,19 +206,19 @@
 
 		<section id="sources" class="scroll-mt-6">
 			<h2 class="text-xl font-semibold">Data sources</h2>
-			<div class="mt-4 overflow-x-auto rounded-xl bg-white ring-1 ring-zinc-200">
+			<div class="bg-white ring-zinc-200 mt-4 overflow-x-auto rounded-xl ring-1">
 				<table class="w-full min-w-[32rem] text-left text-sm">
-					<thead class="border-b border-zinc-200 text-zinc-500">
+					<thead class="border-zinc-200 text-zinc-500 border-b">
 						<tr>
 							<th class="px-4 py-3 font-medium">Source</th>
 							<th class="px-4 py-3 font-medium">What we take</th>
 							<th class="px-4 py-3 font-medium">Terms note</th>
 						</tr>
 					</thead>
-					<tbody class="divide-y divide-zinc-200 text-zinc-700">
+					<tbody class="divide-zinc-200 text-zinc-700 divide-y">
 						{#each sources as s (s.source)}
 							<tr>
-								<td class="px-4 py-3 font-medium text-zinc-900">{s.source}</td>
+								<td class="text-zinc-900 px-4 py-3 font-medium">{s.source}</td>
 								<td class="px-4 py-3">{s.take}</td>
 								<td class="px-4 py-3">{s.terms}</td>
 							</tr>
@@ -226,14 +226,14 @@
 					</tbody>
 				</table>
 			</div>
-			<p class="mt-3 text-sm text-zinc-600">
+			<p class="text-zinc-600 mt-3 text-sm">
 				We store headlines and links, never article bodies. Nothing is sent to sponsors.
 			</p>
 		</section>
 
 		<section id="honesty" class="scroll-mt-6">
 			<h2 class="text-xl font-semibold">Honesty notes</h2>
-			<ul class="{card} mt-4 list-disc space-y-2 pl-10 text-zinc-700">
+			<ul class="{card} text-zinc-700 mt-4 list-disc space-y-2 pl-10">
 				{#each honesty as h (h)}
 					<li>{h}</li>
 				{/each}
@@ -242,7 +242,7 @@
 
 		<section id="links" class="scroll-mt-6">
 			<h2 class="text-xl font-semibold">Links</h2>
-			<ul class="{card} mt-4 space-y-2 text-indigo-600">
+			<ul class="{card} text-indigo-600 mt-4 space-y-2">
 				<li>
 					<ExternalLink href="https://github.com/daelmor/gigcast" class="hover:underline"
 						>Repository</ExternalLink
@@ -263,7 +263,7 @@
 			</ul>
 			<a
 				href={resolve('/new')}
-				class="mt-6 inline-block rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white shadow-sm hover:bg-indigo-700"
+				class="bg-indigo-600 text-white hover:bg-indigo-700 mt-6 inline-block rounded-lg px-5 py-2.5 font-medium shadow-sm"
 				>Start a brief</a
 			>
 		</section>

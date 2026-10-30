@@ -205,21 +205,21 @@
 		].toLowerCase()} for the audience around the artist's city"
 	/>
 	<div
-		class="pointer-events-none absolute bottom-2 left-2 rounded-lg bg-white/90 px-2.5 py-2 text-xs text-zinc-700 shadow-sm ring-1 ring-zinc-200"
+		class="bg-white/90 text-zinc-700 ring-zinc-200 pointer-events-none absolute bottom-2 left-2 rounded-lg px-2.5 py-2 text-xs shadow-sm ring-1"
 	>
 		<p class="font-medium">{DIMENSION_LABEL[dimension]}</p>
 		<div
 			class="mt-1 h-1.5 w-24 rounded-full"
 			style="background: linear-gradient(to right, #c7d2fe, #6366f1, #312e81)"
 		></div>
-		<div class="flex justify-between text-[10px] text-zinc-500">
+		<div class="text-zinc-500 flex justify-between text-[10px]">
 			<span>low</span><span>high</span>
 		</div>
 		<p class="mt-1.5 flex items-center gap-1.5">
-			<span class="size-2.5 rounded-full bg-amber-500 ring-2 ring-white"></span>Hotspot
+			<span class="bg-amber-500 ring-white size-2.5 rounded-full ring-2"></span>Hotspot
 		</p>
 		<p class="flex items-center gap-1.5">
-			<span class="size-2.5 rounded-full bg-violet-600 ring-2 ring-white"></span>Venue or partner
+			<span class="bg-violet-600 ring-white size-2.5 rounded-full ring-2"></span>Venue or partner
 		</p>
 	</div>
 </div>

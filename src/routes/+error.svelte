@@ -9,11 +9,11 @@
 >
 
 <section class="mx-auto max-w-md py-16 text-center">
-	<p class="text-sm font-semibold text-indigo-600">{page.status}</p>
+	<p class="text-indigo-600 text-sm font-semibold">{page.status}</p>
 	<h1 class="mt-2 text-3xl font-semibold tracking-tight">
 		{notFound ? 'We could not find that page' : 'Something went wrong'}
 	</h1>
-	<p class="mt-3 text-zinc-600">
+	<p class="text-zinc-600 mt-3">
 		{#if notFound}
 			The page does not exist, or the brief was removed.
 		{:else}
@@ -22,7 +22,7 @@
 	</p>
 	<a
 		href={resolve('/')}
-		class="mt-6 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+		class="bg-indigo-600 text-white hover:bg-indigo-700 mt-6 inline-block rounded-lg px-4 py-2 text-sm font-medium"
 		>Back to home</a
 	>
 </section>

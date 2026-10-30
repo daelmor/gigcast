@@ -46,12 +46,12 @@
 <section aria-labelledby="risks">
 	{#if unavailable}
 		<div class="mb-5 flex flex-wrap items-center gap-3">
-			<h2 id="risks" class="scroll-mt-24 text-xl font-semibold text-zinc-900">Risk panel</h2>
+			<h2 id="risks" class="text-zinc-900 scroll-mt-24 text-xl font-semibold">Risk panel</h2>
 			<Label label="no_coverage" size="md" />
 		</div>
-		<div class="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center">
+		<div class="border-zinc-300 bg-zinc-50 rounded-xl border border-dashed p-6 text-center">
 			<svg
-				class="mx-auto size-8 text-zinc-400"
+				class="text-zinc-400 mx-auto size-8"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -64,11 +64,11 @@
 					d="M12 9v3.75m0 3.75h.008M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"
 				/>
 			</svg>
-			<p class="mt-3 font-medium text-zinc-900">The risk layer is not part of this build yet</p>
-			{#if risks}<p class="mx-auto mt-1 max-w-xl text-sm text-zinc-600">
+			<p class="text-zinc-900 mt-3 font-medium">The risk layer is not part of this build yet</p>
+			{#if risks}<p class="text-zinc-600 mx-auto mt-1 max-w-xl text-sm">
 					{risks.note.summary}
 				</p>{/if}
-			<p class="mx-auto mt-2 max-w-xl text-xs text-zinc-500">{RISK_UNAVAILABLE}</p>
+			<p class="text-zinc-500 mx-auto mt-2 max-w-xl text-xs">{RISK_UNAVAILABLE}</p>
 		</div>
 	{:else}
 		<SectionHeader id="risks" title="Risk panel" {note} />
@@ -77,7 +77,7 @@
 				<RiskScoreCard score={feed.score} />
 			{/if}
 			{#if groups.length === 0}
-				<p class="rounded-xl bg-zinc-50 p-4 text-sm text-zinc-600 ring-1 ring-zinc-200">
+				<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
 					{#if feed && feed.items.length > 0}
 						The agent reported no notable risks; {feed.items.length} classified {feed.items
 							.length === 1
@@ -90,23 +90,23 @@
 			{:else}
 				{#each groups as group (group.category)}
 					<div>
-						<h3 class="mb-2 text-sm font-semibold tracking-wide text-zinc-500 uppercase">
+						<h3 class="text-zinc-500 mb-2 text-sm font-semibold tracking-wide uppercase">
 							{categoryLabel(group.category)}
 						</h3>
 						<ul class="space-y-3">
 							{#each group.items as item, i (i)}
-								<li class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
+								<li class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
 									<div class="flex flex-wrap items-center gap-2">
 										<CategoryBadge category={item.category} />
 										<SeverityDots severity={item.severity} />
 									</div>
-									<h4 class="mt-2 font-semibold text-zinc-900">
+									<h4 class="text-zinc-900 mt-2 font-semibold">
 										<ExternalLink
 											href={item.sourceUrl}
 											class="hover:text-indigo-700 hover:underline">{item.title}</ExternalLink
 										>
 									</h4>
-									<p class="mt-1 text-sm text-zinc-700">{item.soWhat}</p>
+									<p class="text-zinc-700 mt-1 text-sm">{item.soWhat}</p>
 									<div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
 										<ExternalLink href={item.sourceUrl} class="text-indigo-600 hover:underline"
 											>{item.sourceName}</ExternalLink
@@ -125,27 +125,27 @@
 
 			{#if hasContext}
 				<div>
-					<h3 class="mb-2 text-sm font-semibold tracking-wide text-zinc-500 uppercase">Context</h3>
+					<h3 class="text-zinc-500 mb-2 text-sm font-semibold tracking-wide uppercase">Context</h3>
 					<div class="grid gap-4 lg:grid-cols-2">
 						{#if calendar}
-							<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-								<h4 class="mb-3 font-semibold text-zinc-900">
+							<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
+								<h4 class="text-zinc-900 mb-3 font-semibold">
 									Calendar, {formatDate(calendar.from)} to {formatDate(calendar.to)}
 								</h4>
 								<HolidayList {holidays} {longWeekends} />
 							</div>
-							<div class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
-								<h4 class="mb-3 font-semibold text-zinc-900">Climate for your dates</h4>
+							<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
+								<h4 class="text-zinc-900 mb-3 font-semibold">Climate for your dates</h4>
 								{#if calendar.climate}
 									<ClimateCard climate={calendar.climate} />
 								{:else}
-									<p class="text-sm text-zinc-500">No climate normals were available.</p>
+									<p class="text-zinc-500 text-sm">No climate normals were available.</p>
 								{/if}
 							</div>
 						{/if}
 					</div>
 					{#if advisories.length > 0}
-						<h4 class="mt-4 mb-2 font-semibold text-zinc-900">Travel advisories</h4>
+						<h4 class="text-zinc-900 mt-4 mb-2 font-semibold">Travel advisories</h4>
 						<ul class="grid gap-3 lg:grid-cols-2">
 							{#each advisories as advisory, i (i)}
 								<li><AdvisoryCard {advisory} /></li>
@@ -155,7 +155,7 @@
 				</div>
 			{/if}
 			{#if feed && feed.ingestedAt}
-				<p class="text-xs text-zinc-500">
+				<p class="text-zinc-500 text-xs">
 					News last ingested {formatDate(feed.ingestedAt)}; {feed.storedItems} items stored for this market.
 				</p>
 			{/if}

@@ -22,13 +22,13 @@
 <div>
 	<dl class="grid grid-cols-2 gap-3 sm:grid-cols-5">
 		{#each stats as s (s.label)}
-			<div class="rounded-lg bg-zinc-50 p-3 ring-1 ring-zinc-200">
-				<dt class="text-xs text-zinc-500">{s.label}</dt>
-				<dd class="mt-0.5 font-semibold text-zinc-900 tabular-nums">{s.value}</dd>
+			<div class="bg-zinc-50 ring-zinc-200 rounded-lg p-3 ring-1">
+				<dt class="text-zinc-500 text-xs">{s.label}</dt>
+				<dd class="text-zinc-900 mt-0.5 font-semibold tabular-nums">{s.value}</dd>
 			</div>
 		{/each}
 	</dl>
-	<p class="mt-2 text-xs text-zinc-500">
+	<p class="text-zinc-500 mt-2 text-xs">
 		{#if climate.years.length > 0}Based on the same dates in {climate.years.join(', ')}.{:else}No
 			years of observations were available.{/if}
 		{#if climate.note}{climate.note}{/if}

@@ -74,13 +74,13 @@
 >
 	<aside class="hidden lg:block">
 		<nav class="sticky top-6" aria-label="Brief sections">
-			<p class="mb-2 text-xs font-semibold tracking-wide text-zinc-500 uppercase">On this page</p>
-			<ul class="space-y-0.5 border-l border-zinc-200">
+			<p class="text-zinc-500 mb-2 text-xs font-semibold tracking-wide uppercase">On this page</p>
+			<ul class="border-zinc-200 space-y-0.5 border-l">
 				{#each toc as item (item.id)}
 					<li>
 						<a
 							href="#{item.id}"
-							class="-ml-px flex items-center gap-2 border-l border-transparent py-1 pl-3 text-sm text-zinc-600 hover:border-indigo-600 hover:text-indigo-700"
+							class="text-zinc-600 hover:border-indigo-600 hover:text-indigo-700 -ml-px flex items-center gap-2 border-l border-transparent py-1 pl-3 text-sm"
 						>
 							{#if item.label}
 								<span
@@ -99,7 +99,7 @@
 	</aside>
 
 	<div class="min-w-0 space-y-12">
-		<header class="rounded-xl bg-white p-5 ring-1 ring-zinc-200 sm:p-6">
+		<header class="bg-white ring-zinc-200 rounded-xl p-5 ring-1 sm:p-6">
 			<div class="flex flex-wrap items-center gap-2">
 				<span
 					class="rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide uppercase ring-1 ring-inset {verdictStyles[
@@ -112,23 +112,23 @@
 					]}">Run {brief.run.status}</span
 				>
 			</div>
-			<h1 class="mt-3 text-2xl leading-tight font-semibold text-zinc-900 sm:text-3xl">
+			<h1 class="text-zinc-900 mt-3 text-2xl leading-tight font-semibold sm:text-3xl">
 				{draft.headline}
 			</h1>
-			<p class="mt-2 text-base text-zinc-700">
+			<p class="text-zinc-700 mt-2 text-base">
 				{resolution.artist.name || brief.input.artist}
 				<span aria-hidden="true">→</span><span class="sr-only">in</span>
 				{brief.input.city}, {brief.input.country}
 			</p>
-			<p class="mt-1 text-sm text-zinc-500">
+			<p class="text-zinc-500 mt-1 text-sm">
 				{formatDate(brief.input.dateFrom)} to {formatDate(brief.input.dateTo)} · created {formatDate(
 					brief.createdAt
 				)}
 			</p>
 
-			<dl class="mt-4 grid gap-3 border-t border-zinc-100 pt-4 text-sm sm:grid-cols-2">
+			<dl class="border-zinc-100 mt-4 grid gap-3 border-t pt-4 text-sm sm:grid-cols-2">
 				<div>
-					<dt class="text-xs font-medium text-zinc-500 uppercase">Artist</dt>
+					<dt class="text-zinc-500 text-xs font-medium uppercase">Artist</dt>
 					<dd class="text-zinc-800">
 						{resolution.artist.name}
 						{#if resolution.artist.disambiguation}
@@ -137,23 +137,23 @@
 					</dd>
 				</div>
 				<div>
-					<dt class="text-xs font-medium text-zinc-500 uppercase">Locality</dt>
+					<dt class="text-zinc-500 text-xs font-medium uppercase">Locality</dt>
 					<dd class="text-zinc-800">
 						{resolution.locality.name ?? brief.input.city}
 						<span class="text-zinc-500">· {locationMethod[resolution.locality.method]}</span>
 						{#if resolution.locality.disambiguation}
-							<span class="block text-xs text-zinc-500">{resolution.locality.disambiguation}</span>
+							<span class="text-zinc-500 block text-xs">{resolution.locality.disambiguation}</span>
 						{/if}
 					</dd>
 				</div>
 			</dl>
 
-			<div class="mt-4 border-t border-zinc-100 pt-4">
-				<h2 class="text-sm font-semibold text-zinc-900">Key points</h2>
+			<div class="border-zinc-100 mt-4 border-t pt-4">
+				<h2 class="text-zinc-900 text-sm font-semibold">Key points</h2>
 				<ul class="mt-2 space-y-2">
 					{#each draft.keyPoints as point, i (i)}
-						<li class="flex gap-2.5 text-sm leading-relaxed text-zinc-800">
-							<span class="mt-2 size-1.5 shrink-0 rounded-full bg-indigo-600" aria-hidden="true"
+						<li class="text-zinc-800 flex gap-2.5 text-sm leading-relaxed">
+							<span class="bg-indigo-600 mt-2 size-1.5 shrink-0 rounded-full" aria-hidden="true"
 							></span>
 							<span>{point}</span>
 						</li>
