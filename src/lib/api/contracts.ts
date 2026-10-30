@@ -4,7 +4,12 @@
  */
 import { z } from 'zod';
 import { agentEventSchema } from '../brief/events.ts';
-import { briefInputSchema, briefSchema } from '../brief/schema.ts';
+import {
+	briefInputSchema,
+	briefSchema,
+	marketCalendarSchema,
+	riskFeedSchema
+} from '../brief/schema.ts';
 
 export const briefStatusSchema = z.enum(['queued', 'running', 'complete', 'partial', 'failed']);
 export type BriefStatus = z.infer<typeof briefStatusSchema>;
@@ -63,6 +68,8 @@ export type BriefRecord = z.infer<typeof briefRecordSchema>;
 export const briefListItemSchema = z.object({
 	id: z.string(),
 	status: briefStatusSchema,
+	/** Known market slug when the brief started from a quick pick. */
+	marketId: z.string().nullable().default(null),
 	artistName: z.string(),
 	city: z.string(),
 	country: z.string(),
@@ -129,3 +136,30 @@ export const apiErrorSchema = z.object({
 	details: z.array(z.string()).optional()
 });
 export type ApiError = z.infer<typeof apiErrorSchema>;
+
+// GET /market/:slug (page data) ------------------------------------------
+
+export const marketDashboardSchema = z.object({
+	market: z.object({
+		id: z.string(),
+		name: z.string(),
+		country: z.string(),
+		countryName: z.string(),
+		localityName: z.string(),
+		lat: z.number(),
+		lon: z.number(),
+		timezone: z.string(),
+		note: z.string().optional(),
+		sampleArtists: z.array(z.string()),
+		outlets: z.array(
+			z.object({ name: z.string(), url: z.string(), rss: z.string(), lang: z.enum(['es', 'en']) })
+		)
+	}),
+	/** Classified news of the last 60 days, advisories and the decayed score. */
+	feed: riskFeedSchema,
+	/** Holidays and long weekends for the next six months plus monthly climate normals. */
+	calendar: marketCalendarSchema,
+	recentBriefs: z.array(briefListItemSchema),
+	generatedAt: z.string()
+});
+export type MarketDashboard = z.infer<typeof marketDashboardSchema>;

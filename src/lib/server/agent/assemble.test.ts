@@ -137,7 +137,11 @@ describe('assembleBrief', () => {
 			artistPick(real.entity_id, real.name),
 			artistPick(MADE_UP_ID, 'Totally Invented Band')
 		];
-		const expectedChecked = 2 + draft.sponsors.picks.length + draft.venuesAndPartners.picks.length;
+		const expectedChecked =
+			2 +
+			draft.sponsors.picks.length +
+			draft.venuesAndPartners.picks.length +
+			(draft.risks?.items.length ?? 0);
 
 		const brief = assembleBrief({
 			id: 'brief_test',

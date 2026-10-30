@@ -2,7 +2,7 @@
  * Postgres persistence for briefs, their runs and the agent events, plus the
  * known-markets upsert. Thin functions over Drizzle; no business logic.
  */
-import { desc, eq, gt, and, asc } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, sql } from 'drizzle-orm';
 import type { BriefListItem, BriefRecord, BriefStatus, RunRecord } from '../../api/contracts.ts';
 import { agentEventSchema, type AgentEvent } from '../../brief/events.ts';
 import { briefInputSchema, briefSchema, type Brief, type BriefInput } from '../../brief/schema.ts';
@@ -265,11 +265,12 @@ export async function getBriefRecord(id: string): Promise<BriefRecord | undefine
 	};
 }
 
-export async function listRecentBriefs(limit = 12): Promise<BriefListItem[]> {
+export async function listRecentBriefs(limit = 12, marketId?: string): Promise<BriefListItem[]> {
 	const rows = await getDb()
 		.select({
 			id: briefs.id,
 			status: briefs.status,
+			marketId: briefs.marketId,
 			artistName: briefs.artistName,
 			city: briefs.city,
 			country: briefs.country,
@@ -280,7 +281,11 @@ export async function listRecentBriefs(limit = 12): Promise<BriefListItem[]> {
 			brief: briefs.brief
 		})
 		.from(briefs)
-		.where(eq(briefs.isPublic, true))
+		.where(
+			marketId
+				? and(eq(briefs.isPublic, true), eq(briefs.marketId, marketId))
+				: eq(briefs.isPublic, true)
+		)
 		.orderBy(desc(briefs.createdAt))
 		.limit(limit);
 	return rows.map((r) => {
@@ -289,6 +294,7 @@ export async function listRecentBriefs(limit = 12): Promise<BriefListItem[]> {
 		return {
 			id: r.id,
 			status: r.status as BriefStatus,
+			marketId: r.marketId,
 			artistName: r.artistName,
 			city: r.city ?? r.localityName ?? '',
 			country: r.country ?? '',
@@ -308,6 +314,30 @@ export async function listRecentBriefs(limit = 12): Promise<BriefListItem[]> {
 	});
 }
 
+export function listRecentBriefsForMarket(marketId: string, limit = 6): Promise<BriefListItem[]> {
+	return listRecentBriefs(limit, marketId);
+}
+
+/** The newest complete brief of each featured market, for the landing's examples and demo mode. */
+export async function listExampleBriefs(marketIds: string[]): Promise<BriefListItem[]> {
+	const out: BriefListItem[] = [];
+	for (const marketId of marketIds) {
+		const rows = await getDb()
+			.select({ id: briefs.id })
+			.from(briefs)
+			.where(
+				and(eq(briefs.isPublic, true), eq(briefs.marketId, marketId), eq(briefs.status, 'complete'))
+			)
+			.orderBy(desc(briefs.createdAt))
+			.limit(1);
+		if (!rows[0]) continue;
+		const items = await listRecentBriefs(50, marketId);
+		const found = items.find((b) => b.id === rows[0].id);
+		if (found) out.push(found);
+	}
+	return out;
+}
+
 /** Idempotent: inserts or refreshes the markets the app knows up front. */
 export async function upsertKnownMarkets(): Promise<void> {
 	const now = new Date();
@@ -323,6 +353,7 @@ export async function upsertKnownMarkets(): Promise<void> {
 				lat: m.lat,
 				lon: m.lon,
 				timezone: m.timezone,
+				outlets: m.outlets,
 				updatedAt: now
 			}))
 		)
@@ -336,6 +367,7 @@ export async function upsertKnownMarkets(): Promise<void> {
 				lat: markets.lat,
 				lon: markets.lon,
 				timezone: markets.timezone,
+				outlets: sql`excluded.outlets`,
 				updatedAt: now
 			}
 		});

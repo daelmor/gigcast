@@ -153,14 +153,19 @@ export const RISK_CATEGORIES = [
 ] as const;
 export const riskCategorySchema = z.enum(RISK_CATEGORIES);
 
+export const TIME_HORIZONS = ['past', 'ongoing', 'in_window', 'after_window', 'unknown'] as const;
+export const timeHorizonSchema = z.enum(TIME_HORIZONS);
+
 export const riskItemSchema = z.object({
 	category: riskCategorySchema,
 	severity: z.number().int().min(1).max(5),
 	title: z.string().max(300),
 	soWhat: z.string().max(800),
 	sourceName: z.string().max(120),
+	/** Every risk links to its source; the server checks it against the risk feed the tool returned. */
 	sourceUrl: z.string().url(),
 	publishedAt: z.string().optional(),
+	timeHorizon: timeHorizonSchema.optional(),
 	label: labelSchema
 });
 export type RiskItem = z.infer<typeof riskItemSchema>;
@@ -271,6 +276,122 @@ export type Candidate = z.infer<typeof candidateSchema>;
 
 const withSource = <T extends z.ZodType>(items: T) => z.object({ items, source: sourceRefSchema });
 
+// Risk layer (M4): shapes shared by the agent tools, the artifacts and the market dashboard.
+
+export const holidaySchema = z.object({
+	date: isoDate,
+	localName: z.string(),
+	name: z.string(),
+	/** True when the holiday falls inside the requested date window. */
+	inWindow: z.boolean(),
+	/** Day of week in English, e.g. "Friday". */
+	weekday: z.string()
+});
+export type Holiday = z.infer<typeof holidaySchema>;
+
+export const longWeekendSchema = z.object({
+	start: isoDate,
+	end: isoDate,
+	days: z.number().int().min(3),
+	holidays: z.array(z.string()),
+	inWindow: z.boolean()
+});
+export type LongWeekend = z.infer<typeof longWeekendSchema>;
+
+/** Climate for the date window from the last years' observations at the same dates. */
+export const climateWindowSchema = z.object({
+	years: z.array(z.number().int()),
+	tmaxMean: z.number().nullable(),
+	tminMean: z.number().nullable(),
+	/** Mean total precipitation over the window, mm. */
+	precipMean: z.number().nullable(),
+	/** Share of days with at least 1 mm of rain, 0 to 1. */
+	rainDayShare: z.number().nullable(),
+	/** Highest daily precipitation seen on those dates in any year, mm. */
+	precipMaxDay: z.number().nullable(),
+	note: z.string().optional()
+});
+export type ClimateWindow = z.infer<typeof climateWindowSchema>;
+
+export const climateMonthSchema = z.object({
+	month: z.number().int().min(1).max(12),
+	tmaxMean: z.number().nullable(),
+	tminMean: z.number().nullable(),
+	precipMean: z.number().nullable(),
+	rainDays: z.number().nullable()
+});
+export type ClimateMonth = z.infer<typeof climateMonthSchema>;
+
+export const marketCalendarShape = {
+	country: z.string(),
+	from: isoDate,
+	to: isoDate,
+	holidays: z.array(holidaySchema),
+	longWeekends: z.array(longWeekendSchema),
+	climate: climateWindowSchema.nullable(),
+	climateMonths: z.array(climateMonthSchema).default([])
+};
+export const marketCalendarSchema = z.object(marketCalendarShape);
+export type MarketCalendar = z.infer<typeof marketCalendarSchema>;
+
+export const classifiedNewsSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	url: z.string(),
+	source: z.string().nullable(),
+	publishedAt: z.string().nullable(),
+	snippet: z.string().nullable(),
+	category: riskCategorySchema,
+	severity: z.number().int().min(1).max(5),
+	timeHorizon: timeHorizonSchema,
+	confidence: z.number().min(0).max(1),
+	soWhat: z.string(),
+	affectedEntities: z.array(z.string()),
+	/** Decayed weight used for the market score, 0 to 1. */
+	weight: z.number().min(0).max(1),
+	/** Mentions the artist or the venue the promoter asked about. */
+	mentionsSubject: z.boolean().default(false)
+});
+export type ClassifiedNews = z.infer<typeof classifiedNewsSchema>;
+
+export const travelAdvisorySchema = z.object({
+	source: z.enum(['US State Department', 'UK FCDO']),
+	title: z.string(),
+	url: z.string(),
+	publishedAt: z.string().nullable(),
+	/** US advisory level 1 to 4 when the title carries it. */
+	level: z.number().int().min(1).max(4).nullable(),
+	summary: z.string().nullable()
+});
+export type TravelAdvisory = z.infer<typeof travelAdvisorySchema>;
+
+export const riskScoreSchema = z.object({
+	/** 0 (quiet) to 100 (loud), from decayed severity-weighted items. */
+	value: z.number().int().min(0).max(100),
+	byCategory: z.record(z.string(), z.number().int().min(0).max(100)),
+	itemCount: z.number().int().nonnegative(),
+	/** Items newer than seven days. */
+	recentCount: z.number().int().nonnegative()
+});
+export type RiskScore = z.infer<typeof riskScoreSchema>;
+
+export const riskFeedShape = {
+	marketId: z.string().nullable(),
+	country: z.string(),
+	city: z.string(),
+	from: isoDate,
+	to: isoDate,
+	items: z.array(classifiedNewsSchema),
+	advisories: z.array(travelAdvisorySchema),
+	score: riskScoreSchema,
+	/** When the newest item in the store was fetched; null when nothing has been ingested yet. */
+	ingestedAt: z.string().nullable(),
+	/** Items stored for the market (before relevance filtering). */
+	storedItems: z.number().int().nonnegative()
+};
+export const riskFeedSchema = z.object(riskFeedShape);
+export type RiskFeed = z.infer<typeof riskFeedSchema>;
+
 export const briefArtifactsSchema = z.object({
 	/** Every tool call that made a Qloo request, so any cited tool call id resolves to a source. */
 	calls: z.array(sourceRefSchema).default([]),
@@ -312,7 +433,11 @@ export const briefArtifactsSchema = z.object({
 	sponsorCandidates: withSource(z.array(candidateSchema)).optional(),
 	placeCandidates: z
 		.array(z.object({ kind: z.string(), items: z.array(candidateSchema), source: sourceRefSchema }))
-		.optional()
+		.optional(),
+	/** Deterministic context for the date window: holidays, long weekends, climate normals. */
+	marketCalendar: z.object({ ...marketCalendarShape, source: sourceRefSchema }).optional(),
+	/** Classified local news and travel advisories with a decayed market risk score. */
+	riskFeed: z.object({ ...riskFeedShape, source: sourceRefSchema }).optional()
 });
 export type BriefArtifacts = z.infer<typeof briefArtifactsSchema>;
 

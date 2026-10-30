@@ -4,7 +4,13 @@ import { sampleBrief } from '../../brief/fixtures/sample-brief.ts';
 import { MemoryCacheStore } from '../qloo/cache.ts';
 import { QlooClient } from '../qloo/client.ts';
 import { cachedResponseFor, loadSamples, seedStore, type Sample } from '../qloo/test-support.ts';
-import { createAgentTools, QLOO_TOOL_NAMES, ToolRegistry, type ToolCallRecord } from './tools.ts';
+import {
+	createAgentTools,
+	QLOO_TOOL_NAMES,
+	RISK_TOOL_NAMES,
+	ToolRegistry,
+	type ToolCallRecord
+} from './tools.ts';
 
 const ARTIST_ID = 'BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3';
 const LOCALITY_ID = '6A479AAF-1D8D-4EA2-AC1E-29B0906063AC';
@@ -79,7 +85,11 @@ const rec = (registry: ToolRegistry, id: string): ToolCallRecord => {
 describe('tool list', () => {
 	it('exposes the Qloo tools plus emit_brief in a stable order', () => {
 		const { tools } = setup();
-		expect(tools.map((t) => t.name)).toEqual([...QLOO_TOOL_NAMES, 'emit_brief']);
+		expect(tools.map((t) => t.name)).toEqual([
+			...QLOO_TOOL_NAMES,
+			...RISK_TOOL_NAMES,
+			'emit_brief'
+		]);
 	});
 
 	it('enables eager input streaming on every tool', () => {

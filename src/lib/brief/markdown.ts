@@ -345,9 +345,46 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 		}
 		if (risks && risks.note.label !== 'no_coverage') {
 			const riskLine = (r: RiskItem) =>
-				`- **[severity ${r.severity}/5] ${words(r.category)}**: ${r.title}. So what: ${r.soWhat} Source: [${r.sourceName}](${r.sourceUrl})${r.publishedAt ? `, ${r.publishedAt}` : ''} [${r.label}]`;
+				`- **[severity ${r.severity}/5] ${words(r.category)}**: ${r.title}. So what: ${r.soWhat} Source: [${r.sourceName}](${r.sourceUrl})${r.publishedAt ? `, ${r.publishedAt.slice(0, 10)}` : ''} [${r.label}]`;
 			for (const r of risks.items) out.push(riskLine(r));
 			if (risks.items.length > 0) blank();
+		}
+		const feed = a.riskFeed;
+		if (feed) {
+			out.push(
+				`Market risk score ${feed.score.value}/100 from ${feed.score.itemCount} classified items (${feed.score.recentCount} in the last week)${feed.ingestedAt ? `, news ingested ${feed.ingestedAt.slice(0, 10)}` : ''}.${citeRef(feed.source)}`
+			);
+			if (feed.advisories.length) {
+				blank();
+				out.push('Travel advisories:');
+				blank();
+				for (const adv of feed.advisories)
+					out.push(
+						`- ${adv.source}${adv.level ? ` level ${adv.level}` : ''}: [${adv.title}](${adv.url})${adv.publishedAt ? `, ${adv.publishedAt.slice(0, 10)}` : ''}`
+					);
+			}
+			blank();
+		}
+		const cal = a.marketCalendar;
+		if (cal) {
+			const inWindow = cal.holidays.filter((h) => h.inWindow);
+			out.push(
+				`Calendar${citeRef(cal.source)}: ${inWindow.length ? inWindow.map((h) => `${h.localName} (${h.weekday} ${h.date})`).join('; ') : 'no public holiday in the window'}${
+					cal.longWeekends.some((l) => l.inWindow)
+						? `; long weekend ${cal.longWeekends
+								.filter((l) => l.inWindow)
+								.map((l) => `${l.start} to ${l.end}`)
+								.join(', ')}`
+						: ''
+				}.`
+			);
+			if (cal.climate) {
+				const c = cal.climate;
+				out.push(
+					`Climate on these dates in ${c.years.length} previous years: highs ${num(c.tmaxMean, 1) ?? '-'} C, lows ${num(c.tminMean, 1) ?? '-'} C, ${num(c.precipMean, 1) ?? '-'} mm over the window, rain on ${c.rainDayShare != null ? Math.round(c.rainDayShare * 100) : '-'}% of days, wettest day ${num(c.precipMaxDay, 1) ?? '-'} mm. Not a forecast.`
+				);
+			}
+			blank();
 		}
 	};
 

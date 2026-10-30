@@ -9,6 +9,9 @@
  * stays in the registry.
  */
 import { betaZodTool } from '@anthropic-ai/sdk/helpers/beta/zod';
+import { KNOWN_MARKETS } from '../../markets.ts';
+import type { MarketCalendar, RiskFeed } from '../../brief/schema.ts';
+import { buildMarketCalendar, getRiskFeed, type SourceCall } from '../risk/index.ts';
 import type { BetaToolRunContext } from '@anthropic-ai/sdk/lib/tools/BetaRunnableTool';
 import { z } from 'zod';
 import {
@@ -45,6 +48,8 @@ export interface RequestRecord {
 	requestKey: string;
 	cacheHit: boolean;
 	fetchedAt: string;
+	/** Qloo by default; the risk tools call other free sources. */
+	source?: 'qloo' | 'external';
 }
 
 export type ToolArtifact =
@@ -80,6 +85,8 @@ export type ToolArtifact =
 			onlyA: Array<{ id: string; name: string }>;
 			onlyB: Array<{ id: string; name: string }>;
 	  }
+	| { kind: 'calendar'; calendar: MarketCalendar }
+	| { kind: 'risk'; feed: RiskFeed }
 	| { kind: 'brief'; draft: BriefDraft };
 
 export interface ToolCallRecord {
@@ -174,8 +181,9 @@ export class ToolRegistry {
 		let qlooCalls = 0;
 		let qlooCacheHits = 0;
 		for (const rec of this.calls.values()) {
-			qlooCalls += rec.requests.length;
-			qlooCacheHits += rec.requests.filter((r) => r.cacheHit).length;
+			const qloo = rec.requests.filter((r) => r.source !== 'external');
+			qlooCalls += qloo.length;
+			qlooCacheHits += qloo.filter((r) => r.cacheHit).length;
 		}
 		return { toolCalls: this.calls.size, qlooCalls, qlooCacheHits };
 	}
@@ -373,12 +381,60 @@ function locationFilter(input: {
 // Tool factory
 // ---------------------------------------------------------------------------
 
+/** The non-Qloo sources behind market_calendar and risk_feed; injectable for tests. */
+export interface RiskProvider {
+	calendar: (
+		input: { country: string; lat: number; lon: number; from: string; to: string },
+		calls: SourceCall[]
+	) => Promise<MarketCalendar>;
+	feed: (
+		query: {
+			marketId?: string | null;
+			country: string;
+			city: string;
+			from: string;
+			to: string;
+			artist?: string;
+			venue?: string;
+		},
+		calls: SourceCall[]
+	) => Promise<RiskFeed>;
+}
+
+export const defaultRiskProvider: RiskProvider = {
+	calendar: (input, calls) => buildMarketCalendar({ ...input, withMonths: false }, calls),
+	feed: (query, calls) => getRiskFeed(query, calls)
+};
+
 export interface ToolFactoryOptions {
 	client: QlooClient;
 	registry: ToolRegistry;
 	/** Injectable clock for deterministic trending windows in tests. */
 	now?: () => Date;
+	/** Holidays, climate, news and advisories; defaults to the live sources. */
+	risk?: RiskProvider;
 }
+
+/** Known market for a city and country, by English or local name. */
+export function marketFor(
+	city: string,
+	country: string
+): (typeof KNOWN_MARKETS)[number] | undefined {
+	const norm = (x: string) =>
+		x
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.toLowerCase()
+			.trim();
+	const c = country.toUpperCase();
+	const n = norm(city);
+	return KNOWN_MARKETS.find(
+		(m) => m.country === c && (norm(m.name) === n || norm(m.localityName) === n)
+	);
+}
+
+const externalRecords = (calls: SourceCall[]): RequestRecord[] =>
+	calls.map((c) => ({ ...c, source: 'external' as const }));
 
 const ids = z.array(z.string().min(8)).min(1).max(5).describe('Qloo entity ids');
 const localityId = z
@@ -388,7 +444,12 @@ const localityId = z
 const take = (def: number, max: number) => z.number().int().min(1).max(max).default(def);
 
 /** Build the Qloo-backed tools plus emit_brief for one run. */
-export function createAgentTools({ client, registry, now = () => new Date() }: ToolFactoryOptions) {
+export function createAgentTools({
+	client,
+	registry,
+	now = () => new Date(),
+	risk = defaultRiskProvider
+}: ToolFactoryOptions) {
 	const searchEntity = betaZodTool({
 		name: 'qloo_search_entity',
 		description:
@@ -1015,6 +1076,126 @@ export function createAgentTools({ client, registry, now = () => new Date() }: T
 		}
 	});
 
+	const marketCalendar = betaZodTool({
+		name: 'market_calendar',
+		description:
+			'Deterministic context for the date window from free public sources: public holidays and long weekends (Nager.Date) around the window and the climate observed on those dates in the previous years (Open-Meteo archive: mean highs and lows, rain, rain-day share). Call once per brief with the resolved locality coordinates.',
+		inputSchema: z.object({
+			country: z.string().length(2).describe('ISO 3166-1 alpha-2'),
+			lat: z.number(),
+			lon: z.number(),
+			date_from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+			date_to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
+		}),
+		eager_input_streaming: true,
+		run: async (input, ctx) => {
+			const rec = registry.begin(ctx, 'market_calendar', input);
+			const calls: SourceCall[] = [];
+			try {
+				const calendar = await risk.calendar(
+					{
+						country: input.country,
+						lat: input.lat,
+						lon: input.lon,
+						from: input.date_from,
+						to: input.date_to
+					},
+					calls
+				);
+				rec.requests.push(...externalRecords(calls));
+				rec.artifacts.push({ kind: 'calendar', calendar });
+				const inWindow = calendar.holidays.filter((h) => h.inWindow);
+				registry.finish(
+					rec,
+					true,
+					`${inWindow.length} holidays in window, ${calendar.longWeekends.filter((l) => l.inWindow).length} long weekends, climate ${calendar.climate ? 'from ' + calendar.climate.years.length + ' years' : 'unavailable'}`
+				);
+				return JSON.stringify({
+					holidaysInWindow: inWindow,
+					holidaysNearby: calendar.holidays.filter((h) => !h.inWindow).slice(0, 8),
+					longWeekends: calendar.longWeekends,
+					climate: calendar.climate,
+					toolCallId: rec.toolCallId
+				});
+			} catch (err) {
+				rec.requests.push(...externalRecords(calls));
+				registry.finish(rec, false, errorMessage(err));
+				return errorPayload(err);
+			}
+		}
+	});
+
+	const riskFeed = betaZodTool({
+		name: 'risk_feed',
+		description:
+			'Local news of the last weeks classified for promoters (category, severity 1-5, time horizon, so-what), travel advisories (US State Department, UK FCDO) and a decayed market risk score. Items come from Google News searches and local outlets and are stored with their source links; cite the exact url of an item or advisory in every risk you report. Call once per brief, after the locality is resolved.',
+		inputSchema: z.object({
+			city: z.string().min(1),
+			country: z.string().length(2).describe('ISO 3166-1 alpha-2'),
+			market_id: z.string().optional().describe('Known market slug when the promoter picked one'),
+			artist: z.string().optional(),
+			venue: z.string().optional(),
+			date_from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+			date_to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
+		}),
+		eager_input_streaming: true,
+		run: async (input, ctx) => {
+			const rec = registry.begin(ctx, 'risk_feed', input);
+			const calls: SourceCall[] = [];
+			try {
+				const market = input.market_id
+					? KNOWN_MARKETS.find((m) => m.id === input.market_id)
+					: marketFor(input.city, input.country);
+				const feed = await risk.feed(
+					{
+						marketId: market?.id ?? null,
+						country: input.country,
+						city: input.city,
+						from: input.date_from,
+						to: input.date_to,
+						artist: input.artist,
+						venue: input.venue
+					},
+					calls
+				);
+				rec.requests.push(...externalRecords(calls));
+				rec.artifacts.push({ kind: 'risk', feed });
+				registry.finish(
+					rec,
+					true,
+					`${feed.items.length} classified items, ${feed.advisories.length} advisories, score ${feed.score.value}${market ? '' : ' (no local news store for this city)'}`
+				);
+				return JSON.stringify({
+					market: market?.id ?? null,
+					note: market
+						? undefined
+						: 'No local news store exists for this city; only travel advisories are available. Label news-based risks no_coverage.',
+					score: feed.score,
+					ingestedAt: feed.ingestedAt,
+					items: feed.items.slice(0, 15).map((i) => ({
+						id: i.id,
+						title: i.title,
+						url: i.url,
+						source: i.source,
+						publishedAt: i.publishedAt?.slice(0, 10) ?? null,
+						category: i.category,
+						severity: i.severity,
+						timeHorizon: i.timeHorizon,
+						confidence: i.confidence,
+						soWhat: i.soWhat,
+						mentionsSubject: i.mentionsSubject
+					})),
+					advisories: feed.advisories,
+					toolCallId: rec.toolCallId
+				});
+			} catch (err) {
+				rec.requests.push(...externalRecords(calls));
+				registry.finish(rec, false, errorMessage(err));
+				return errorPayload(err);
+			}
+		}
+	});
+
 	const emitBrief = betaZodTool({
 		name: 'emit_brief',
 		description:
@@ -1053,6 +1234,8 @@ export function createAgentTools({ client, registry, now = () => new Date() }: T
 		compare,
 		cityTaste,
 		artistTags,
+		marketCalendar,
+		riskFeed,
 		emitBrief
 	];
 	// registry.begin() throws ToolBudgetExceeded before a tool's own try/catch; turn that into the
@@ -1088,3 +1271,4 @@ export const QLOO_TOOL_NAMES = [
 	'qloo_city_taste',
 	'qloo_artist_tags'
 ] as const;
+export const RISK_TOOL_NAMES = ['market_calendar', 'risk_feed'] as const;

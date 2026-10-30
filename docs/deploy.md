@@ -34,7 +34,9 @@ Settings and why:
 
 Environment set by the script: `GOOGLE_CLOUD_PROJECT`, `ANTHROPIC_VERTEX_REGION=global`, `GOOGLE_APPLICATION_CREDENTIALS=/mnt/secrets/gcp-sa-json`, `QLOO_BASE_URL`, `QLOO_MODE=live`, `QLOO_CACHE_BACKEND=postgres`, `MIGRATE_ON_START=true`, `MAX_CONCURRENT_RUNS=2`, `LOG_LEVEL=info`, `NODE_ENV=production`, `PORT=3000`, `HOST=0.0.0.0`, plus `ORIGIN` and `APP_BASE_URL`. Secrets as env: `QLOO_API_KEY`, `DATABASE_URL`.
 
-Overrides: `RG`, `LOCATION`, `APP`, `ENV_NAME`, `ACR`, `MIN_REPLICAS`, `MAX_REPLICAS`.
+The script also creates the scheduled job `gigcast-ingest` (a `curlimages/curl` container, cron `0 */6 * * *`) that posts to `/api/jobs/ingest` with the shared secret `INGEST_JOB_SECRET`. The secret is generated on the first run when the variable is unset and stored on both the app and the job; `az containerapp job start -n gigcast-ingest -g rg-gigcast` runs an ingestion on demand.
+
+Overrides: `RG`, `LOCATION`, `APP`, `ENV_NAME`, `ACR`, `MIN_REPLICAS`, `MAX_REPLICAS`, `JOB_NAME`, `INGEST_CRON`, `INGEST_JOB_SECRET`.
 
 ### 3. Verify
 

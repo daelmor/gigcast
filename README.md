@@ -12,7 +12,43 @@ Built for the Qloo Agentic Hackathon. Progress lives in [STATUS.md](STATUS.md); 
 2. The server starts the agent loop: Claude on the Anthropic SDK tool runner with twelve typed Qloo tools plus `emit_brief`, streaming, adaptive thinking, a cached system prompt and a tool budget. Every tool records the Qloo request behind it.
 3. Events stream to the browser over SSE (`/api/briefs/:id/events`) and are persisted with the brief; `/brief/:id` shows the live trace, then the document.
 4. In parallel, a second run answers the lineup and sponsor question with every tool removed. The server checks each of those LLM-only names against what Qloo actually returned, and the brief shows the two columns side by side: what the model guessed and what the data says.
-5. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link, printable to PDF, with the sponsor outreach drafts on their own page.
+5. Two more tools cover what Qloo does not know: `market_calendar` (public holidays, long weekends and the climate observed on the dates in previous years) and `risk_feed` (local news ingested from Google News and local outlets, classified by Claude Haiku into risk categories with severity and a one-line "so what", plus US and UK travel advisories and a decayed market risk score). Every risk in the brief links to its source; the server rejects any that the feed did not return.
+6. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link, printable to PDF, with the sponsor outreach drafts on their own page.
+
+## Why Qloo is load-bearing
+
+Qloo's Taste AI is one affinity graph across artists, brands, places, localities and demographics, and the brief leans on it at every step:
+
+| Brief section | Qloo call | What it gives |
+| --- | --- | --- |
+| Entity resolution | `/search` by type | Artist, brand and locality ids with disambiguation; the country check defeats "Panama City is in Florida". |
+| Audience map | `/v2/insights` `urn:heatmap` with `filter.location=<locality id>` and `heatmap.dimensions` | Geohash cells with affinity, popularity, quality and price level; `output.heatmap.boundary=urn:entity:locality` for neighbourhoods. |
+| Demand and fit | `urn:demographics`, `urn:tag` for the artist and for the city (`signal.location`), `/v2/trending` | Age and gender affinities, the taste match, the twelve-month trend. |
+| Lineup | `urn:entity:artist` with `signal.location`, `/v2/insights/compare` | Compatible artists in that city with explainability weights; shared tags behind a pairing. |
+| Sponsors | `urn:entity:brand` with `signal.location` and `signal.demographics.age` | Brands this audience over-indexes on, also for the dominant age bucket. |
+| Venues and partners | `urn:entity:place` with `filter.location` and place tags | Venues, bars, hotels and restaurants near the heat with price level and rating. |
+| Pricing | the heatmap price-level dimension and the places' price levels | The willingness-to-pay proxy behind the tiers. |
+
+Without those calls the same questions get plausible guesses. The brief proves it on screen: a second run with every tool removed sits next to the grounded picks, and each LLM-only name is checked against what Qloo returned. In the first live comparison for Ricardo Arjona in Guatemala City, three of five LLM-only lineup picks appeared in Qloo's results and none of the five guessed sponsors did, while the grounded run's sponsors came straight from the audience's brand affinities.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  B[Browser<br/>SvelteKit, MapLibre, ECharts] -->|POST /api/briefs, SSE| S[SvelteKit server<br/>Azure Container Apps]
+  S -->|tool runner, streaming| C[Claude on Vertex AI<br/>12 Qloo tools + market_calendar + risk_feed + emit_brief]
+  S -->|no tools, in parallel| CF[Counterfactual run]
+  C -->|typed client, whitelist, cache| Q[(Qloo API)]
+  C --> R[Risk layer]
+  R --> N[Google News RSS, local outlets]
+  R --> H[Nager.Date, Open-Meteo]
+  R --> A[US State Dept, UK FCDO]
+  S --> P[(Postgres on Neon<br/>briefs, runs, events, qloo_cache,<br/>news, classifications, caches)]
+  J[Scheduled job<br/>every 6 h] -->|POST /api/jobs/ingest| S
+  R -->|classify| K[Claude Haiku]
+```
+
+The agent emits a structured draft; the server attaches the raw artifacts and verifies every grounded claim before anything is stored or shown.
 
 ## Stack
 
@@ -73,7 +109,11 @@ The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample br
 | `MIGRATE_ON_START` | no | `true` applies Drizzle migrations on boot (Cloud Run). |
 | `PUBLIC_MAP_STYLE_URL` | no | MapLibre style; OpenFreeMap Positron by default. |
 | `APP_BASE_URL`, `ORIGIN` | deploy | Public URL of the app; adapter-node reads `ORIGIN`. |
-| `INGEST_JOB_SECRET` | M4 | Shared secret for the news ingestion job. |
+| `INGEST_JOB_SECRET` | deploy | Bearer secret for `POST /api/jobs/ingest`; the scheduled job sends it. Unset means the endpoint answers 503. |
+
+## Market dashboards and ingestion
+
+`/market/:slug` shows each known market's risk feed with filters, the score, travel advisories, the next six months of holidays and long weekends, monthly climate normals and the market's recent briefs. The news store is refreshed by `POST /api/jobs/ingest` (all markets, or `?market=slug`) with `Authorization: Bearer $INGEST_JOB_SECRET`; on Azure a scheduled job calls it every six hours, and a brief refreshes its market inline when the store is older than twelve hours.
 
 ## Deploy
 
@@ -85,6 +125,7 @@ One Docker image on Azure Container Apps, Postgres on Neon, Claude on Vertex AI:
 src/lib/server/qloo/      typed Qloo client, parameter whitelist, cache stores, locality resolver
 src/lib/server/agent/     tools, system prompt, Vertex agent loop, brief assembly and verification
 src/lib/server/briefs/    Postgres store, run manager with the SSE event hub, fake runner
+src/lib/server/risk/      RSS ingestion, Haiku classification, holidays and climate, advisories, score, dashboard
 src/lib/brief/            Brief contract (Zod), agent events, Markdown renderer, fixtures
 src/lib/components/       UI: brief document sections, maps, trace, the /new form, shell
 src/routes/               pages (/, /new, /brief/[id]) and API routes (/api/briefs, /api/search, SSE)

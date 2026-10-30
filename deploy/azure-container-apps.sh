@@ -16,7 +16,7 @@
 # The GCP credentials and the two secrets are stored as Container Apps secrets; the JSON is
 # mounted as a file so the Google SDK reads it through GOOGLE_APPLICATION_CREDENTIALS.
 #
-# Overrides: RG, LOCATION, APP, ENV_NAME, ACR, MIN_REPLICAS, MAX_REPLICAS.
+# Overrides: RG, LOCATION, APP, ENV_NAME, ACR, MIN_REPLICAS, MAX_REPLICAS, JOB_NAME, INGEST_CRON, INGEST_JOB_SECRET.
 set -euo pipefail
 
 RG="${RG:-rg-gigcast}"
@@ -25,6 +25,11 @@ APP="${APP:-gigcast}"
 ENV_NAME="${ENV_NAME:-cae-gigcast}"
 MIN_REPLICAS="${MIN_REPLICAS:-1}"
 MAX_REPLICAS="${MAX_REPLICAS:-1}"
+
+# Shared secret for POST /api/jobs/ingest; generated when absent (the job and the app get the same value).
+INGEST_JOB_SECRET="${INGEST_JOB_SECRET:-$(openssl rand -hex 24)}"
+JOB_NAME="${JOB_NAME:-gigcast-ingest}"
+INGEST_CRON="${INGEST_CRON:-0 */6 * * *}"
 
 : "${QLOO_API_KEY:?QLOO_API_KEY is required}"
 : "${DATABASE_URL:?DATABASE_URL is required}"
@@ -74,12 +79,13 @@ ENV_VARS=(
   "HOST=0.0.0.0"
   "QLOO_API_KEY=secretref:qloo-api-key"
   "DATABASE_URL=secretref:database-url"
+  "INGEST_JOB_SECRET=secretref:ingest-job-secret"
 )
 
 if az containerapp show -n "${APP}" -g "${RG}" -o none 2>/dev/null; then
   say "Updating secrets and the running app"
   az containerapp secret set -n "${APP}" -g "${RG}" -o none \
-    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}"
+    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}"
   az containerapp registry set -n "${APP}" -g "${RG}" --server "${ACR}.azurecr.io" --identity system -o none
   az containerapp update -n "${APP}" -g "${RG}" -o none \
     --image "${IMAGE}" \
@@ -96,7 +102,7 @@ else
     --target-port 3000 --ingress external --transport auto \
     --min-replicas "${MIN_REPLICAS}" --max-replicas "${MAX_REPLICAS}" \
     --cpu 1.0 --memory 2.0Gi \
-    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" \
+    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}" \
     --secret-volume-mount /mnt/secrets \
     --env-vars "${ENV_VARS[@]}"
 fi
@@ -105,6 +111,25 @@ FQDN="$(az containerapp show -n "${APP}" -g "${RG}" --query properties.configura
 say "Setting ORIGIN to https://${FQDN}"
 az containerapp update -n "${APP}" -g "${RG}" -o none \
   --set-env-vars "ORIGIN=https://${FQDN}" "APP_BASE_URL=https://${FQDN}"
+
+say "Scheduled ingestion job ${JOB_NAME} (${INGEST_CRON})"
+# A tiny curl container posts to the ingest endpoint on a cron; the secret travels as a job secret.
+JOB_CMD="curl -fsS -m 290 -X POST -H \"Authorization: Bearer \$INGEST_JOB_SECRET\" https://${FQDN}/api/jobs/ingest"
+if az containerapp job show -n "${JOB_NAME}" -g "${RG}" -o none 2>/dev/null; then
+  az containerapp job secret set -n "${JOB_NAME}" -g "${RG}" --secrets "ingest-job-secret=${INGEST_JOB_SECRET}" -o none
+  az containerapp job update -n "${JOB_NAME}" -g "${RG}" -o none \
+    --cron-expression "${INGEST_CRON}" \
+    --image curlimages/curl:8.11.1 --command "/bin/sh" --args "-c" "${JOB_CMD}" \
+    --set-env-vars "INGEST_JOB_SECRET=secretref:ingest-job-secret"
+else
+  az containerapp job create -n "${JOB_NAME}" -g "${RG}" --environment "${ENV_NAME}" -o none \
+    --trigger-type Schedule --cron-expression "${INGEST_CRON}" \
+    --replica-timeout 600 --replica-retry-limit 1 --parallelism 1 --replica-completion-count 1 \
+    --image curlimages/curl:8.11.1 --command "/bin/sh" --args "-c" "${JOB_CMD}" \
+    --cpu 0.25 --memory 0.5Gi \
+    --secrets "ingest-job-secret=${INGEST_JOB_SECRET}" \
+    --env-vars "INGEST_JOB_SECRET=secretref:ingest-job-secret"
+fi
 
 say "Waiting for the new revision"
 for _ in $(seq 1 30); do

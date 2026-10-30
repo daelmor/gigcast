@@ -26,6 +26,16 @@ export interface KnownMarket {
 	sampleArtists: string[];
 	/** One line of context for the picker. */
 	note?: string;
+	/** Local outlets with RSS feeds for the risk layer (verified live on 2026-10-30 unless marked TODO). */
+	outlets: Outlet[];
+}
+
+export interface Outlet {
+	name: string;
+	url: string;
+	rss: string;
+	/** Spanish or English content, for the classifier's benefit. */
+	lang: 'es' | 'en';
 }
 
 export const KNOWN_MARKETS: KnownMarket[] = [
@@ -41,7 +51,28 @@ export const KNOWN_MARKETS: KnownMarket[] = [
 		timezone: 'America/Guatemala',
 		featured: true,
 		sampleArtists: ['Ricardo Arjona', 'Gaby Moreno', 'Alux Nahual', 'Bohemia Suburbana'],
-		note: 'Deepest Central American coverage in the probe: 1,757 heatmap cells, regional artists resolve.'
+		note: 'Deepest Central American coverage in the probe: 1,757 heatmap cells, regional artists resolve.',
+		outlets: [
+			{
+				name: 'Prensa Libre',
+				url: 'https://www.prensalibre.com',
+				rss: 'https://www.prensalibre.com/feed/',
+				lang: 'es'
+			},
+			{
+				name: 'República',
+				url: 'https://republica.gt',
+				rss: 'https://republica.gt/feed',
+				lang: 'es'
+			},
+			{
+				name: 'Emisoras Unidas',
+				url: 'https://emisorasunidas.com',
+				rss: 'https://emisorasunidas.com/feed/',
+				lang: 'es'
+			}
+			// TODO(David): Soy502 and elPeriódico have no working RSS at the usual paths; add if you know one.
+		]
 	},
 	{
 		id: 'santo-domingo',
@@ -55,7 +86,17 @@ export const KNOWN_MARKETS: KnownMarket[] = [
 		timezone: 'America/Santo_Domingo',
 		featured: true,
 		sampleArtists: ['Juan Luis Guerra', 'Romeo Santos', 'Natti Natasha', 'El Alfa'],
-		note: 'Caribbean market with strong merengue, bachata and dembow signals.'
+		note: 'Caribbean market with strong merengue, bachata and dembow signals.',
+		outlets: [
+			{
+				name: 'Diario Libre',
+				url: 'https://www.diariolibre.com',
+				rss: 'https://www.diariolibre.com/rss/portada.xml',
+				lang: 'es'
+			},
+			{ name: 'El Día', url: 'https://eldia.com.do', rss: 'https://eldia.com.do/feed/', lang: 'es' }
+			// TODO(David): Listín Diario and El Caribe block or lack RSS; add a working feed if you have one.
+		]
 	},
 	{
 		id: 'mexico-city',
@@ -69,7 +110,28 @@ export const KNOWN_MARKETS: KnownMarket[] = [
 		timezone: 'America/Mexico_City',
 		featured: true,
 		sampleArtists: ['Natalia Lafourcade', 'Café Tacvba', 'Carín León', 'Zoé'],
-		note: 'Large market that shows the product scaling up: 6,436 heatmap cells in the probe.'
+		note: 'Large market that shows the product scaling up: 6,436 heatmap cells in the probe.',
+		outlets: [
+			{
+				name: 'La Jornada',
+				url: 'https://www.jornada.com.mx',
+				rss: 'https://www.jornada.com.mx/rss/edicion.xml?v=1',
+				lang: 'es'
+			},
+			{
+				name: 'Expansión Política',
+				url: 'https://politica.expansion.mx',
+				rss: 'https://politica.expansion.mx/rss',
+				lang: 'es'
+			},
+			{
+				name: 'Chilango',
+				url: 'https://www.chilango.com',
+				rss: 'https://www.chilango.com/feed/',
+				lang: 'es'
+			}
+			// TODO(David): El Universal, Milenio and Excélsior return 404 at the usual RSS paths.
+		]
 	},
 	{
 		id: 'panama-city',
@@ -83,7 +145,16 @@ export const KNOWN_MARKETS: KnownMarket[] = [
 		timezone: 'America/Panama',
 		featured: false,
 		sampleArtists: ['Rubén Blades', 'Sech', 'Boza', 'Los Rabanes'],
-		note: 'Qloo calls the capital "Distrito Panamá"; the free-text "Panama City" is in Florida.'
+		note: 'Qloo calls the capital "Distrito Panamá"; the free-text "Panama City" is in Florida.',
+		outlets: [
+			{
+				name: 'TVN Noticias',
+				url: 'https://www.tvn-2.com',
+				rss: 'https://www.tvn-2.com/rss',
+				lang: 'es'
+			}
+			// TODO(David): La Prensa (Panamá) serves HTML at /feed/; add a working feed.
+		]
 	},
 	{
 		id: 'san-salvador',
@@ -96,7 +167,9 @@ export const KNOWN_MARKETS: KnownMarket[] = [
 		lon: -89.2182,
 		timezone: 'America/El_Salvador',
 		featured: false,
-		sampleArtists: ['Álvaro Torres', 'Adhesivo', 'Frigüey']
+		sampleArtists: ['Álvaro Torres', 'Adhesivo', 'Frigüey'],
+		// TODO(David): La Prensa Gráfica and elsalvador.com block feed requests; add 3 to 5 outlets.
+		outlets: []
 	},
 	{
 		id: 'managua',
@@ -109,7 +182,16 @@ export const KNOWN_MARKETS: KnownMarket[] = [
 		lon: -86.2362,
 		timezone: 'America/Managua',
 		featured: false,
-		sampleArtists: ['Luis Enrique', 'Katia Cardenal', 'Perrozompopo']
+		sampleArtists: ['Luis Enrique', 'Katia Cardenal', 'Perrozompopo'],
+		outlets: [
+			{
+				name: 'Confidencial',
+				url: 'https://confidencial.digital',
+				rss: 'https://confidencial.digital/feed/',
+				lang: 'es'
+			}
+			// TODO(David): La Prensa (Nicaragua) returns 403 for feeds; add others.
+		]
 	}
 ];
 
