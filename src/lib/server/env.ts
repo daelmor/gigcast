@@ -3,11 +3,19 @@ import { z } from 'zod';
 const schema = z.object({
 	QLOO_API_KEY: z.string().min(1),
 	QLOO_BASE_URL: z.string().url().default('https://hackathon.api.qloo.com'),
+	// live: cache first, API on miss. replay: cache only (after the key dies). refresh: always call.
+	QLOO_MODE: z.enum(['live', 'replay', 'refresh']).default('live'),
+	QLOO_CACHE_BACKEND: z.enum(['postgres', 'file']).default('postgres'),
+	QLOO_CACHE_DIR: z.string().min(1).default('.cache/qloo'),
 	DATABASE_URL: z.string().min(1),
 	GOOGLE_APPLICATION_CREDENTIALS: z.string().min(1).optional(),
 	GOOGLE_CLOUD_PROJECT: z.string().min(1),
 	ANTHROPIC_VERTEX_REGION: z.string().min(1).default('global'),
-	INGEST_JOB_SECRET: z.string().min(1),
+	// Vertex model ids. Claude 5.x is listed but not enabled for the project yet (see docs/decisions.md).
+	CLAUDE_PLANNER_MODEL: z.string().min(1).default('claude-opus-4-6'),
+	CLAUDE_CLASSIFIER_MODEL: z.string().min(1).default('claude-haiku-4-5'),
+	// Required only by the ingest job endpoint, which checks it at request time.
+	INGEST_JOB_SECRET: z.string().min(1).optional(),
 	PUBLIC_MAP_STYLE_URL: z.string().url().optional(),
 	APP_BASE_URL: z.string().url().optional()
 });
