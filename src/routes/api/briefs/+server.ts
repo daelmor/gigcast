@@ -6,6 +6,14 @@ import { listRecentBriefs } from '$lib/server/briefs/store';
 const bad = (status: number, error: string, details?: string[]) =>
 	json({ error, details } satisfies ApiError, { status });
 
+/** Forms send "" for untouched optional fields; treat those as absent at the top level. */
+function stripEmptyStrings(body: unknown): unknown {
+	if (!body || typeof body !== 'object' || Array.isArray(body)) return body;
+	return Object.fromEntries(
+		Object.entries(body as Record<string, unknown>).filter(([, v]) => v !== '' && v !== null)
+	);
+}
+
 /** Start a brief run. Returns 201 with the id; the run continues in the background. */
 export const POST: RequestHandler = async ({ request, locals }) => {
 	let body: unknown;
@@ -14,7 +22,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	} catch {
 		return bad(400, 'The request body must be JSON.');
 	}
-	const parsed = createBriefRequestSchema.safeParse(body);
+	const parsed = createBriefRequestSchema.safeParse(stripEmptyStrings(body));
 	if (!parsed.success) {
 		return bad(
 			400,

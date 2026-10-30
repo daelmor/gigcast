@@ -1,43 +1,98 @@
 # gigcast
 
-Qloo-grounded booking and sponsorship agent for event promoters.
+Qloo-grounded Booking Briefs for concert promoters.
 
-A promoter considering **artist X in city Y during date window Z** gets a
-**Booking Brief**: audience heatmap, demand and fit, lineup, sponsors, venues
-and partners, pricing guidance, a risk panel, and a side-by-side
-"LLM only vs. grounded in Qloo" counterfactual. Every recommendation is
-labeled **grounded**, **inferred**, or **no coverage**.
+A promoter picks an artist, a city and a date window. An agent on Claude (Vertex AI) calls Qloo's Taste AI and produces a document the promoter can take to a sponsor the same day: where the artist's audience lives (heatmap), demand and fit, a lineup, sponsors with outreach drafts, venues and partners near the heat, ticket tiers, a risk panel, and the full agent trace. Every claim carries one of three labels: **grounded** (a Qloo result the server verified against the entity ids Qloo returned), **inferred** (the model's reasoning on top of grounded data) or **no coverage** (Qloo returned nothing usable, and the brief says so instead of inventing).
 
-Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com).
+Built for the Qloo Agentic Hackathon. Progress lives in [STATUS.md](STATUS.md); routine decisions in [docs/decisions.md](docs/decisions.md); what the Qloo API really does in [docs/qloo-findings.md](docs/qloo-findings.md).
 
-## Status
+## How a brief is built
 
-Early development. See [STATUS.md](STATUS.md) for what works today and
-[docs/decisions.md](docs/decisions.md) for the decision log.
+1. `/new` resolves the market (quick picks or a locality search with a country check, because "Panama City" resolves to Florida) and the artist (autocomplete through Qloo `/search`), takes the dates and optional promoter numbers, and calls `POST /api/briefs`.
+2. The server starts the agent loop: Claude on the Anthropic SDK tool runner with twelve typed Qloo tools plus `emit_brief`, streaming, adaptive thinking, a cached system prompt and a tool budget. Every tool records the Qloo request behind it.
+3. Events stream to the browser over SSE (`/api/briefs/:id/events`) and are persisted with the brief; `/brief/:id` shows the live trace, then the document.
+4. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link.
 
-## Development
+## Stack
+
+TypeScript end to end: SvelteKit 2, Svelte 5 (runes), Tailwind 4, adapter-node · Postgres with Drizzle · Claude on Vertex AI through `@anthropic-ai/vertex-sdk` (beta tool runner, `betaZodTool`) · MapLibre GL with OpenFreeMap tiles · ECharts · Zod at every boundary · Vitest and Playwright · Docker on Cloud Run.
+
+## Run it locally
+
+Prerequisites: Node 22+ (developed on 26), pnpm 12, Docker (for Postgres), a Qloo hackathon API key, and a Google Cloud project with Claude enabled on Vertex AI plus Application Default Credentials (a service-account JSON kept outside the repo).
 
 ```sh
 pnpm install
-pnpm db:start          # Postgres 16 via Docker Compose
-pnpm dev               # http://localhost:5173
-pnpm check && pnpm lint && pnpm test
+cp .env.example .env      # fill in the values; names and comments are in the template
+pnpm db:start             # Postgres 16 in Docker Compose
+pnpm db:migrate
+pnpm dev                  # http://localhost:5173
 ```
 
-Copy `.env.example` to a local env file and fill in the values; the browser
-never sees them.
+The dev server reads `.env` itself. In production the variables come from the environment (Cloud Run secrets); there is no dotenv loading.
 
-Build a brief from the terminal (streams the agent trace to stderr, prints the
-Markdown to stdout and writes JSON, events and Markdown under `.cache/briefs/`):
+### CLI
 
 ```sh
-pnpm brief --city "Guatemala City" --country GT --artist "Ricardo Arjona" \
-  --from 2026-11-20 --to 2026-11-22
-# --mode replay serves everything from the Qloo cache (no API key needed after the hackathon)
-``` `pnpm probe` runs the Qloo API probe that produced
-[docs/qloo-findings.md](docs/qloo-findings.md) (`QLOO_PROBE_REPLAY=1` re-renders
-it from the local cache without calling the API).
+pnpm brief --city "Guatemala City" --country GT --artist "Ricardo Arjona" --from 2026-11-20 --to 2026-11-22
+```
+
+Streams the trace to stderr, prints the Markdown brief to stdout and writes `.cache/briefs/<id>.{json,events.json,md}`. `--mode replay` serves Qloo responses from the cache only; `--effort medium` is faster; `--json` prints the structured brief.
+
+### Tests and checks
+
+```sh
+pnpm check      # svelte-check, TypeScript strict
+pnpm lint       # prettier + eslint
+pnpm test       # vitest: Qloo client against recorded samples, schemas, tools, assembly, renderer, UI helpers
+pnpm test:e2e   # playwright: builds, starts the preview with the fake agent runner, needs the local Postgres
+```
+
+The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample brief, so it needs neither a Qloo key nor Vertex. Briefs it creates land in the local database.
+
+### Qloo probe
+
+`pnpm probe` reruns the M0 probe against the live API and regenerates `docs/qloo-findings.md` and the samples under `docs/qloo-samples/` that the client tests replay.
+
+## Environment
+
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `QLOO_API_KEY` | yes | Hackathon key; server only. |
+| `QLOO_BASE_URL` | yes | `https://hackathon.api.qloo.com` for hackathon keys. |
+| `DATABASE_URL` | yes | Postgres connection string. |
+| `GOOGLE_CLOUD_PROJECT` | yes | Project with Claude on Vertex AI. |
+| `GOOGLE_APPLICATION_CREDENTIALS` | local only | Path to a service-account JSON outside the repo; unset on Cloud Run. |
+| `ANTHROPIC_VERTEX_REGION` | no | `global` by default. |
+| `CLAUDE_PLANNER_MODEL` / `CLAUDE_CLASSIFIER_MODEL` | no | Defaults `claude-opus-4-6` and `claude-haiku-4-5`. |
+| `QLOO_MODE` | no | `live` (cache first, API on miss), `replay` (cache only), `refresh`. |
+| `QLOO_CACHE_BACKEND` / `QLOO_CACHE_DIR` | no | `postgres` (default) or `file` for offline work and tests. |
+| `MAX_CONCURRENT_RUNS` | no | Briefs running at once per instance, default 2; extra requests get 429. |
+| `AGENT_RUNNER` | no | `vertex` (default) or `fake` for tests. |
+| `MIGRATE_ON_START` | no | `true` applies Drizzle migrations on boot (Cloud Run). |
+| `PUBLIC_MAP_STYLE_URL` | no | MapLibre style; OpenFreeMap Positron by default. |
+| `APP_BASE_URL`, `ORIGIN` | deploy | Public URL of the app; adapter-node reads `ORIGIN`. |
+| `INGEST_JOB_SECRET` | M4 | Shared secret for the news ingestion job. |
+
+## Deploy
+
+One Docker image on Cloud Run in the Vertex project, Postgres hosted separately, secrets in Secret Manager: `deploy/cloud-run.sh` does the Google Cloud steps and [docs/deploy.md](docs/deploy.md) explains them.
+
+## Repository layout
+
+```
+src/lib/server/qloo/      typed Qloo client, parameter whitelist, cache stores, locality resolver
+src/lib/server/agent/     tools, system prompt, Vertex agent loop, brief assembly and verification
+src/lib/server/briefs/    Postgres store, run manager with the SSE event hub, fake runner
+src/lib/brief/            Brief contract (Zod), agent events, Markdown renderer, fixtures
+src/lib/components/       UI: brief document sections, maps, trace, the /new form, shell
+src/routes/               pages (/, /new, /brief/[id]) and API routes (/api/briefs, /api/search, SSE)
+scripts/                  qloo-probe.ts (M0) and brief.ts (CLI)
+drizzle/                  SQL migrations
+docs/                     Qloo findings and samples, decisions, deploy guide
+deploy/                   Cloud Run deploy script
+```
 
 ## License
 
-[MIT](LICENSE)
+MIT, see [LICENSE](LICENSE).
