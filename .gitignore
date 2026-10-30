@@ -1,0 +1,45 @@
+# Dependencies and build output
+node_modules/
+.svelte-kit/
+build/
+dist/
+.output/
+.vercel/
+.netlify/
+.wrangler/
+
+# Environment and secrets — never commit
+.env
+.env.*
+!.env.example
+_secrets/
+*service-account*.json
+*-sa.json
+cloudcode-*.json
+gcp-*.json
+*.pem
+*.key
+
+# Local caches and dumps (Qloo replay cache, probe output)
+.cache/
+*.cache.json
+qloo-cache/
+
+# Test artifacts
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Editor and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Planning notes kept out of the public repo
+hackathon-qloo-prompt-idea-*.md
