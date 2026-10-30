@@ -1,0 +1,57 @@
+import { z } from 'zod';
+
+const schema = z.object({
+	QLOO_API_KEY: z.string().min(1),
+	QLOO_BASE_URL: z.string().url().default('https://hackathon.api.qloo.com'),
+	DATABASE_URL: z.string().min(1),
+	GOOGLE_APPLICATION_CREDENTIALS: z.string().min(1).optional(),
+	GOOGLE_CLOUD_PROJECT: z.string().min(1),
+	ANTHROPIC_VERTEX_REGION: z.string().min(1).default('global'),
+	INGEST_JOB_SECRET: z.string().min(1),
+	PUBLIC_MAP_STYLE_URL: z.string().url().optional(),
+	APP_BASE_URL: z.string().url().optional()
+});
+
+export type Env = z.infer<typeof schema>;
+
+let cached: Env | undefined;
+
+/** Treat empty strings as unset so `VAR=` lines in a dotenv file behave like absent variables. */
+function readProcessEnv(): Record<string, string | undefined> {
+	const out: Record<string, string | undefined> = {};
+	for (const key of Object.keys(schema.shape)) {
+		const value = process.env[key];
+		out[key] = value === undefined || value === '' ? undefined : value;
+	}
+	return out;
+}
+
+/**
+ * Parse and cache the environment on first use. Errors list variable names only,
+ * never values, so they are safe to log.
+ */
+export function getEnv(): Env {
+	if (cached) return cached;
+	const raw = readProcessEnv();
+	const result = schema.safeParse(raw);
+	if (!result.success) {
+		const missing = new Set<string>();
+		const invalid = new Set<string>();
+		for (const issue of result.error.issues) {
+			const name = String(issue.path[0]);
+			if (raw[name] === undefined) missing.add(name);
+			else invalid.add(name);
+		}
+		const parts: string[] = [];
+		if (missing.size) parts.push(`Missing environment variables: ${[...missing].join(', ')}`);
+		if (invalid.size) parts.push(`Invalid environment variables: ${[...invalid].join(', ')}`);
+		throw new Error(parts.join('. '));
+	}
+	cached = result.data;
+	return cached;
+}
+
+/** Test helper: drop the cached parse so the next getEnv() re-reads process.env. */
+export function resetEnvCache(): void {
+	cached = undefined;
+}

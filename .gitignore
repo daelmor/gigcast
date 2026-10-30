@@ -43,3 +43,7 @@ pnpm-debug.log*
 
 # Planning notes kept out of the public repo
 hackathon-qloo-prompt-idea-*.md
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
