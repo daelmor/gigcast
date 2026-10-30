@@ -13,23 +13,28 @@ export function ageDays(publishedAt: string | null, now: Date): number {
 	return Math.max(0, (now.getTime() - t) / DAY);
 }
 
-/** (severity / 5) x confidence x 0.5^(age / halfLife), clamped to 0..1. */
+/**
+ * ((severity - 1) / 4)^1.5 x confidence x 0.5^(age / halfLife), clamped to 0..1.
+ * Severity 2 counts little (0.125), 3 some (0.35), 4 a lot (0.65), 5 fully.
+ */
 export function decayWeight(
 	severity: number,
 	confidence: number,
 	age: number,
 	halfLifeDays = 14
 ): number {
+	const s = (Math.min(5, Math.max(1, severity)) - 1) / 4;
 	const w =
-		(Math.min(5, Math.max(1, severity)) / 5) *
-		Math.min(1, Math.max(0, confidence)) *
-		Math.pow(0.5, age / halfLifeDays);
+		Math.pow(s, 1.5) * Math.min(1, Math.max(0, confidence)) * Math.pow(0.5, age / halfLifeDays);
 	return Math.round(Math.min(1, Math.max(0, w)) * 1000) / 1000;
 }
 
-/** 0..100 from a sum of weights: a few strong fresh items already read as "loud". */
+/**
+ * 0..100 from a sum of weights. A quiet week of severity-2 items stays under 25;
+ * a couple of fresh severity-4 items read as "watch"; event-threatening news reads "loud".
+ */
 export function squash(sum: number): number {
-	return Math.round(100 * (1 - Math.exp(-sum / 2.5)));
+	return Math.round(100 * (1 - Math.exp(-sum / 4)));
 }
 
 export interface ScoredItem {

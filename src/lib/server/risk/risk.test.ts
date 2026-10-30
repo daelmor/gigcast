@@ -60,19 +60,38 @@ describe('parseFeed', () => {
 describe('longWeekends', () => {
 	it('finds a Friday holiday as a three-day weekend and flags the window', () => {
 		// 2026-11-20 is a Friday.
-		const out = longWeekends(['2026-11-20'], '2026-11-01', '2026-12-31', '2026-11-19', '2026-11-23');
+		const out = longWeekends(
+			['2026-11-20'],
+			'2026-11-01',
+			'2026-12-31',
+			'2026-11-19',
+			'2026-11-23'
+		);
 		expect(out).toEqual([
 			{ start: '2026-11-20', end: '2026-11-22', days: 3, holidays: ['2026-11-20'], inWindow: true }
 		]);
 	});
 	it('ignores midweek holidays and plain weekends', () => {
 		// 2026-11-18 is a Wednesday.
-		expect(longWeekends(['2026-11-18'], '2026-11-01', '2026-11-30', '2026-11-01', '2026-11-30')).toEqual([]);
+		expect(
+			longWeekends(['2026-11-18'], '2026-11-01', '2026-11-30', '2026-11-01', '2026-11-30')
+		).toEqual([]);
 	});
 	it('bridges a Monday holiday after a weekend', () => {
 		// 2026-11-23 is a Monday.
-		const out = longWeekends(['2026-11-23'], '2026-11-01', '2026-11-30', '2026-12-01', '2026-12-02');
-		expect(out[0]).toMatchObject({ start: '2026-11-21', end: '2026-11-23', days: 3, inWindow: false });
+		const out = longWeekends(
+			['2026-11-23'],
+			'2026-11-01',
+			'2026-11-30',
+			'2026-12-01',
+			'2026-12-02'
+		);
+		expect(out[0]).toMatchObject({
+			start: '2026-11-21',
+			end: '2026-11-23',
+			days: 3,
+			inWindow: false
+		});
 	});
 });
 
@@ -81,13 +100,18 @@ describe('score', () => {
 	it('decays with age and scales with severity and confidence', () => {
 		expect(decayWeight(5, 1, 0)).toBe(1);
 		expect(decayWeight(5, 1, 14)).toBe(0.5);
-		expect(decayWeight(3, 0.5, 0)).toBe(0.3);
+		expect(decayWeight(1, 1, 0)).toBe(0);
+		expect(decayWeight(3, 1, 0)).toBe(0.354);
+		expect(decayWeight(3, 0.5, 0)).toBe(0.177);
 		expect(ageDays('2026-10-23T00:00:00Z', now)).toBe(7);
 		expect(ageDays(null, now)).toBe(30);
 	});
 	it('squashes sums into 0..100 and counts recent items', () => {
 		expect(squash(0)).toBe(0);
-		expect(squash(2.5)).toBe(63);
+		expect(squash(4)).toBe(63);
+		// A week of six fresh severity-2 items stays quiet; two fresh severity-4 items read as watch.
+		expect(squash(6 * decayWeight(2, 0.8, 1))).toBeLessThan(25);
+		expect(squash(2 * decayWeight(4, 0.8, 1))).toBeGreaterThanOrEqual(20);
 		const score = riskScore(
 			[
 				{ category: 'security', weight: 0.8, publishedAt: '2026-10-29T00:00:00Z' },
