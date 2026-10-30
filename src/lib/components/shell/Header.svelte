@@ -12,6 +12,11 @@
 				>New brief</a
 			>
 			<a
+				href={resolve('/about')}
+				class="rounded-lg px-3 py-1.5 font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+				>About</a
+			>
+			<a
 				href="https://github.com/daelmor/gigcast"
 				target="_blank"
 				rel="noopener noreferrer"
