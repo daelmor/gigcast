@@ -1,0 +1,100 @@
+{
+  "note": "/search (artist)",
+  "request": {
+    "endpoint": "/search",
+    "params": {
+      "query": "Bad Bunny",
+      "types": "urn:entity:artist",
+      "take": 2
+    }
+  },
+  "status": 200,
+  "body": {
+    "results": [
+      {
+        "name": "Bad Bunny",
+        "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "types": [
+          "urn:entity:artist"
+        ],
+        "properties": {
+          "akas": [],
+          "duration": {},
+          "external": {
+            "facebook": {
+              "id": "badbunnyofficial"
+            },
+            "instagram": {
+              "id": "badbunnypr"
+            },
+            "lastfm": {
+              "id": "bad%20bunny",
+              "listeners": 1701793,
+              "scrobbles": 244869967
+            },
+            "musicbrainz": {
+              "id": "89aa5ecb-59ad-46f5-b3eb-2d424e941f19"
+            },
+            "spotify": {
+              "id": "4q3ewBCX7sLwd24euuV69X"
+            },
+            "twitter": {
+              "id": "sanbenito"
+            },
+            "wikidata": {
+              "id": "q44333953"
+            }
+          },
+          "image": {
+            "url": "https://images.qloo.com/i/BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3-420x-auto.jpg"
+          },
+          "short_description": "Puerto Rican singer, rapper, and songwriter known for popularizing Latin trap and reggaeton worldwide."
+        },
+        "popularity": 0.9935258812932044,
+        "disambiguation": "Bad Bunny",
+        "tags": [
+          {
+            "name": "Latin",
+            "tag_id": "urn:tag:genre:latin",
+            "type": "urn:tag:genre",
+            "value": "urn:tag:genre:latin"
+          },
+          {
+            "name": "Reggaeton",
+            "tag_id": "urn:tag:genre:reggaeton",
+            "type": "urn:tag:genre",
+            "value": "urn:tag:genre:reggaeton"
+          },
+          {
+            "name": "Trap Latino",
+            "tag_id": "urn:tag:genre:trap_latino",
+            "type": "urn:tag:genre",
+            "value": "urn:tag:genre:trap_latino"
+          }
+        ]
+      },
+      {
+        "name": "Bad Bunny & Jhay Cortez",
+        "entity_id": "3A64A446-7125-4934-BA97-C4352D46D6FC",
+        "types": [
+          "urn:entity:artist"
+        ],
+        "properties": {
+          "akas": [],
+          "duration": {},
+          "external": {
+            "lastfm": {},
+            "musicbrainz": {},
+            "spotify": {}
+          },
+          "image": {
+            "url": "https://images.qloo.com/i/3A64A446-7125-4934-BA97-C4352D46D6FC-420x-auto.jpg"
+          },
+          "short_description": "Puerto Rican Latin trap and reggaeton duo known for their collaborations and chart-topping hits."
+        },
+        "popularity": 0.6665542102013758,
+        "disambiguation": "Bad Bunny & Jhay Cortez"
+      }
+    ]
+  }
+}

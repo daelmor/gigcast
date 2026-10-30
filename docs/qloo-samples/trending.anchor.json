@@ -1,0 +1,46 @@
+{
+  "note": "/v2/trending (artist, calendar year 2025)",
+  "request": {
+    "endpoint": "/v2/trending",
+    "params": {
+      "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+      "filter.type": "urn:entity:artist",
+      "filter.start_date": "2025-01-01",
+      "filter.end_date": "2025-12-31",
+      "take": 5
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "trending": [
+        {
+          "date": "2025-12-31",
+          "population_percentile": 0.11259292229499225,
+          "population_rank": "6885",
+          "population_rank_velocity": 0,
+          "velocity_fold_change": 0,
+          "population_percent_delta": 0
+        },
+        {
+          "date": "2025-12-26",
+          "population_percentile": 0.11259292229499225,
+          "population_rank": "6885",
+          "population_rank_velocity": 0,
+          "velocity_fold_change": 0,
+          "population_percent_delta": 0
+        },
+        {
+          "date": "2025-12-24",
+          "population_percentile": 0.11259292229499225,
+          "population_rank": "6885",
+          "population_rank_velocity": 0,
+          "velocity_fold_change": 0,
+          "population_percent_delta": 0
+        }
+      ]
+    },
+    "duration": 10
+  }
+}

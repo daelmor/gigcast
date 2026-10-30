@@ -1,0 +1,62 @@
+{
+  "note": "/v2/insights tag, signal.location (Guatemala City)",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:tag",
+      "signal.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+      "filter.parents.types": "urn:entity:artist",
+      "take": 20
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "tags": [
+        {
+          "tag_id": "urn:tag:genre:music:guatemala",
+          "name": "guatemala",
+          "types": [
+            "urn:entity:artist"
+          ],
+          "subtype": "urn:tag:genre:music",
+          "tag_value": "urn:tag:genre:music:guatemala",
+          "popularity": 0.9880282841731879,
+          "query": {
+            "affinity": 1
+          }
+        },
+        {
+          "tag_id": "urn:tag:genre:qloo:cuban_music",
+          "name": "Cuban Music",
+          "types": [
+            "urn:entity:artist",
+            "urn:entity:person"
+          ],
+          "subtype": "urn:tag:genre:qloo",
+          "tag_value": "urn:tag:genre:qloo:cuban_music",
+          "popularity": 0.9558242013030864,
+          "query": {
+            "affinity": 0.999885
+          }
+        },
+        {
+          "tag_id": "urn:tag:theme:qloo:human_experience",
+          "name": "Human Experience",
+          "types": [
+            "urn:entity:artist",
+            "urn:entity:book",
+            "urn:entity:movie"
+          ],
+          "subtype": "urn:tag:theme:qloo",
+          "tag_value": "urn:tag:theme:qloo:human_experience",
+          "popularity": 0.9975732658201124,
+          "query": {
+            "affinity": 0.999803
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "note": "/v2/insights heatmap, output.heatmap.boundary=urn:entity:locality",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:heatmap",
+      "filter.location.query": "Mexico City, Mexico",
+      "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+      "output.heatmap.boundary": "urn:entity:locality"
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "entities": [
+        {
+          "name": "México",
+          "entity_id": "0C2901D1-FA87-4F1E-A97D-385912D6911B",
+          "popularity": 0.9999906993676899,
+          "query": {
+            "affinity": 1
+          },
+          "disambiguation": "México",
+          "boundary": "MULTIPOLYGON (((-118.599188 29.162153, -118.599157 29.159608, -118.599096 29.156728, -118.599057 29.155456, -118.599009 29.154184, -118.598886 29.151641, -118.598726 29.1491, -118.598632 29.14783, -118.598417 29.145292, -118.598165 29.142757, -118.597876 29.140224, -118.597718 29.138959, -118.597375..."
+        },
+        {
+          "name": "Colonia Algarín",
+          "entity_id": "F6ED9BAB-DCAE-4A6A-8C99-C6497AD282B4",
+          "popularity": 0.966027447494609,
+          "query": {
+            "affinity": 0.9821428571428571
+          },
+          "disambiguation": "Colonia Algarín, Ciudad de México, Cuauhtémoc, Ciudad de México, México",
+          "boundary": "POLYGON ((-99.1449751 19.4038752, -99.1364924 19.4034087, -99.1360966 19.4060575, -99.1357887 19.4080669, -99.1361722 19.4078706, -99.1364221 19.4077805, -99.136719 19.4077428, -99.1444853 19.407137, -99.1446426 19.4071649, -99.1449751 19.4038752))"
+        },
+        {
+          "name": "Ecatepec de Morelos",
+          "entity_id": "11E4C670-6B5C-48F2-9179-D6D34C481279",
+          "popularity": 0.9987915821305623,
+          "query": {
+            "affinity": 0.9642857142857143
+          },
+          "disambiguation": "Ecatepec de Morelos, Estado de México, México",
+          "boundary": "POLYGON ((-99.118598 19.584462, -99.1180552 19.5834941, -99.116906 19.581445, -99.1150394 19.5800737, -99.114662 19.579796, -99.112966 19.573742, -99.1128559 19.5732626, -99.1118914 19.573123, -99.1109269 19.5729834, -99.1099624 19.5728439, -99.1089979 19.5727043, -99.1080334 19.5725647, -99.1070689..."
+        }
+      ]
+    },
+    "query": {
+      "localities": {
+        "filter": [
+          {
+            "entity_id": "B7114A68-EA17-4514-BE69-F67590C681D8",
+            "name": "Mexico City",
+            "subtype": "urn:entity:locality",
+            "location": {
+              "lat": 19.27689675652405,
+              "lon": -99.13941406175974
+            },
+            "popularity": 0.99993354,
+            "disambiguation": "Mexico City, Mexico"
+          }
+        ]
+      }
+    }
+  }
+}

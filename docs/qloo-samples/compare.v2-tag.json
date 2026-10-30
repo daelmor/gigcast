@@ -1,0 +1,190 @@
+{
+  "note": "/v2/insights/compare (compare.v2-tag)",
+  "request": {
+    "endpoint": "/v2/insights/compare",
+    "params": {
+      "a.signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+      "b.signal.interests.entities": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+      "filter.type": "urn:tag",
+      "take": 5
+    }
+  },
+  "status": 200,
+  "body": {
+    "duration": 902,
+    "results": {
+      "tags": [
+        {
+          "tag_id": "urn:tag:region:qloo:united_states",
+          "name": "United States",
+          "type": "urn:tag",
+          "subtype": "urn:tag:region:qloo",
+          "entity_id": "9231423C-49CD-4240-8227-78D285399E78",
+          "popularity": 0,
+          "query": {
+            "score": 0.9912110306951047,
+            "a.signal.interests.entities": [
+              {
+                "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                "name": "Bad Bunny",
+                "subtype": "urn:entity:artist",
+                "disambiguation": "Bad Bunny"
+              }
+            ],
+            "b.signal.interests.entities": [
+              {
+                "entity_id": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+                "name": "Coldplay",
+                "subtype": "urn:entity:artist",
+                "disambiguation": "Coldplay"
+              },
+              {
+                "entity_id": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+                "name": "Coldplay",
+                "subtype": "urn:entity:person",
+                "disambiguation": ""
+              }
+            ]
+          }
+        },
+        {
+          "tag_id": "urn:tag:characteristic:music:energetic",
+          "name": "Energetic",
+          "type": "urn:tag",
+          "subtype": "urn:tag:characteristic:music",
+          "entity_id": "328AD8B3-040B-40A6-A067-0324977EBCF2",
+          "popularity": 0,
+          "query": {
+            "score": 0.9766532319362277,
+            "a.signal.interests.entities": [
+              {
+                "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                "name": "Bad Bunny",
+                "subtype": "urn:entity:artist",
+                "disambiguation": "Bad Bunny"
+              }
+            ],
+            "b.signal.interests.entities": [
+              {
+                "entity_id": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+                "name": "Coldplay",
+                "subtype": "urn:entity:artist",
+                "disambiguation": "Coldplay"
+              },
+              {
+                "entity_id": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+                "name": "Coldplay",
+                "subtype": "urn:entity:person",
+                "disambiguation": ""
+              }
+            ]
+          }
+        },
+        {
+          "tag_id": "urn:tag:genre:music:electronic",
+          "name": "Electronic",
+          "type": "urn:tag",
+          "subtype": "urn:tag:genre:music",
+          "entity_id": "D4132442-7F20-48E9-9F70-6BC806164A4F",
+          "popularity": 0.9997944738848622,
+          "query": {
+            "score": 0.9766532319362277,
+            "a.signal.interests.entities": [
+              {
+                "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                "name": "Bad Bunny",
+                "subtype": "urn:entity:artist",
+                "disambiguation": "Bad Bunny"
+              }
+            ],
+            "b.signal.interests.entities": [
+              {
+                "entity_id": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+                "name": "Coldplay",
+                "subtype": "urn:entity:artist",
+                "disambiguation": "Coldplay"
+              },
+              {
+                "entity_id": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+                "name": "Coldplay",
+                "subtype": "urn:entity:person",
+                "disambiguation": ""
+              }
+            ]
+          }
+        }
+      ],
+      "a": [
+        {
+          "tag_id": "urn:tag:theme:qloo:heartbreak",
+          "name": "Heartbreak",
+          "type": "urn:tag",
+          "subtype": "urn:tag:theme:qloo",
+          "entity_id": "1157CA05-F10E-4C89-A1B1-10DBE72F1272",
+          "popularity": 0.976842,
+          "query": {
+            "count": "1"
+          }
+        },
+        {
+          "tag_id": "urn:tag:style:qloo:expressive",
+          "name": "Expressive",
+          "type": "urn:tag",
+          "subtype": "urn:tag:style:qloo",
+          "entity_id": "241982E6-3CCA-42C2-81EC-A5DC7E99896A",
+          "popularity": 0.9734908,
+          "query": {
+            "count": "1"
+          }
+        },
+        {
+          "tag_id": "urn:tag:style:qloo:charismatic",
+          "name": "Charismatic",
+          "type": "urn:tag",
+          "subtype": "urn:tag:style:qloo",
+          "entity_id": "320A650A-6BE9-4810-9171-88717CC7A084",
+          "popularity": 0.9500786,
+          "query": {
+            "count": "1"
+          }
+        }
+      ],
+      "b": [
+        {
+          "tag_id": "urn:tag:music:qloo:anthemic",
+          "name": "Anthemic",
+          "type": "urn:tag",
+          "subtype": "urn:tag:music:qloo",
+          "entity_id": "01455406-F958-4C03-829C-5C00D58FBE47",
+          "popularity": 0.87461865,
+          "query": {
+            "count": "1"
+          }
+        },
+        {
+          "tag_id": "urn:tag:artist:qloo:melodic",
+          "name": "Melodic",
+          "type": "urn:tag",
+          "subtype": "urn:tag:artist:qloo",
+          "entity_id": "03F6ED3F-AFD6-4491-AC63-ACB2822E6506",
+          "popularity": 0.9168785,
+          "query": {
+            "count": "1"
+          }
+        },
+        {
+          "tag_id": "urn:tag:subgenre:qloo:ambient",
+          "name": "Ambient",
+          "type": "urn:tag",
+          "subtype": "urn:tag:subgenre:qloo",
+          "entity_id": "09620EEA-9F39-49A5-8EEB-0BC037120E92",
+          "popularity": 0.04416659,
+          "query": {
+            "count": "1"
+          }
+        }
+      ],
+      "matchEntities": []
+    }
+  }
+}

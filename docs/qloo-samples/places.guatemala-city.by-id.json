@@ -1,0 +1,835 @@
+{
+  "note": "/v2/insights place, filter.location=<locality id> (Guatemala City)",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:entity:place",
+      "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+      "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+      "take": 50,
+      "feature.explainability": true
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "entities": [
+        {
+          "name": "Bazar Casa Vieja | La Pradera",
+          "entity_id": "18CF203B-E16B-4A7B-BE1F-FE6D9533B749",
+          "type": "urn:entity",
+          "subtype": "urn:entity:place",
+          "properties": {
+            "hours": {
+              "friday": [
+                {
+                  "opens": "T10:00:00",
+                  "closed": false,
+                  "closes": "T20:00:00"
+                }
+              ],
+              "monday": [
+                {
+                  "opens": "T10:00:00",
+                  "closed": false,
+                  "closes": "T20:00:00"
+                }
+              ],
+              "sunday": [
+                {
+                  "opens": "T10:00:00",
+                  "closed": false,
+                  "closes": "T19:00:00"
+                }
+              ],
+              "tuesday": [
+                {
+                  "opens": "T10:00:00",
+                  "closed": false,
+                  "closes": "T20:00:00"
+                }
+              ],
+              "saturday": [
+                {
+                  "opens": "T10:00:00",
+                  "closed": false,
+                  "closes": "T20:00:00"
+                }
+              ],
+              "thursday": [
+                {
+                  "opens": "T10:00:00",
+                  "closed": false,
+                  "closes": "T20:00:00"
+                }
+              ],
+              "wednesday": [
+                {
+                  "opens": "T10:00:00",
+                  "closed": false,
+                  "closes": "T20:00:00"
+                }
+              ]
+            },
+            "phone": "+50223673470",
+            "images": [
+              {
+                "url": "https://images.qloo.com/i/18CF203B-E16B-4A7B-BE1F-FE6D9533B749-0ZL15x-420x-outside.jpg",
+                "type": "urn:image:place:unknown"
+              }
+            ],
+            "address": "La Pradera Cdad. de Guatemala 01010 Guatemala",
+            "geocode": {
+              "city": "Guatemala City",
+              "name": "Zone 14",
+              "metro": null,
+              "country": "Guatemala",
+              "country_code": "GT",
+              "admin1_region": "Guatemala Department",
+              "admin2_region": "Guatemala City"
+            },
+            "parking": true,
+            "website": "https://m.facebook.com/bazarcasaviejagt/",
+            "good_for": null,
+            "keywords": null,
+            "locality": {
+              "city": {
+                "name": "Guatemala City",
+                "place": "city",
+                "boundary": "administrative",
+                "entity_id": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+                "admin_level": 6,
+                "locality_id": "r67992",
+                "abbreviation": "Guate",
+                "country_code": null
+              },
+              "metro": null,
+              "state": {
+                "name": "Guatemala Department",
+                "place": null,
+                "boundary": "administrative",
+                "entity_id": "E1FBA82E-0469-45B9-AA20-562BD1040878",
+                "admin_level": 4,
+                "locality_id": "r214704",
+                "abbreviation": null,
+                "country_code": null
+              },
+              "county": {
+                "name": "Guatemala City",
+                "place": "city",
+                "boundary": "administrative",
+                "entity_id": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+                "admin_level": 6,
+                "locality_id": "r67992",
+                "abbreviation": "Guate",
+                "country_code": null
+              },
+              "country": {
+                "name": "Guatemala",
+                "place": "country",
+                "boundary": "administrative",
+                "entity_id": "1B7ED0E8-64D6-46D8-A56D-3D4C3405B1A1",
+                "admin_level": 2,
+                "locality_id": "r1521463",
+                "abbreviation": null,
+                "country_code": "GT"
+              },
+              "neighborhood": {
+                "name": "Zone 14",
+                "place": "district",
+                "boundary": "administrative",
+                "entity_id": "1851E67D-E19F-4559-A4C3-27C135CC3268",
+                "admin_level": 8,
+                "locality_id": "r13733478",
+                "abbreviation": null,
+                "country_code": null
+              }
+            },
+            "menu_url": null,
+            "is_closed": false,
+            "live_music": null,
+            "localities": [
+              {
+                "name": "Zone 14",
+                "place": "district",
+                "boundary": "administrative",
+                "entity_id": "1851E67D-E19F-4559-A4C3-27C135CC3268",
+                "admin_level": 8,
+                "locality_id": "r13733478",
+                "abbreviation": null,
+                "country_code": null
+              },
+              {
+                "name": "Guatemala",
+                "place": "country",
+                "boundary": "administrative",
+                "entity_id": "1B7ED0E8-64D6-46D8-A56D-3D4C3405B1A1",
+                "admin_level": 2,
+                "locality_id": "r1521463",
+                "abbreviation": null,
+                "country_code": "GT"
+              },
+              {
+                "name": "Zone 10",
+                "place": "districtict",
+                "boundary": "administrative",
+                "entity_id": "FB4D6EF7-1BB0-47AC-B27D-58D0FFDC9FA8",
+                "admin_level": 8,
+                "locality_id": "r13733477",
+                "abbreviation": null,
+                "country_code": null
+              }
+            ],
+            "description": "A home goods and gift shop in La Pradera offering decor and practical items in a shopping setting.",
+            "hotel_class": null,
+            "price_level": null,
+            "price_range": {
+              "to": null,
+              "from": null,
+              "currency": "usd"
+            },
+            "star_rating": null,
+            "event_spaces": false,
+            "neighborhood": "Zone 14",
+            "pet_friendly": null,
+            "check_in_time": null,
+            "primary_genre": {
+              "id": "urn:tag:genre:place:home_goods_store",
+              "akas": [
+                {
+                  "value": "\"Lakberendezési üzlet\"",
+                  "languages": [
+                    "hu"
+                  ]
+                },
+                {
+                  "value": "\"Toko perlengkapan rumah\"",
+                  "languages": [
+                    "id"
+                  ]
+                },
+                {
+                  "value": "\"အိမ်သုံးပစ္စည်းဆိုင်\"",
+                  "languages": [
+                    "my"
+                  ]
+                }
+              ],
+              "name": "Home goods store",
+              "type": "urn:tag:genre:place",
+              "weight": null
+            },
+            "check_out_time": null,
+            "business_rating": 5,
+            "loyalty_program": null,
+            "number_of_rooms": null,
+            "cost_description": null,
+            "specialty_dishes": null,
+            "short_description": "A home goods and gift shop in La Pradera offering decor and practical items in a shopping setting.",
+            "number_of_stations": null,
+            "cuisine_description": null,
+            "overall_description": "Bazar Casa Vieja is a welcoming boutique located in the La Pradera shopping center in Guatemala City, specializing in home goods and unique gift items. It offers a curated collection of practical and decorative pieces that reflect an authentic and cozy aesthetic, perfect for shoppers seeking somethi...",
+            "service_description": null,
+            "ambience_description": "The shop provides an inviting and casual atmosphere that encourages relaxed browsing for home goods. Its interior is organized to feel comfortable and accessible for visitors of all types.",
+            "amenities_description": "The store offers a curated selection of home goods and gift items, providing helpful service to assist customers in their purchasing decisions. Shoppers can find a range of decorative and practical products suitable for various occasions.",
+            "unique_selling_points": "The shop serves as a specialized destination for unique home decor and gift items within a popular shopping center. It combines local flair with practical utility to offer distinctive pieces not commonly found in large chain retailers.",
+            "neighborhood_description": "The surrounding La Pradera area is a bustling commercial district known for its accessibility and density of retail options. It serves as a central hub for urban shoppers looking for convenient access to goods and services.",
+            "physical_setting_description": "Located within the La Pradera shopping center in Guatemala City, this store is situated in a prominent commercial and urban retail environment. The shop is easily accessible to shoppers browsing within the mall's indoor complex.",
+            "customer_demographics_description": null,
+            "image": {
+              "url": "https://images.qloo.com/i/18CF203B-E16B-4A7B-BE1F-FE6D9533B749-420x-auto.jpg"
+            }
+          },
+          "popularity": 0.9374800573975494,
+          "location": {
+            "lat": 14.579728999999999,
+            "lon": -90.4956883,
+            "geohash": "9fxduwpj1d7p"
+          },
+          "tags": [
+            {
+              "id": "urn:tag:genre:place:home_goods_store",
+              "name": "Home goods store",
+              "type": "urn:tag:genre:place",
+              "weight": null
+            },
+            {
+              "id": "urn:tag:recycling:place:electronics",
+              "name": "Electronics",
+              "type": "urn:tag:recycling:place",
+              "weight": null
+            },
+            {
+              "id": "urn:tag:recycling:place:light_bulbs",
+              "name": "Light bulbs",
+              "type": "urn:tag:recycling:place",
+              "weight": null
+            }
+          ],
+          "references": null,
+          "query": {
+            "affinity": 0.8647793953350652,
+            "distance": 4.775103427794642,
+            "measurements": {
+              "audience_growth": 0
+            },
+            "explainability": {
+              "signal.interests.entities": [
+                {
+                  "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                  "score": 1
+                }
+              ]
+            }
+          },
+          "disambiguation": "La Pradera Cdad. de Guatemala 01010 Guatemala",
+          "external": {
+            "google_place": [
+              {
+                "id": "256caa643bf84f99",
+                "place_id": "ChIJwR5m4CmjiYURmU_4O2SqbCU"
+              }
+            ]
+          }
+        },
+        {
+          "name": "November",
+          "entity_id": "A0E6A6C6-4A89-49FC-B547-8DA000CF5889",
+          "type": "urn:entity",
+          "subtype": "urn:entity:place",
+          "properties": {
+            "hours": {
+              "friday": [
+                {
+                  "opens": "T09:00:00",
+                  "closed": false,
+                  "closes": "T18:00:00"
+                }
+              ],
+              "monday": [
+                {
+                  "opens": "T09:00:00",
+                  "closed": false,
+                  "closes": "T18:00:00"
+                }
+              ],
+              "sunday": [
+                {
+                  "opens": null,
+                  "closed": true,
+                  "closes": null
+                }
+              ],
+              "tuesday": [
+                {
+                  "opens": "T09:00:00",
+                  "closed": false,
+                  "closes": "T18:00:00"
+                }
+              ],
+              "saturday": [
+                {
+                  "opens": "T09:00:00",
+                  "closed": false,
+                  "closes": "T18:00:00"
+                }
+              ],
+              "thursday": [
+                {
+                  "opens": "T09:00:00",
+                  "closed": false,
+                  "closes": "T18:00:00"
+                }
+              ],
+              "wednesday": [
+                {
+                  "opens": "T09:00:00",
+                  "closed": false,
+                  "closes": "T18:00:00"
+                }
+              ]
+            },
+            "phone": null,
+            "images": [
+              {
+                "url": "https://images.qloo.com/i/A0E6A6C6-4A89-49FC-B547-8DA000CF5889-2UIauG-420x-outside.jpg",
+                "type": "urn:image:place:unknown"
+              }
+            ],
+            "address": "15 Calle 3-05 Cdad. de Guatemala 01010 Guatemala",
+            "geocode": {
+              "city": "Guatemala City",
+              "name": "Oakland",
+              "metro": null,
+              "country": "Guatemala",
+              "country_code": "GT",
+              "admin1_region": "Guatemala Department",
+              "admin2_region": "Guatemala City"
+            },
+            "parking": false,
+            "website": null,
+            "good_for": null,
+            "keywords": null,
+            "locality": {
+              "city": {
+                "name": "Guatemala City",
+                "place": "city",
+                "boundary": "administrative",
+                "entity_id": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+                "admin_level": 6,
+                "locality_id": "r67992",
+                "abbreviation": "Guate",
+                "country_code": null
+              },
+              "metro": null,
+              "state": {
+                "name": "Guatemala Department",
+                "place": null,
+                "boundary": "administrative",
+                "entity_id": "E1FBA82E-0469-45B9-AA20-562BD1040878",
+                "admin_level": 4,
+                "locality_id": "r214704",
+                "abbreviation": null,
+                "country_code": null
+              },
+              "county": {
+                "name": "Guatemala City",
+                "place": "city",
+                "boundary": "administrative",
+                "entity_id": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+                "admin_level": 6,
+                "locality_id": "r67992",
+                "abbreviation": "Guate",
+                "country_code": null
+              },
+              "country": {
+                "name": "Guatemala",
+                "place": "country",
+                "boundary": "administrative",
+                "entity_id": "1B7ED0E8-64D6-46D8-A56D-3D4C3405B1A1",
+                "admin_level": 2,
+                "locality_id": "r1521463",
+                "abbreviation": null,
+                "country_code": "GT"
+              },
+              "neighborhood": {
+                "name": "Oakland",
+                "place": "neighbourhood",
+                "boundary": null,
+                "entity_id": "E902509E-F83E-4E90-8DCF-1706C97B8DBC",
+                "admin_level": 10,
+                "locality_id": "n617757926",
+                "abbreviation": null,
+                "country_code": null
+              }
+            },
+            "menu_url": null,
+            "is_closed": false,
+            "live_music": null,
+            "localities": [
+              {
+                "name": "Oakland",
+                "place": "neighbourhood",
+                "boundary": null,
+                "entity_id": "E902509E-F83E-4E90-8DCF-1706C97B8DBC",
+                "admin_level": 10,
+                "locality_id": "n617757926",
+                "abbreviation": null,
+                "country_code": null
+              },
+              {
+                "name": "Guatemala",
+                "place": "country",
+                "boundary": "administrative",
+                "entity_id": "1B7ED0E8-64D6-46D8-A56D-3D4C3405B1A1",
+                "admin_level": 2,
+                "locality_id": "r1521463",
+                "abbreviation": null,
+                "country_code": "GT"
+              },
+              {
+                "name": "Zone 10",
+                "place": "districtict",
+                "boundary": "administrative",
+                "entity_id": "FB4D6EF7-1BB0-47AC-B27D-58D0FFDC9FA8",
+                "admin_level": 8,
+                "locality_id": "r13733477",
+                "abbreviation": null,
+                "country_code": null
+              }
+            ],
+            "description": "Tailor in central Guatemala City offering custom fittings, made-to-measure garments, and expert alterations on Calle 3.",
+            "hotel_class": null,
+            "price_level": null,
+            "price_range": {
+              "to": null,
+              "from": null,
+              "currency": "usd"
+            },
+            "star_rating": null,
+            "event_spaces": false,
+            "neighborhood": "Oakland",
+            "pet_friendly": false,
+            "check_in_time": null,
+            "primary_genre": {
+              "id": "urn:tag:genre:place:tailor",
+              "akas": [
+                {
+                  "value": "\"Croitor\"",
+                  "languages": [
+                    "ro"
+                  ]
+                },
+                {
+                  "value": "\"Skräddare\"",
+                  "languages": [
+                    "sv"
+                  ]
+                },
+                {
+                  "value": "\"خياط\"",
+                  "languages": [
+                    "ar"
+                  ]
+                }
+              ],
+              "name": "Tailor",
+              "type": "urn:tag:genre:place",
+              "weight": null
+            },
+            "check_out_time": null,
+            "business_rating": null,
+            "loyalty_program": null,
+            "number_of_rooms": null,
+            "cost_description": null,
+            "specialty_dishes": null,
+            "short_description": "Tailor in central Guatemala City offering custom fittings, made-to-measure garments, and expert alterations on Calle 3.",
+            "number_of_stations": null,
+            "cuisine_description": null,
+            "overall_description": "November is a dedicated tailoring boutique located in central Guatemala City, specializing in custom-made garments and professional alterations. With a focus on precision and individual service, it caters to those who value well-fitted, quality clothing. The shop offers a refined, calm environment w...",
+            "service_description": null,
+            "ambience_description": "The atmosphere is professional and focused, providing a calm environment for detailed fittings and consultations. The shop maintains a clean, orderly space dedicated to the craft of garment making.",
+            "amenities_description": "The shop provides comprehensive tailoring services, ranging from precise custom garment creation to expert alterations. Personalized fittings ensure each piece is adjusted to meet individual specifications.",
+            "unique_selling_points": "The establishment is known for its high-quality made-to-measure garments and the meticulous attention to detail provided by expert tailors. It offers a personalized approach to clothing that distinguishes it from mass-market retail.",
+            "neighborhood_description": "The surrounding neighborhood is a bustling commercial center characterized by its accessibility and proximity to city services. It serves as a practical hub for residents and visitors seeking professional tailoring services.",
+            "physical_setting_description": "Located in the heart of Guatemala City, this tailor shop is situated on a central street within the urban landscape. The location offers easy accessibility for those navigating the city's primary commercial district.",
+            "customer_demographics_description": null,
+            "image": {
+              "url": "https://images.qloo.com/i/A0E6A6C6-4A89-49FC-B547-8DA000CF5889-420x-auto.jpg"
+            }
+          },
+          "popularity": 0.9320348679340039,
+          "location": {
+            "lat": 14.596727699999999,
+            "lon": -90.5140174,
+            "geohash": "9fxeh338ne4q"
+          },
+          "tags": [
+            {
+              "id": "urn:tag:nearby_attraction:qloo:centro_historico",
+              "name": "Centro historico",
+              "type": "urn:tag:nearby_attraction:qloo",
+              "weight": null
+            },
+            {
+              "id": "urn:tag:ambience:qloo:efficient",
+              "name": "Efficient",
+              "type": "urn:tag:ambience:qloo",
+              "weight": null
+            },
+            {
+              "id": "urn:tag:category:place:tailor",
+              "name": "Tailor",
+              "type": "urn:tag:category:place",
+              "weight": null
+            }
+          ],
+          "references": null,
+          "query": {
+            "affinity": 0.861502425761,
+            "distance": 0,
+            "measurements": {
+              "audience_growth": 0
+            },
+            "explainability": {
+              "signal.interests.entities": [
+                {
+                  "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                  "score": 1
+                }
+              ]
+            }
+          },
+          "disambiguation": "15 Calle 3-05 Cdad. de Guatemala 01010 Guatemala",
+          "external": {
+            "google_place": [
+              {
+                "id": "76134edeb4cd4643",
+                "place_id": "ChIJafbGHmejiYURQ0bNtN5OE3Y"
+              }
+            ]
+          }
+        },
+        {
+          "name": "15 Avenida 5 calle",
+          "entity_id": "D089CC32-28C0-4569-827D-6EE64993BB9E",
+          "type": "urn:entity",
+          "subtype": "urn:entity:place",
+          "properties": {
+            "hours": null,
+            "phone": null,
+            "images": [
+              {
+                "url": "https://images.qloo.com/i/D089CC32-28C0-4569-827D-6EE64993BB9E-0cSsN7-420x-outside.jpg",
+                "type": "urn:image:place:unknown"
+              }
+            ],
+            "address": "Ciudad de Guatemala 01015 Guatemala",
+            "geocode": {
+              "city": "Guatemala City",
+              "name": "Colonia Forestal",
+              "metro": null,
+              "country": "Guatemala",
+              "country_code": "GT",
+              "admin1_region": "Guatemala Department",
+              "admin2_region": "Guatemala City"
+            },
+            "parking": true,
+            "website": null,
+            "good_for": null,
+            "keywords": null,
+            "locality": {
+              "city": {
+                "name": "Guatemala City",
+                "place": "city",
+                "boundary": "administrative",
+                "entity_id": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+                "admin_level": 6,
+                "locality_id": "r67992",
+                "abbreviation": "Guate",
+                "country_code": null
+              },
+              "metro": null,
+              "state": {
+                "name": "Guatemala Department",
+                "place": null,
+                "boundary": "administrative",
+                "entity_id": "E1FBA82E-0469-45B9-AA20-562BD1040878",
+                "admin_level": 4,
+                "locality_id": "r214704",
+                "abbreviation": null,
+                "country_code": null
+              },
+              "county": {
+                "name": "Guatemala City",
+                "place": "city",
+                "boundary": "administrative",
+                "entity_id": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+                "admin_level": 6,
+                "locality_id": "r67992",
+                "abbreviation": "Guate",
+                "country_code": null
+              },
+              "country": {
+                "name": "Guatemala",
+                "place": "country",
+                "boundary": "administrative",
+                "entity_id": "1B7ED0E8-64D6-46D8-A56D-3D4C3405B1A1",
+                "admin_level": 2,
+                "locality_id": "r1521463",
+                "abbreviation": null,
+                "country_code": "GT"
+              },
+              "neighborhood": {
+                "name": "Colonia Forestal",
+                "place": "neighbourhood",
+                "boundary": null,
+                "entity_id": "69FF96BA-8124-4083-91E0-E369BA382524",
+                "admin_level": 10,
+                "locality_id": "n4011979925",
+                "abbreviation": null,
+                "country_code": null
+              }
+            },
+            "menu_url": null,
+            "is_closed": false,
+            "live_music": null,
+            "localities": [
+              {
+                "name": "Colonia Forestal",
+                "place": "neighbourhood",
+                "boundary": null,
+                "entity_id": "69FF96BA-8124-4083-91E0-E369BA382524",
+                "admin_level": 10,
+                "locality_id": "n4011979925",
+                "abbreviation": null,
+                "country_code": null
+              },
+              {
+                "name": "Guatemala",
+                "place": "country",
+                "boundary": "administrative",
+                "entity_id": "1B7ED0E8-64D6-46D8-A56D-3D4C3405B1A1",
+                "admin_level": 2,
+                "locality_id": "r1521463",
+                "abbreviation": null,
+                "country_code": "GT"
+              },
+              {
+                "name": "Guatemala City",
+                "place": "city",
+                "boundary": "administrative",
+                "entity_id": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+                "admin_level": 6,
+                "locality_id": "r67992",
+                "abbreviation": "Guate",
+                "country_code": null
+              }
+            ],
+            "description": "Multi-tenant technology and industrial complex offering offices, labs, and conference facilities in Guatemala City business district.",
+            "hotel_class": null,
+            "price_level": null,
+            "price_range": {
+              "to": null,
+              "from": null,
+              "currency": "usd"
+            },
+            "star_rating": null,
+            "event_spaces": true,
+            "neighborhood": "Colonia Forestal",
+            "pet_friendly": false,
+            "check_in_time": null,
+            "primary_genre": {
+              "id": "urn:tag:genre:place:industrial_building",
+              "akas": [
+                {
+                  "value": "\"Edificio industriale\"",
+                  "languages": [
+                    "it"
+                  ]
+                },
+                {
+                  "value": "\"Industrial building\"",
+                  "languages": [
+                    "en_gb"
+                  ]
+                },
+                {
+                  "value": "\"Pramoninis pastatas\"",
+                  "languages": [
+                    "lt"
+                  ]
+                }
+              ],
+              "name": "Industrial building",
+              "type": "urn:tag:genre:place",
+              "weight": null
+            },
+            "check_out_time": null,
+            "business_rating": null,
+            "loyalty_program": null,
+            "number_of_rooms": null,
+            "cost_description": null,
+            "specialty_dishes": null,
+            "short_description": "Multi-tenant technology and industrial complex offering offices, labs, and conference facilities in Guatemala City business district.",
+            "number_of_stations": null,
+            "cuisine_description": null,
+            "overall_description": "The World Technology Center is a premier multi-tenant facility serving the industrial and corporate needs of Guatemala City. It offers a comprehensive suite of professional amenities, including modern offices, specialized lab spaces, and high-capacity conference rooms. Ideally situated in a central ...",
+            "service_description": null,
+            "ambience_description": "The atmosphere is strictly professional, quiet, and highly efficient, catering to the needs of modern businesses. It maintains a clean, organized aesthetic conducive to high-level productivity.",
+            "amenities_description": "The facility is equipped with dedicated office spaces, professional-grade laboratories, and versatile conference facilities. These amenities are designed to support diverse technical and administrative requirements for commercial tenants.",
+            "unique_selling_points": "This site serves as a vital nexus for technology and industry in Guatemala City, providing an all-in-one environment for offices and specialized laboratory work.",
+            "neighborhood_description": "The surrounding neighborhood is a bustling commercial center characterized by high-density office spaces and corporate activity. It is a functional and strategic location ideal for professional engagements and business development.",
+            "physical_setting_description": "Located in the heart of Guatemala City's primary business district, this multi-tenant industrial complex is designed for corporate and technical operations. The site provides a professional environment set against the backdrop of an active urban landscape.",
+            "customer_demographics_description": null,
+            "image": {
+              "url": "https://images.qloo.com/i/D089CC32-28C0-4569-827D-6EE64993BB9E-420x-auto.jpg"
+            }
+          },
+          "popularity": 0.6907238992890683,
+          "location": {
+            "lat": 14.591808599999998,
+            "lon": -90.521278,
+            "geohash": "9fxeh0k7mq4x"
+          },
+          "tags": [
+            {
+              "id": "urn:tag:activity_type:qloo:laboratory_research",
+              "name": "Laboratory research",
+              "type": "urn:tag:activity_type:qloo",
+              "weight": null
+            },
+            {
+              "id": "urn:tag:nearby_attraction:qloo:centro_historico",
+              "name": "Centro historico",
+              "type": "urn:tag:nearby_attraction:qloo",
+              "weight": null
+            },
+            {
+              "id": "urn:tag:ambience:qloo:business_friendly",
+              "name": "Business friendly",
+              "type": "urn:tag:ambience:qloo",
+              "weight": null
+            }
+          ],
+          "references": null,
+          "query": {
+            "affinity": 0.8566932003576537,
+            "distance": 0,
+            "measurements": {
+              "audience_growth": 0
+            },
+            "explainability": {
+              "signal.interests.entities": [
+                {
+                  "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                  "score": 1
+                }
+              ]
+            }
+          },
+          "disambiguation": "Ciudad de Guatemala 01015 Guatemala",
+          "external": {
+            "google_place": [
+              {
+                "id": "f7349134a0e02eb8",
+                "place_id": "ChIJuS5xg96jiYURuC7goDSRNPc"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "query": {
+      "explainability": {
+        "signal.interests.entities": {
+          "effect_on_top3_recs": [
+            {
+              "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+              "avg_score": 1
+            }
+          ],
+          "effect_on_top5_recs": [
+            {
+              "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+              "avg_score": 1
+            }
+          ],
+          "effect_on_top10_recs": [
+            {
+              "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+              "avg_score": 1
+            }
+          ],
+          "effect_on_all_recs": [
+            {
+              "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+              "avg_score": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}

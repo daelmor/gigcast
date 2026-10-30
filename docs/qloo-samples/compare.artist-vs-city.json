@@ -1,0 +1,20 @@
+{
+  "note": "/v2/insights/compare artist vs. city (b.signal.location.query)",
+  "request": {
+    "endpoint": "/v2/insights/compare",
+    "params": {
+      "a.signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+      "b.signal.location.query": "Guatemala City, Guatemala",
+      "take": 10
+    }
+  },
+  "status": 400,
+  "body": {
+    "errors": [
+      {
+        "message": "b.signal.interests.entities is required",
+        "path": "b.signal.interests.entities"
+      }
+    ]
+  }
+}

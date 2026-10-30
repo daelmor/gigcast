@@ -1,0 +1,42 @@
+{
+  "note": "/v2/audiences/types",
+  "request": {
+    "endpoint": "/v2/audiences/types",
+    "params": {
+      "take": 50
+    }
+  },
+  "status": 200,
+  "body": {
+    "duration": 3,
+    "success": true,
+    "results": {
+      "audience_types": [
+        {
+          "parents": [
+            {
+              "type": "urn:audience:communities"
+            }
+          ],
+          "type": "urn:audience:communities"
+        },
+        {
+          "parents": [
+            {
+              "type": "urn:audience:global_issues"
+            }
+          ],
+          "type": "urn:audience:global_issues"
+        },
+        {
+          "parents": [
+            {
+              "type": "urn:audience:hobbies_and_interests"
+            }
+          ],
+          "type": "urn:audience:hobbies_and_interests"
+        }
+      ]
+    }
+  }
+}

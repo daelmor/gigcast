@@ -15,6 +15,20 @@ Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com).
 Early development. See [STATUS.md](STATUS.md) for what works today and
 [docs/decisions.md](docs/decisions.md) for the decision log.
 
+## Development
+
+```sh
+pnpm install
+pnpm db:start          # Postgres 16 via Docker Compose
+pnpm dev               # http://localhost:5173
+pnpm check && pnpm lint && pnpm test
+```
+
+Copy `.env.example` to a local env file and fill in the values; the browser
+never sees them. `pnpm probe` runs the Qloo API probe that produced
+[docs/qloo-findings.md](docs/qloo-findings.md) (`QLOO_PROBE_REPLAY=1` re-renders
+it from the local cache without calling the API).
+
 ## License
 
 [MIT](LICENSE)
