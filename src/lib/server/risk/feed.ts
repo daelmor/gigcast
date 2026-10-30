@@ -113,7 +113,7 @@ export async function getRiskFeed(
 				and(
 					eq(newsItems.marketId, market.id),
 					gte(newsClassifications.severity, 2),
-					gte(sql`coalesce(${newsItems.publishedAt}, ${newsItems.fetchedAt})`, since)
+					sql`coalesce(${newsItems.publishedAt}, ${newsItems.fetchedAt}) >= ${since.toISOString()}::timestamptz`
 				)
 			)
 			.orderBy(desc(sql`coalesce(${newsItems.publishedAt}, ${newsItems.fetchedAt})`))

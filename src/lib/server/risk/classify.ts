@@ -111,8 +111,7 @@ export async function classifyNews(
 			{
 				model,
 				max_tokens: 6_000,
-				thinking: { type: 'adaptive' as const },
-				output_config: { effort: 'low' as const },
+				// claude-haiku-4-5 rejects adaptive thinking (verified live); the task needs none.
 				system: [
 					{
 						type: 'text' as const,
