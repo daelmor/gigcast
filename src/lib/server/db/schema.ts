@@ -64,6 +64,8 @@ export const briefs = pgTable(
 		id: text('id').primaryKey(),
 		marketId: text('market_id').references(() => markets.id, { onDelete: 'set null' }),
 		artistName: text('artist_name').notNull(),
+		city: text('city'),
+		country: text('country'),
 		artistEntityId: text('artist_entity_id'),
 		localityEntityId: text('locality_entity_id'),
 		localityName: text('locality_name'),
@@ -72,11 +74,15 @@ export const briefs = pgTable(
 		dateFrom: date('date_from'),
 		dateTo: date('date_to'),
 		promoterInputs: jsonb('promoter_inputs'),
+		// The full BriefInput as submitted, so a brief can be re-run or displayed before it finishes.
+		input: jsonb('input'),
 		// queued | running | complete | partial | failed
 		status: text('status').notNull(),
 		// Null until the run completes.
 		brief: jsonb('brief'),
 		markdown: text('markdown'),
+		// Set when the run failed or ended partial.
+		error: text('error'),
 		isPublic: boolean('is_public').notNull().default(true),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
