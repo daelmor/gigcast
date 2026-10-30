@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { FEATURED_MARKETS } from '$lib/markets';
+	import { Button, Card, Chip } from '$lib/components/ui';
 	import ExampleBriefs from '$lib/components/landing/ExampleBriefs.svelte';
+	import HeroTrace from '$lib/components/landing/HeroTrace.svelte';
 	import RecentBriefs from '$lib/components/shell/RecentBriefs.svelte';
 
 	let { data } = $props();
@@ -15,25 +17,37 @@
 
 <svelte:head><title>gigcast · Booking Briefs grounded in Qloo</title></svelte:head>
 
-<section class="py-6 sm:py-10">
-	<h1 class="text-zinc-900 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-		Booking Briefs grounded in Qloo
-	</h1>
-	<p class="text-zinc-600 mt-5 max-w-2xl text-lg">
-		A promoter picks an artist, a city and dates. The agent maps the audience, scores demand and
-		fit, proposes a lineup, sponsors, venues and ticket tiers, and labels every claim grounded,
-		inferred or no coverage.
-	</p>
-	<a
-		href={resolve('/new')}
-		class="bg-indigo-600 text-white hover:bg-indigo-700 mt-8 inline-block rounded-lg px-5 py-2.5 font-medium shadow-sm"
-		>Start a brief</a
+<!-- The hero is a full-bleed night band in both themes: it breaks out of the main column. -->
+<section
+	data-theme="dark"
+	data-hero
+	class="relative -mt-8 ml-[calc(50%-50vw)] w-screen bg-night text-ink sm:-mt-12 print:ml-0 print:w-auto"
+>
+	<div
+		class="mx-auto grid max-w-6xl items-center gap-space-7 px-4 py-space-7 sm:px-6 sm:py-space-8 lg:grid-cols-[1.1fr_1fr]"
 	>
+		<div>
+			<h1 class="max-w-3xl type-heading-1 text-ink sm:type-display lg:type-display-xl">
+				Booking Briefs grounded in Qloo
+			</h1>
+			<p class="mt-space-5 max-w-2xl type-body-lg text-ink-muted">
+				A promoter picks an artist, a city and dates. The agent maps the audience, scores demand and
+				fit, proposes a lineup, sponsors, venues and ticket tiers, and labels every claim grounded,
+				inferred or no coverage.
+			</p>
+			<Button variant="primary" href={resolve('/new')} class="mt-space-6">Start a brief</Button>
+		</div>
+		<div class="hidden lg:block">
+			<HeroTrace />
+		</div>
+	</div>
 </section>
 
-<section class="bg-white ring-zinc-200 mt-10 rounded-xl p-6 ring-1">
-	<h2 class="text-lg font-semibold">Why Qloo</h2>
-	<p class="text-zinc-600 mt-2 max-w-3xl">
+<section
+	class="mt-space-7 rounded-lg border border-line bg-signal-soft p-space-4 text-ink sm:p-space-5"
+>
+	<h2 class="type-heading-1">Why Qloo</h2>
+	<p class="mt-space-3 max-w-3xl type-body">
 		Qloo's Taste AI links artists, brands, places and neighbourhoods through one affinity graph.
 		That is what lets a brief say where an artist's audience lives, which brands they over-index on
 		and which venues sit in the heat, with the Qloo result behind every claim. Everything else in
@@ -43,51 +57,59 @@
 
 <ExampleBriefs briefs={data.examples} />
 
-<section class="mt-12">
-	<h2 class="text-lg font-semibold">Featured markets</h2>
-	<ul class="mt-4 grid gap-4 md:grid-cols-3">
+<section class="mt-space-7" aria-labelledby="markets-title">
+	<h2 id="markets-title" class="type-heading-1">Featured markets</h2>
+	<ul class="mt-space-4 grid gap-space-5 md:grid-cols-3">
 		{#each FEATURED_MARKETS as m (m.id)}
-			<li>
-				<div
-					class="bg-white ring-zinc-200 focus-within:ring-indigo-400 hover:ring-indigo-400 flex h-full flex-col rounded-xl ring-1 transition"
-				>
-					<a href="{resolve('/new')}?market={m.id}" class="flex flex-1 flex-col p-5 pb-3">
-						<span class="text-zinc-900 font-semibold">{m.name}</span>
-						<span class="text-zinc-500 text-sm">{m.countryName}</span>
-						{#if m.note}<span class="text-zinc-600 mt-2 text-sm">{m.note}</span>{/if}
-						<span class="mt-auto flex flex-wrap gap-1.5 pt-4">
+			<li class="flex">
+				<Card class="flex w-full flex-col" interactive>
+					<a
+						href="{resolve('/new')}?market={m.id}"
+						class="flex flex-1 flex-col rounded-sm text-ink no-underline"
+					>
+						<span class="type-heading-2">{m.name}</span>
+						<span class="type-small text-ink-muted">{m.countryName}</span>
+						{#if m.note}<span class="mt-space-2 type-body text-ink-muted">{m.note}</span>{/if}
+						<span class="mt-auto flex flex-wrap gap-space-2 pt-space-4">
 							{#each m.sampleArtists as a (a)}
-								<span class="bg-zinc-100 text-zinc-700 rounded-full px-2 py-0.5 text-xs">{a}</span>
+								<Chip>{a}</Chip>
 							{/each}
 						</span>
 					</a>
 					<a
 						href={resolve('/market/[slug]', { slug: m.id })}
-						class="text-indigo-600 px-5 pb-4 text-xs font-medium hover:underline"
+						class="mt-space-4 rounded-sm type-small font-semibold text-signal hover:underline"
 						>Market dashboard</a
 					>
-				</div>
+				</Card>
 			</li>
 		{/each}
 	</ul>
 </section>
 
-<section class="mt-12">
-	<h2 class="text-lg font-semibold">How it works</h2>
-	<ol class="mt-4 grid gap-4 md:grid-cols-3">
+<section class="mt-space-7" aria-labelledby="how-title">
+	<h2 id="how-title" class="type-heading-1">How it works</h2>
+	<ol class="mt-space-4 grid gap-space-5 md:grid-cols-3">
 		{#each steps as s, i (s)}
-			<li class="bg-white ring-zinc-200 flex gap-3 rounded-xl p-4 ring-1">
+			<Card as="li" class="flex items-start gap-space-3">
 				<span
-					class="bg-indigo-600 text-white flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+					class="flex size-8 shrink-0 items-center justify-center rounded-full bg-signal-soft type-heading-3 text-signal tabular-nums"
 					>{i + 1}</span
 				>
-				<span class="text-zinc-700">{s}</span>
-			</li>
+				<span class="pt-1 type-body text-ink">{s}</span>
+			</Card>
 		{/each}
 	</ol>
 </section>
 
-<section class="mt-12">
-	<h2 class="mb-4 text-lg font-semibold">Recent briefs</h2>
+<section class="mt-space-7" aria-labelledby="recent-title">
+	<h2 id="recent-title" class="mb-space-4 type-heading-1">Recent briefs</h2>
 	<RecentBriefs briefs={data.recent} />
 </section>
+
+<style>
+	/* The full-bleed hero is 100vw wide; clip the scrollbar gutter so it never causes a horizontal scroll. */
+	:global(body:has([data-hero])) {
+		overflow-x: clip;
+	}
+</style>

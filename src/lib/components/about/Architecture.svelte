@@ -73,7 +73,7 @@
 
 <svg
 	viewBox="0 0 960 520"
-	class="h-auto w-full"
+	class="h-auto w-full font-sans"
 	role="img"
 	aria-labelledby="arch-title arch-desc"
 	font-family="inherit"
