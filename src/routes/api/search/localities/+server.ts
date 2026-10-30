@@ -3,8 +3,9 @@ import type { ApiError, LocalitySearchResponse } from '$lib/api/contracts';
 import { logger } from '$lib/server/log';
 import {
 	countryHintsFor,
-	getSharedQlooClient,
 	defaultRejectHints,
+	getSharedQlooClient,
+	localityQueries,
 	searchLocalities
 } from '$lib/server/qloo';
 import { toLocalityResults } from '$lib/server/search/map';
@@ -17,11 +18,25 @@ export const GET: RequestHandler = async ({ url }) => {
 		return json({ query, country, results: [] } satisfies LocalitySearchResponse);
 	}
 	try {
-		const { candidates } = await searchLocalities(getSharedQlooClient(), query, {
+		const client = getSharedQlooClient();
+		const criteria = {
 			cityName: query,
 			countryHints: countryHintsFor(country),
 			rejectHints: defaultRejectHints(country)
-		});
+		};
+		const { candidates } = await searchLocalities(client, query, criteria);
+		// Free text often lands in the wrong country ("Panama City" is in Florida). When nothing
+		// acceptable came back, retry with the "<city>, <country>" variants the resolver uses.
+		if (country && !candidates.some((c) => c.acceptable)) {
+			for (const fallback of localityQueries(query, country)) {
+				if (fallback.toLowerCase() === query.toLowerCase()) continue;
+				const more = await searchLocalities(client, fallback, criteria);
+				for (const c of more.candidates) {
+					if (!candidates.some((k) => k.entityId === c.entityId)) candidates.push(c);
+				}
+				if (candidates.some((c) => c.acceptable)) break;
+			}
+		}
 		return json({
 			query,
 			country,

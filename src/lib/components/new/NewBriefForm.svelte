@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import {
 		apiErrorSchema,
 		createBriefRequestSchema,
@@ -67,8 +68,7 @@
 			});
 			if (res.status === 200 || res.status === 201) {
 				const { id } = createBriefResponseSchema.parse(await res.json());
-				// eslint-disable-next-line svelte/no-navigation-without-resolve -- /brief/[id] route is owned by another module
-				await goto(`/brief/${id}`);
+				await goto(resolve('/brief/[id]', { id }));
 				return;
 			}
 			if (res.status === 429) {

@@ -3,7 +3,7 @@
 	import type { BriefListItem } from '$lib/api/contracts';
 
 	// /brief/[id] is owned by another module, so its typed route is not known here yet (hence the cast).
-	const briefHref = (id: string) => resolve(`/brief/${id}` as '/');
+	const briefHref = (id: string) => resolve('/brief/[id]', { id });
 
 	let { briefs }: { briefs: BriefListItem[] } = $props();
 
