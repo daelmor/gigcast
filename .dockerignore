@@ -1,0 +1,12 @@
+node_modules
+.svelte-kit
+build
+.env*
+_secrets
+.cache
+docs
+.git
+coverage
+test-results
+playwright-report
+playwright/.cache
