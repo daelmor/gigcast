@@ -20,7 +20,7 @@ Load the local env file into the shell (it holds `QLOO_API_KEY`, `DATABASE_URL`,
 ./deploy/azure-container-apps.sh
 ```
 
-What it does, in order: resource group `rg-gigcast` in `eastus`; an Azure Container Registry (Basic, name derived from the subscription id); `az acr build` of the Dockerfile for linux/amd64 in the registry (the upload honours `.dockerignore`, so secrets and caches never leave the machine); a Container Apps environment `cae-gigcast` with its Log Analytics workspace; the container app `gigcast` with a system-assigned identity that pulls from the registry; the secrets `qloo-api-key`, `database-url` and `gcp-sa-json`, the last one mounted as the file `/mnt/secrets/gcp-sa-json` and pointed to by `GOOGLE_APPLICATION_CREDENTIALS`; finally `ORIGIN` and `APP_BASE_URL` set to the app's FQDN. Rerunning the script rebuilds the image with the current git SHA, refreshes the secrets and rolls a new revision.
+What it does, in order: resource group `rg-gigcast` in `eastus`; an Azure Container Registry (Basic, name derived from the subscription id); `az acr build` of the Dockerfile for linux/amd64 in the registry (the upload honours `.dockerignore`, so secrets and caches never leave the machine); a Container Apps environment `cae-gigcast` with its Log Analytics workspace; the container app `gigcast` with a system-assigned identity that pulls from the registry; the secrets `qloo-api-key`, `database-url` and `gcp-sa-json`, the last one mounted as the file `/mnt/secrets/gcp-sa-json` and pointed to by `GOOGLE_APPLICATION_CREDENTIALS`; finally `ORIGIN` and `APP_BASE_URL` set to the public origin (`PUBLIC_ORIGIN`, default `https://gigcast.ai`). Rerunning the script rebuilds the image with the current git SHA, refreshes the secrets and rolls a new revision.
 
 Settings and why:
 
@@ -99,3 +99,18 @@ docker run --rm -p 3000:3000 \
 ```
 
 With `-e AGENT_RUNNER=fake` the container serves the canned trace and the sample brief, which is how the M2 smoke test was run without any secret.
+
+## Custom domain (gigcast.ai)
+
+The domain is registered in Route 53 (hosted zone `gigcast.ai`, account `fegora`). Records, all created with `aws route53 change-resource-record-sets` on 2026-10-30:
+
+| Name | Type | Value |
+|---|---|---|
+| `gigcast.ai` | A | the environment's static IP (`az containerapp env show -n cae-gigcast -g rg-gigcast --query properties.staticIp`) |
+| `asuid.gigcast.ai` | TXT | the app's `customDomainVerificationId` |
+| `www.gigcast.ai` | CNAME | the app's FQDN |
+| `asuid.www.gigcast.ai` | TXT | the same verification id |
+
+Then the hostnames are added and bound with a free managed certificate: `az containerapp hostname add -n gigcast -g rg-gigcast --hostname gigcast.ai` and `az containerapp hostname bind ... --environment cae-gigcast --validation-method HTTP` (the apex uses an A record), and the same for `www.gigcast.ai` with `--validation-method CNAME`. Certificates renew on their own.
+
+`https://gigcast.ai` is the canonical origin: the deploy script sets `ORIGIN` and `APP_BASE_URL` to it, and `src/hooks.server.ts` answers any other host (www, the platform hostname) with a 308 to the canonical one. API paths are not redirected, so the health check and the ingestion job keep using the platform hostname.
