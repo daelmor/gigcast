@@ -4,7 +4,7 @@ Last updated: 2026-10-30 (end of M4 and M5).
 
 ## Deployed
 
-- **Live demo:** https://gigcast.gentlegrass-9cbc951b.eastus.azurecontainerapps.io (Azure Container Apps, subscription "Fegora", resource group `rg-gigcast`, one always-on replica). Postgres on Neon (project `gigcast`, branch `production`). Claude on Vertex AI in Google Cloud project `n1-data` through the mounted service-account file. A scheduled job (`gigcast-ingest`, every six hours) refreshes the news store through `POST /api/jobs/ingest`.
+- **Live demo:** https://gigcast.ai (Azure Container Apps, subscription "Fegora", resource group `rg-gigcast`, one always-on replica). Postgres on Neon (project `gigcast`, branch `production`). Claude on Vertex AI in Google Cloud project `n1-data` through the mounted service-account file. A scheduled job (`gigcast-ingest`, every six hours) refreshes the news store through `POST /api/jobs/ingest`.
 - Deploy with `./deploy/azure-container-apps.sh` after loading the local env file; `docs/deploy.md` explains every setting.
 - Demo mode: the landing's "See a finished brief" cards open the newest complete brief of each featured market; every Qloo response behind them is cached in Postgres, so a rerun of the same inputs is fast even if the hackathon key slows down (`QLOO_MODE=replay` serves the cache only if the key dies).
 
