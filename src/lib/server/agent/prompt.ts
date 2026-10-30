@@ -67,6 +67,16 @@ export function buildUserMessage(input: BriefInput, options: UserMessageOptions)
 		`City: ${input.city}, ${input.country}`,
 		`Date window: ${input.dateFrom} to ${input.dateTo}`,
 		`Today: ${options.today}`,
+		...(input.artistEntityId
+			? [
+					`Artist entity id confirmed by the promoter: ${input.artistEntityId} (verify with qloo_search_entity, then use it).`
+				]
+			: []),
+		...(input.localityEntityId
+			? [
+					`Locality confirmed by the promoter: ${input.localityName ?? input.city} (Qloo locality id ${input.localityEntityId}). Use this id in every tool that accepts locality_id; you may skip qloo_resolve_locality.`
+				]
+			: []),
 		'',
 		'Promoter inputs:',
 		promoter

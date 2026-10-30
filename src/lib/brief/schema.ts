@@ -58,7 +58,12 @@ export const briefInputSchema = z.object({
 	country: z.string().min(2),
 	dateFrom: isoDate,
 	dateTo: isoDate,
-	promoter: promoterInputsSchema.optional()
+	promoter: promoterInputsSchema.optional(),
+	/** Set when the promoter confirmed the artist in the UI; the agent still verifies it. */
+	artistEntityId: z.string().min(1).optional(),
+	/** Set when the promoter confirmed the Qloo locality in the UI (defeats the free-text traps). */
+	localityEntityId: z.string().min(1).optional(),
+	localityName: z.string().min(1).optional()
 });
 export type BriefInput = z.infer<typeof briefInputSchema>;
 
