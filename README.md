@@ -15,6 +15,41 @@ Built for the Qloo Agentic Hackathon. Progress lives in [STATUS.md](STATUS.md); 
 5. Two more tools cover what Qloo does not know: `market_calendar` (public holidays, long weekends and the climate observed on the dates in previous years) and `risk_feed` (local news ingested from Google News and local outlets, classified by Claude Haiku into risk categories with severity and a one-line "so what", plus US and UK travel advisories and a decayed market risk score). Every risk in the brief links to its source; the server rejects any that the feed did not return.
 6. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link, printable to PDF, with the sponsor outreach drafts on their own page.
 
+## Why Qloo is load-bearing
+
+Qloo's Taste AI is one affinity graph across artists, brands, places, localities and demographics, and the brief leans on it at every step:
+
+| Brief section | Qloo call | What it gives |
+| --- | --- | --- |
+| Entity resolution | `/search` by type | Artist, brand and locality ids with disambiguation; the country check defeats "Panama City is in Florida". |
+| Audience map | `/v2/insights` `urn:heatmap` with `filter.location=<locality id>` and `heatmap.dimensions` | Geohash cells with affinity, popularity, quality and price level; `output.heatmap.boundary=urn:entity:locality` for neighbourhoods. |
+| Demand and fit | `urn:demographics`, `urn:tag` for the artist and for the city (`signal.location`), `/v2/trending` | Age and gender affinities, the taste match, the twelve-month trend. |
+| Lineup | `urn:entity:artist` with `signal.location`, `/v2/insights/compare` | Compatible artists in that city with explainability weights; shared tags behind a pairing. |
+| Sponsors | `urn:entity:brand` with `signal.location` and `signal.demographics.age` | Brands this audience over-indexes on, also for the dominant age bucket. |
+| Venues and partners | `urn:entity:place` with `filter.location` and place tags | Venues, bars, hotels and restaurants near the heat with price level and rating. |
+| Pricing | the heatmap price-level dimension and the places' price levels | The willingness-to-pay proxy behind the tiers. |
+
+Without those calls the same questions get plausible guesses. The brief proves it on screen: a second run with every tool removed sits next to the grounded picks, and each LLM-only name is checked against what Qloo returned. In the first live comparison for Ricardo Arjona in Guatemala City, three of five LLM-only lineup picks appeared in Qloo's results and none of the five guessed sponsors did, while the grounded run's sponsors came straight from the audience's brand affinities.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  B[Browser<br/>SvelteKit, MapLibre, ECharts] -->|POST /api/briefs, SSE| S[SvelteKit server<br/>Azure Container Apps]
+  S -->|tool runner, streaming| C[Claude on Vertex AI<br/>12 Qloo tools + market_calendar + risk_feed + emit_brief]
+  S -->|no tools, in parallel| CF[Counterfactual run]
+  C -->|typed client, whitelist, cache| Q[(Qloo API)]
+  C --> R[Risk layer]
+  R --> N[Google News RSS, local outlets]
+  R --> H[Nager.Date, Open-Meteo]
+  R --> A[US State Dept, UK FCDO]
+  S --> P[(Postgres on Neon<br/>briefs, runs, events, qloo_cache,<br/>news, classifications, caches)]
+  J[Scheduled job<br/>every 6 h] -->|POST /api/jobs/ingest| S
+  R -->|classify| K[Claude Haiku]
+```
+
+The agent emits a structured draft; the server attaches the raw artifacts and verifies every grounded claim before anything is stored or shown.
+
 ## Stack
 
 TypeScript end to end: SvelteKit 2, Svelte 5 (runes), Tailwind 4, adapter-node · Postgres with Drizzle · Claude on Vertex AI through `@anthropic-ai/vertex-sdk` (beta tool runner, `betaZodTool`) · MapLibre GL with OpenFreeMap tiles · ECharts · Zod at every boundary · Vitest and Playwright · Docker on Cloud Run.
