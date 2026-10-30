@@ -140,7 +140,51 @@ export function buildArtifacts(registry: ToolRegistry): BriefArtifacts {
 			source: sourceRef(p.rec)
 		}));
 	}
+
+	const calendar = artifactsOfKind(registry, 'calendar')[0];
+	if (calendar)
+		artifacts.marketCalendar = { ...calendar.artifact.calendar, source: sourceRef(calendar.rec) };
+	const risk = largest(artifactsOfKind(registry, 'risk'), (a) => a.feed.items.length);
+	if (risk) artifacts.riskFeed = { ...risk.artifact.feed, source: sourceRef(risk.rec) };
 	return artifacts;
+}
+
+/** Normalize a url for matching a cited source against the feed (scheme, host case, trailing slash). */
+function urlKey(url: string): string {
+	try {
+		const u = new URL(url);
+		u.hash = '';
+		return `${u.hostname.toLowerCase().replace(/^www\./, '')}${u.pathname.replace(/\/$/, '')}${u.search}`;
+	} catch {
+		return url.trim();
+	}
+}
+
+/** Risk items must cite a url the risk_feed tool returned (news item or advisory); others are downgraded. */
+export function verifyRiskItems(
+	draft: BriefDraft,
+	registry: ToolRegistry,
+	verification: Verification
+): void {
+	const items = draft.risks?.items ?? [];
+	if (items.length === 0) return;
+	const known = new Set<string>();
+	for (const picked of artifactsOfKind(registry, 'risk')) {
+		for (const i of picked.artifact.feed.items) known.add(urlKey(i.url));
+		for (const a of picked.artifact.feed.advisories) known.add(urlKey(a.url));
+	}
+	for (const item of items) {
+		verification.checked++;
+		if (item.label === 'grounded' && !known.has(urlKey(item.sourceUrl))) {
+			item.label = 'inferred';
+			verification.downgraded.push({
+				section: 'risks',
+				entityId: item.sourceUrl,
+				name: item.title,
+				reason: 'source url was not returned by the risk feed in this run'
+			});
+		}
+	}
 }
 
 /** Which artist the run treated as the headliner: the id passed most often to the tools. */
@@ -261,6 +305,7 @@ function verifyPicks(
 /** Verify grounded picks against the registry; mutates and returns the draft. */
 export function verifyDraft(draft: BriefDraft, registry: ToolRegistry): Verification {
 	const verification: Verification = { downgraded: [], checked: 0 };
+	verifyRiskItems(draft, registry, verification);
 	verifyPicks('lineup', draft.lineup.picks, registry, verification);
 	verifyPicks('sponsors', draft.sponsors.picks, registry, verification);
 	verifyPicks('venuesAndPartners', draft.venuesAndPartners.picks, registry, verification);

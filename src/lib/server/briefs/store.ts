@@ -2,7 +2,7 @@
  * Postgres persistence for briefs, their runs and the agent events, plus the
  * known-markets upsert. Thin functions over Drizzle; no business logic.
  */
-import { desc, eq, gt, and, asc } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, sql } from 'drizzle-orm';
 import type { BriefListItem, BriefRecord, BriefStatus, RunRecord } from '../../api/contracts.ts';
 import { agentEventSchema, type AgentEvent } from '../../brief/events.ts';
 import { briefInputSchema, briefSchema, type Brief, type BriefInput } from '../../brief/schema.ts';
@@ -265,7 +265,7 @@ export async function getBriefRecord(id: string): Promise<BriefRecord | undefine
 	};
 }
 
-export async function listRecentBriefs(limit = 12): Promise<BriefListItem[]> {
+export async function listRecentBriefs(limit = 12, marketId?: string): Promise<BriefListItem[]> {
 	const rows = await getDb()
 		.select({
 			id: briefs.id,
@@ -280,7 +280,11 @@ export async function listRecentBriefs(limit = 12): Promise<BriefListItem[]> {
 			brief: briefs.brief
 		})
 		.from(briefs)
-		.where(eq(briefs.isPublic, true))
+		.where(
+			marketId
+				? and(eq(briefs.isPublic, true), eq(briefs.marketId, marketId))
+				: eq(briefs.isPublic, true)
+		)
 		.orderBy(desc(briefs.createdAt))
 		.limit(limit);
 	return rows.map((r) => {
@@ -308,6 +312,10 @@ export async function listRecentBriefs(limit = 12): Promise<BriefListItem[]> {
 	});
 }
 
+export function listRecentBriefsForMarket(marketId: string, limit = 6): Promise<BriefListItem[]> {
+	return listRecentBriefs(limit, marketId);
+}
+
 /** Idempotent: inserts or refreshes the markets the app knows up front. */
 export async function upsertKnownMarkets(): Promise<void> {
 	const now = new Date();
@@ -323,6 +331,7 @@ export async function upsertKnownMarkets(): Promise<void> {
 				lat: m.lat,
 				lon: m.lon,
 				timezone: m.timezone,
+				outlets: m.outlets,
 				updatedAt: now
 			}))
 		)
@@ -336,6 +345,7 @@ export async function upsertKnownMarkets(): Promise<void> {
 				lat: markets.lat,
 				lon: markets.lon,
 				timezone: markets.timezone,
+				outlets: sql`excluded.outlets`,
 				updatedAt: now
 			}
 		});
