@@ -7,6 +7,7 @@ import type { BriefListItem, BriefRecord, BriefStatus, RunRecord } from '../../a
 import { agentEventSchema, type AgentEvent } from '../../brief/events.ts';
 import { briefInputSchema, briefSchema, type Brief, type BriefInput } from '../../brief/schema.ts';
 import { KNOWN_MARKETS } from '../../markets.ts';
+import { neutralizeProse, neutralizeProvider } from '../../brief/wording.ts';
 import { getDb } from '../db/index.ts';
 import { agentEvents, briefRuns, briefs, markets, type BriefRun } from '../db/schema.ts';
 import { logger } from '../log.ts';
@@ -243,7 +244,9 @@ export async function getBriefRecord(id: string): Promise<BriefRecord | undefine
 	let brief: Brief | null = null;
 	if (row.brief) {
 		const parsed = briefSchema.safeParse(row.brief);
-		if (parsed.success) brief = parsed.data;
+		// Prose the model wrote (and briefs stored before the wording rule) may name the data
+		// provider; the product only does so where provenance is shown.
+		if (parsed.success) brief = neutralizeProse(parsed.data);
 		else
 			logger.error(
 				{ briefId: id, issues: parsed.error.issues.slice(0, 3) },
@@ -258,7 +261,7 @@ export async function getBriefRecord(id: string): Promise<BriefRecord | undefine
 		marketId: row.marketId,
 		input,
 		brief,
-		markdown: row.markdown,
+		markdown: row.markdown ? neutralizeProvider(row.markdown) : row.markdown,
 		runs: runs.map(toRunRecord),
 		events,
 		lastEventId
@@ -301,7 +304,7 @@ export async function listRecentBriefs(limit = 12, marketId?: string): Promise<B
 			localityName: r.localityName,
 			dateFrom: r.dateFrom,
 			dateTo: r.dateTo,
-			headline: draft?.headline ?? null,
+			headline: draft?.headline ? neutralizeProvider(draft.headline) : null,
 			verdict:
 				verdict === 'promising' ||
 				verdict === 'mixed' ||
