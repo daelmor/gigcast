@@ -22,7 +22,7 @@ html, body { margin: 0; width: 1200px; height: 630px; background: #100c28; }
 .logo svg { height: 96px; width: auto; display: block; }
 .tagline { margin-top: 48px; font-size: 44px; line-height: 56px; font-weight: 400; letter-spacing: -0.01em; max-width: 900px; }
 .foot { position: absolute; left: 96px; bottom: 64px; font-size: 22px; line-height: 28px; color: #aba6cc; }
-</style></head><body><div class="card"><div class="logo">${logo}</div><p class="tagline">Booking Briefs grounded in Qloo</p><p class="foot">Audience map · lineup · sponsors · venues · pricing · risk panel · what the model would have guessed without the data</p></div></body></html>`;
+</style></head><body><div class="card"><div class="logo">${logo}</div><p class="tagline">Booking Briefs grounded in cultural data</p><p class="foot">Audience map · lineup · sponsors · venues · pricing · risk panel</p></div></body></html>`;
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });

@@ -2211,3 +2211,17 @@ weakest: 3/5 artists, 184 cells, and its city-artist list is generic
    Garden questionnaire for that project. Decide: enable 5.5 in `n1-data`, or
    build M1 on `claude-opus-4-6` (planner) and `claude-haiku-4-5`
    (classification). Model ids will be environment variables either way.
+
+## Markets added 2026-10-30
+
+Probe through `/search` (types=urn:entity:locality, take 6), then `/v2/insights` heatmap with `filter.location=<id>` and the anchor signal (Bad Bunny), `urn:entity:artist` with `signal.location=<id>` (take 10) and `urn:tag` music genres with the same signal. Picked candidate = first result whose disambiguation names the expected country.
+
+| Market | Locality id | Disambiguation | Heatmap cells | Top city artists (affinity 1.00) | Music tags |
+|---|---|---|---|---|---|
+| São Paulo | 87DE0F46-8AF7-449B-8369-CC2296578282 | São Paulo, Região Imediata de São Paulo, São Paulo, Região Sudeste, Brasil | 1224 | Criolo, Caetano Veloso, Liniker, Fábio Porchat, Gloria Groove, Pitty, Madonna, Rita Lee, Elza Soares, Gilberto Gil | tropicalia, brazilian rock, '80s, classic rock, heavy metal, queer, freestyle |
+| Buenos Aires | AC7D5EB0-92E9-4EF6-8243-81AA6853143E | Buenos Aires, Comuna 6, Ciudad Autónoma de Buenos Aires, Argentina | 3886 | Dante Spinetta, Emmanuel Horvilleur, Madonna, Mick Jagger, Deborah de Corral, Natalie Perez, Ricky Martin, Marilina Bertoldi, LOUTA, Miss Bolivia | Rock Argentino, Rock en Espanol, '80s, blues, classic rock, guitar, Dance-Pop |
+| New York City | 81E61924-6CEE-4AB4-93D3-282A5C784AB8 | New York, New York, United States of America | 1356 | Solange, Lizzo, Rihanna, Naomi Campbell, Pharrell Williams, Nicole Richie, Madonna, Janelle Monáe, Billy Porter, Beyoncé | Broadway, cabaret, Musical theatre, Disco, avant-garde, chillwave, queer |
+| Los Angeles | 10F17338-97FE-40A3-9434-F6D59F000A9E | Los Angeles, California, United States of America | 4405 | Nicole Richie, Pharrell Williams, Solange, Gwen Stefani, Lizzo, Dita Von Teese, Diplo, Felipe Esparza | chillwave, post-punk, Disco, new wave, trip-hop, instrumental hip hop, cabaret, psychedelic |
+| Tampa | CF0B5657-4CBE-4B3F-9476-57644B5C87A1 | Tampa, Hillsborough, Florida, United States of America | 754 | Plies, Lizzo, Jessie James Decker, Britney Spears, Jessica Simpson, Rick Ross, Julianne Hough, T.I. | contemporary country, American Idol, praise and worship, Brostep, Acoustic Rock, Country-Pop |
+
+Traps seen: "São Paulo" also returns São Paulo in Lisbon and smaller Brazilian localities; "Buenos Aires" returns neighbourhoods in Medellín and Santiago (DO) and a canton in Costa Rica; "Los Angeles" returns Los Ángeles in Chile, Spain, Colombia and Costa Rica; "Tampa" returns Tampa, Kansas. The disambiguation shown in the picker is what tells them apart. `/search` locality results carry no `geocode` block, so the country code is read from the disambiguation text.

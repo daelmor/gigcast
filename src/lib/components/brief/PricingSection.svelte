@@ -19,8 +19,8 @@
 		note={pricing.note}
 	/>
 	<p class="mb-space-3 type-small text-ink-subtle">
-		A heuristic built on audience signals, not a Qloo price. Treat it as a starting point for your
-		own numbers.
+		A heuristic built on audience signals, not a price from the data. Treat it as a starting point
+		for your own numbers.
 	</p>
 	{#if pricing.tiers.length === 0}
 		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">

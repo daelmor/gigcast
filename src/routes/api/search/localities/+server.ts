@@ -8,8 +8,38 @@ import {
 	localityQueries,
 	searchLocalities
 } from '$lib/server/qloo';
-import { toLocalityResults } from '$lib/server/search/map';
+import { dropSubLocalities, toLocalityResults } from '$lib/server/search/map';
+import { KNOWN_MARKETS } from '$lib/markets';
 import type { RequestHandler } from './$types';
+
+const norm = (s: string) =>
+	s
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.toLowerCase()
+		.trim();
+
+/**
+ * Known markets whose English or local name starts with the query, as candidates with their
+ * verified locality id. Free text alone misses some of them: "Panama City" only finds Florida
+ * because the graph calls the capital "Distrito Panamá".
+ */
+function knownMarketCandidates(query: string, country: string) {
+	const q = norm(query);
+	return KNOWN_MARKETS.filter(
+		(m) =>
+			(norm(m.name).startsWith(q) || norm(m.localityName).startsWith(q)) &&
+			(!country || m.country === country.toUpperCase())
+	).map((m) => ({
+		entityId: m.localityEntityId,
+		name: m.localityName,
+		disambiguation: `${m.name}, ${m.countryName}`,
+		lat: m.lat,
+		lon: m.lon,
+		countryCode: m.country,
+		acceptable: true
+	}));
+}
 
 export const GET: RequestHandler = async ({ url }) => {
 	const query = (url.searchParams.get('q') ?? '').trim();
@@ -19,14 +49,18 @@ export const GET: RequestHandler = async ({ url }) => {
 	}
 	try {
 		const client = getSharedQlooClient();
-		const criteria = {
-			cityName: query,
-			countryHints: countryHintsFor(country),
-			rejectHints: defaultRejectHints(country)
-		};
-		const { candidates } = await searchLocalities(client, query, criteria);
-		// Free text often lands in the wrong country ("Panama City" is in Florida). When nothing
-		// acceptable came back, retry with the "<city>, <country>" variants the resolver uses.
+		// Without a country every candidate is acceptable and the promoter picks by the
+		// disambiguation shown next to each name ("Panama City" lists Panama and Florida).
+		const criteria = country
+			? {
+					cityName: query,
+					countryHints: countryHintsFor(country),
+					rejectHints: defaultRejectHints(country)
+				}
+			: { cityName: query, countryHints: [], rejectHints: [] };
+		const { candidates } = await searchLocalities(client, query, criteria, country ? 5 : 8);
+		// Free text often lands in the wrong country ("Panama City" is in Florida). When a country
+		// was given and nothing acceptable came back, retry with the "<city>, <country>" variants.
 		if (country && !candidates.some((c) => c.acceptable)) {
 			for (const fallback of localityQueries(query, country)) {
 				if (fallback.toLowerCase() === query.toLowerCase()) continue;
@@ -37,10 +71,14 @@ export const GET: RequestHandler = async ({ url }) => {
 				if (candidates.some((c) => c.acceptable)) break;
 			}
 		}
+		const known = knownMarketCandidates(query, country);
+		const rest = dropSubLocalities(candidates).filter(
+			(c) => !known.some((k) => k.entityId === c.entityId)
+		);
 		return json({
 			query,
 			country,
-			results: toLocalityResults(candidates)
+			results: toLocalityResults([...known, ...rest])
 		} satisfies LocalitySearchResponse);
 	} catch (err) {
 		logger.error(

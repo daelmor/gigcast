@@ -5,7 +5,6 @@
 	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
 	import { STATUS_LABEL, STATUS_TONE, VERDICT_LABEL, VERDICT_TONE } from '../ui/tones';
 	import AudienceSection from './AudienceSection.svelte';
-	import CounterfactualSection from './CounterfactualSection.svelte';
 	import DemandSection from './DemandSection.svelte';
 	import LineupSection from './LineupSection.svelte';
 	import MethodSection from './MethodSection.svelte';
@@ -37,7 +36,7 @@
 	const draft = $derived(brief.draft);
 
 	const locationMethod = {
-		entity_id: 'matched by Qloo locality id',
+		entity_id: 'matched by locality id',
 		point: 'matched by coordinates',
 		unresolved: 'not resolved'
 	} as const;
@@ -47,7 +46,6 @@
 		{ id: 'demand', title: 'Demand and fit', label: draft.demandAndFit.note.label },
 		{ id: 'lineup', title: 'Lineup', label: draft.lineup.note.label },
 		{ id: 'sponsors', title: 'Sponsors', label: draft.sponsors.note.label },
-		{ id: 'counterfactual', title: 'LLM only vs. Qloo' },
 		{ id: 'venues', title: 'Venues and partners', label: draft.venuesAndPartners.note.label },
 		{ id: 'pricing', title: 'Pricing guidance', label: draft.pricing.note.label },
 		{ id: 'risks', title: 'Risk panel', label: draft.risks?.note.label ?? 'no_coverage' },
@@ -175,7 +173,6 @@
 		<DemandSection {brief} />
 		<LineupSection {brief} />
 		<SponsorsSection {brief} />
-		<CounterfactualSection {brief} />
 		<VenuesSection {brief} />
 		<PricingSection {brief} />
 		<RiskSection {brief} />

@@ -7,7 +7,7 @@
 
 	const toc = [
 		{ id: 'what', title: 'What it is' },
-		{ id: 'qloo', title: 'Why Qloo is load-bearing' },
+		{ id: 'data', title: 'Where the data comes from' },
 		{ id: 'labels', title: 'The three labels' },
 		{ id: 'architecture', title: 'Architecture' },
 		{ id: 'sources', title: 'Data sources' },
@@ -23,7 +23,6 @@
 		'Venues and partners',
 		'Pricing',
 		'Risk panel',
-		'Counterfactual panel',
 		'Agent trace'
 	];
 
@@ -31,7 +30,7 @@
 		{
 			name: '/search',
 			gives:
-				'Resolves artists, brands and localities to Qloo entities. Localities are checked against the country, so "Panama City" does not resolve to Panama City, Florida.'
+				'Resolves artists, brands and localities to entities in the graph. A city picked on /new is pinned by its entity id, so "Panama City" does not drift to Panama City, Florida.'
 		},
 		{
 			name: '/v2/insights, filter.type=urn:heatmap',
@@ -153,7 +152,7 @@
 			<p class="type-label text-ink-subtle">About</p>
 			<h1 class="mt-space-2 type-heading-1 sm:type-display">About gigcast</h1>
 			<p class="mt-space-3 max-w-2xl type-body-lg text-ink-muted">
-				What a Booking Brief is, how Qloo grounds it, and where it stops being reliable.
+				What a Booking Brief is, how cultural data grounds it, and where it stops being reliable.
 			</p>
 		</header>
 
@@ -167,7 +166,7 @@
 					local knowledge, and none of it says who the audience is or where they live.
 				</p>
 				<p>
-					gigcast turns an artist, a city and dates into a Booking Brief with nine parts:
+					gigcast turns an artist, a city and dates into a Booking Brief with eight parts:
 					{parts.join(', ').toLowerCase()}. Each claim is labeled grounded, inferred or no coverage.
 					It is for promoters, talent buyers and venue bookers who need a first read on a market
 					before they commit money, and want to see what each claim rests on.
@@ -180,15 +179,15 @@
 			</Card>
 		</section>
 
-		<section id="qloo" class="scroll-mt-24">
+		<section id="data" class="scroll-mt-24">
 			<p class="type-label text-ink-subtle">Data</p>
-			<h2 class="mt-space-1 type-heading-1">Why Qloo is load-bearing</h2>
+			<h2 class="mt-space-1 type-heading-1">Where the data comes from</h2>
 			<Card class="mt-space-4 space-y-space-4 type-body">
 				<p>
-					Qloo's Taste AI is one affinity graph across artists, brands, places, localities and
-					demographics. One graph means a brief can answer "who likes this artist, where do they
-					live, what do they buy, where do they go" with results that connect to each other. These
-					are the endpoints the agent uses.
+					Behind every brief is one affinity graph across artists, brands, places, localities and
+					demographics: Qloo's Taste AI, reached through its API. One graph means a brief can answer
+					"who likes this artist, where do they live, what do they buy, where do they go" with
+					results that connect to each other. These are the endpoints the agent uses.
 				</p>
 				<dl class="divide-y divide-line overflow-hidden rounded-md border border-line">
 					{#each endpoints as e (e.name)}
@@ -200,13 +199,6 @@
 						</div>
 					{/each}
 				</dl>
-				<h3 class="pt-space-2 type-heading-3">The counterfactual</h3>
-				<p>
-					Ask the same question without tools and a model returns plausible names that nobody can
-					verify. The brief shows both columns side by side: the tool-backed answer and the LLM-only
-					answer. Every name in the LLM-only column is checked against what Qloo returned in the
-					tool-backed run, so the reader sees which names the graph supports and which it does not.
-				</p>
 			</Card>
 		</section>
 

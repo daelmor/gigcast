@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { toArtistResult, toLocalityResults } from './map.ts';
+import { dropSubLocalities, toArtistResult, toLocalityResults } from './map.ts';
 import type { SearchResult } from '../qloo/schemas.ts';
 
 const base = { name: 'Gaby Moreno', entity_id: 'A1' } as SearchResult;
@@ -52,5 +52,29 @@ describe('toLocalityResults', () => {
 			lon: -79.5,
 			acceptable: true
 		});
+	});
+});
+
+describe('dropSubLocalities', () => {
+	const c = (name: string, disambiguation: string) => ({
+		entityId: name,
+		name,
+		disambiguation,
+		acceptable: true
+	});
+	it('drops neighbourhoods of a city that is itself listed, keeps the rest', () => {
+		const out = dropSubLocalities([
+			c('Panama City', 'Panama City, Bay, Florida, United States of America'),
+			c('Panama City Beach', 'Panama City Beach, Bay, Florida, United States of America'),
+			c('The Woods', 'The Woods, Panama City, Bay, Florida, United States of America'),
+			c('Distrito Panamá', 'Distrito Panamá, Panamá, Panama')
+		]);
+		expect(out.map((x) => x.name)).toEqual(['Panama City', 'Panama City Beach', 'Distrito Panamá']);
+	});
+	it('keeps a locality whose parent is not in the list', () => {
+		const out = dropSubLocalities([
+			c('Tampa Heights', 'Tampa Heights, Tampa, Hillsborough, Florida')
+		]);
+		expect(out).toHaveLength(1);
 	});
 });

@@ -40,8 +40,8 @@
 	<p class="mt-space-2 type-body-lg text-ink-muted">{brief.draft.headline}</p>
 
 	<div class="mt-space-5 rounded-lg bg-caution-soft p-space-4 type-small text-caution">
-		These are drafts written by the model from Qloo affinity signals. Review and edit them before
-		use. gigcast never sends anything: the email link only opens your own email app.
+		These are drafts written by the model from the affinity signals in the brief. Review and edit
+		them before use. gigcast never sends anything: the email link only opens your own email app.
 	</div>
 
 	{#if picks.length === 0}

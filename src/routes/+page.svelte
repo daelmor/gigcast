@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { FEATURED_MARKETS } from '$lib/markets';
+	import { FEATURED_MARKETS, REGION_NAMES } from '$lib/markets';
 	import { Button, Card, Chip } from '$lib/components/ui';
 	import ExampleBriefs from '$lib/components/landing/ExampleBriefs.svelte';
 	import HeroTrace from '$lib/components/landing/HeroTrace.svelte';
@@ -8,14 +8,10 @@
 
 	let { data } = $props();
 
-	const steps = [
-		'Pick artist, city, dates.',
-		'The agent calls Qloo and streams its trace.',
-		'Read, share or print the brief.'
-	];
+	const regions = Object.keys(REGION_NAMES) as (keyof typeof REGION_NAMES)[];
 </script>
 
-<svelte:head><title>gigcast · Booking Briefs grounded in Qloo</title></svelte:head>
+<svelte:head><title>gigcast · Booking Briefs grounded in cultural data</title></svelte:head>
 
 <!-- The hero is a full-bleed night band in both themes: it breaks out of the main column. -->
 <section
@@ -28,7 +24,7 @@
 	>
 		<div>
 			<h1 class="max-w-3xl type-heading-1 text-ink sm:type-display lg:type-display-xl">
-				Booking Briefs grounded in Qloo
+				Booking Briefs grounded in cultural data
 			</h1>
 			<p class="mt-space-5 max-w-2xl type-body-lg text-ink-muted">
 				A promoter picks an artist, a city and dates. The agent maps the audience, scores demand and
@@ -46,12 +42,13 @@
 <section
 	class="mt-space-7 rounded-lg border border-line bg-signal-soft p-space-4 text-ink sm:p-space-5"
 >
-	<h2 class="type-heading-1">Why Qloo</h2>
+	<h2 class="type-heading-1">Why gigcast</h2>
 	<p class="mt-space-3 max-w-3xl type-body">
-		Qloo's Taste AI links artists, brands, places and neighbourhoods through one affinity graph.
-		That is what lets a brief say where an artist's audience lives, which brands they over-index on
-		and which venues sit in the heat, with the Qloo result behind every claim. Everything else in
-		the brief is reasoning on top of those results, and it is labeled as such.
+		gigcast turns an artist, a city and a date window into a Booking Brief a promoter can act on.
+		Behind it sits a taste graph of cultural affinities that links artists, brands, places and
+		neighbourhoods, so a brief can say where an artist's audience lives, which brands they
+		over-index on and which venues sit in the heat, with the data behind every claim. Everything
+		else is reasoning on top of those results, and it is labeled as such.
 	</p>
 </section>
 
@@ -59,47 +56,35 @@
 
 <section class="mt-space-7" aria-labelledby="markets-title">
 	<h2 id="markets-title" class="type-heading-1">Featured markets</h2>
-	<ul class="mt-space-4 grid gap-space-5 md:grid-cols-3">
-		{#each FEATURED_MARKETS as m (m.id)}
-			<li class="flex">
-				<Card class="flex w-full flex-col" interactive>
-					<a
-						href="{resolve('/new')}?market={m.id}"
-						class="flex flex-1 flex-col rounded-sm text-ink no-underline"
-					>
-						<span class="type-heading-2">{m.name}</span>
-						<span class="type-small text-ink-muted">{m.countryName}</span>
-						{#if m.note}<span class="mt-space-2 type-body text-ink-muted">{m.note}</span>{/if}
-						<span class="mt-auto flex flex-wrap gap-space-2 pt-space-4">
-							{#each m.sampleArtists as a (a)}
-								<Chip>{a}</Chip>
-							{/each}
-						</span>
-					</a>
-					<a
-						href={resolve('/market/[slug]', { slug: m.id })}
-						class="mt-space-4 rounded-sm type-small font-semibold text-signal hover:underline"
-						>Market dashboard</a
-					>
-				</Card>
-			</li>
-		{/each}
-	</ul>
-</section>
-
-<section class="mt-space-7" aria-labelledby="how-title">
-	<h2 id="how-title" class="type-heading-1">How it works</h2>
-	<ol class="mt-space-4 grid gap-space-5 md:grid-cols-3">
-		{#each steps as s, i (s)}
-			<Card as="li" class="flex items-start gap-space-3">
-				<span
-					class="flex size-8 shrink-0 items-center justify-center rounded-full bg-signal-soft type-heading-3 text-signal tabular-nums"
-					>{i + 1}</span
-				>
-				<span class="pt-1 type-body text-ink">{s}</span>
-			</Card>
-		{/each}
-	</ol>
+	{#each regions as region (region)}
+		<h3 class="mt-space-5 type-label text-ink-subtle">{REGION_NAMES[region]}</h3>
+		<ul class="mt-space-3 grid gap-space-5 md:grid-cols-3">
+			{#each FEATURED_MARKETS.filter((m) => m.region === region) as m (m.id)}
+				<li class="flex">
+					<Card class="flex w-full flex-col" interactive>
+						<a
+							href="{resolve('/new')}?market={m.id}"
+							class="flex flex-1 flex-col rounded-sm text-ink no-underline"
+						>
+							<span class="type-heading-2">{m.name}</span>
+							<span class="type-small text-ink-muted">{m.countryName}</span>
+							{#if m.note}<span class="mt-space-2 type-body text-ink-muted">{m.note}</span>{/if}
+							<span class="mt-auto flex flex-wrap gap-space-2 pt-space-4">
+								{#each m.sampleArtists as a (a)}
+									<Chip>{a}</Chip>
+								{/each}
+							</span>
+						</a>
+						<a
+							href={resolve('/market/[slug]', { slug: m.id })}
+							class="mt-space-4 rounded-sm type-small font-semibold text-signal hover:underline"
+							>Market dashboard</a
+						>
+					</Card>
+				</li>
+			{/each}
+		</ul>
+	{/each}
 </section>
 
 <section class="mt-space-7" aria-labelledby="recent-title">

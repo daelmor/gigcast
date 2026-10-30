@@ -23,6 +23,27 @@ export function toArtistResult(r: SearchResult): ArtistSearchResult {
 	};
 }
 
+const norm = (s: string) =>
+	s
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.toLowerCase()
+		.trim();
+
+/**
+ * Drops neighbourhoods of a city that is itself in the list ("The Woods, Panama City, Bay,
+ * Florida" when "Panama City" is a candidate), so a search for a city is not eight entries of
+ * the same place. A candidate is a sub-locality when the second segment of its disambiguation
+ * names another candidate.
+ */
+export function dropSubLocalities(candidates: LocalityCandidate[]): LocalityCandidate[] {
+	const names = new Set(candidates.map((c) => norm(c.name)));
+	return candidates.filter((c) => {
+		const parent = c.disambiguation?.split(',')[1]?.trim();
+		return !(parent && norm(parent) !== norm(c.name) && names.has(norm(parent)));
+	});
+}
+
 /** Candidates mapped 1:1, acceptable ones first (stable otherwise). */
 export function toLocalityResults(candidates: LocalityCandidate[]): LocalitySearchResult[] {
 	const mapped = candidates.map((c) => ({
@@ -31,6 +52,7 @@ export function toLocalityResults(candidates: LocalityCandidate[]): LocalitySear
 		disambiguation: c.disambiguation,
 		lat: c.lat,
 		lon: c.lon,
+		countryCode: c.countryCode,
 		acceptable: c.acceptable
 	}));
 	return [...mapped.filter((c) => c.acceptable), ...mapped.filter((c) => !c.acceptable)];

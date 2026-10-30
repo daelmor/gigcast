@@ -14,7 +14,7 @@
 
 	const placeholder = $derived.by(() => {
 		const sample = findMarket(form.marketId)?.sampleArtists[0];
-		return sample ? `e.g. ${sample}` : 'Search an artist';
+		return sample ? `e.g. ${sample}` : 'Type an artist name';
 	});
 
 	const search = debounce(async (q: string) => {
@@ -152,19 +152,20 @@
 								</li>
 							{/each}
 						</ul>
+						<p class="border-t border-line px-3 py-2 type-small text-ink-muted">
+							Pick one to pin the exact artist.
+						</p>
 					{/if}
 				</div>
 			{/if}
 		</div>
-		<p class="mt-space-2 type-small text-ink-muted">
-			{#if form.artistEntityId}
-				Confirmed in Qloo.
-			{:else if form.artist.trim()}
+		{#if form.artistEntityId}
+			<p class="mt-space-2 type-small text-ink-muted">Pinned to the exact artist.</p>
+		{:else if form.artist.trim() && !open}
+			<p class="mt-space-2 type-small text-ink-muted">
 				Not picked from the list: the agent will look the artist up itself.
-			{:else}
-				Pick from the suggestions to pin the exact artist.
-			{/if}
-		</p>
+			</p>
+		{/if}
 		{#if error}<p class="mt-space-1 type-small text-critical" role="alert">{error}</p>{/if}
 	</fieldset>
 </Card>
