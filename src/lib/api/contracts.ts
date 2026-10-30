@@ -68,6 +68,8 @@ export type BriefRecord = z.infer<typeof briefRecordSchema>;
 export const briefListItemSchema = z.object({
 	id: z.string(),
 	status: briefStatusSchema,
+	/** Known market slug when the brief started from a quick pick. */
+	marketId: z.string().nullable().default(null),
 	artistName: z.string(),
 	city: z.string(),
 	country: z.string(),

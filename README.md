@@ -12,7 +12,8 @@ Built for the Qloo Agentic Hackathon. Progress lives in [STATUS.md](STATUS.md); 
 2. The server starts the agent loop: Claude on the Anthropic SDK tool runner with twelve typed Qloo tools plus `emit_brief`, streaming, adaptive thinking, a cached system prompt and a tool budget. Every tool records the Qloo request behind it.
 3. Events stream to the browser over SSE (`/api/briefs/:id/events`) and are persisted with the brief; `/brief/:id` shows the live trace, then the document.
 4. In parallel, a second run answers the lineup and sponsor question with every tool removed. The server checks each of those LLM-only names against what Qloo actually returned, and the brief shows the two columns side by side: what the model guessed and what the data says.
-5. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link, printable to PDF, with the sponsor outreach drafts on their own page.
+5. Two more tools cover what Qloo does not know: `market_calendar` (public holidays, long weekends and the climate observed on the dates in previous years) and `risk_feed` (local news ingested from Google News and local outlets, classified by Claude Haiku into risk categories with severity and a one-line "so what", plus US and UK travel advisories and a decayed market risk score). Every risk in the brief links to its source; the server rejects any that the feed did not return.
+6. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link, printable to PDF, with the sponsor outreach drafts on their own page.
 
 ## Stack
 
@@ -73,7 +74,11 @@ The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample br
 | `MIGRATE_ON_START` | no | `true` applies Drizzle migrations on boot (Cloud Run). |
 | `PUBLIC_MAP_STYLE_URL` | no | MapLibre style; OpenFreeMap Positron by default. |
 | `APP_BASE_URL`, `ORIGIN` | deploy | Public URL of the app; adapter-node reads `ORIGIN`. |
-| `INGEST_JOB_SECRET` | M4 | Shared secret for the news ingestion job. |
+| `INGEST_JOB_SECRET` | deploy | Bearer secret for `POST /api/jobs/ingest`; the scheduled job sends it. Unset means the endpoint answers 503. |
+
+## Market dashboards and ingestion
+
+`/market/:slug` shows each known market's risk feed with filters, the score, travel advisories, the next six months of holidays and long weekends, monthly climate normals and the market's recent briefs. The news store is refreshed by `POST /api/jobs/ingest` (all markets, or `?market=slug`) with `Authorization: Bearer $INGEST_JOB_SECRET`; on Azure a scheduled job calls it every six hours, and a brief refreshes its market inline when the store is older than twelve hours.
 
 ## Deploy
 
@@ -85,6 +90,7 @@ One Docker image on Azure Container Apps, Postgres on Neon, Claude on Vertex AI:
 src/lib/server/qloo/      typed Qloo client, parameter whitelist, cache stores, locality resolver
 src/lib/server/agent/     tools, system prompt, Vertex agent loop, brief assembly and verification
 src/lib/server/briefs/    Postgres store, run manager with the SSE event hub, fake runner
+src/lib/server/risk/      RSS ingestion, Haiku classification, holidays and climate, advisories, score, dashboard
 src/lib/brief/            Brief contract (Zod), agent events, Markdown renderer, fixtures
 src/lib/components/       UI: brief document sections, maps, trace, the /new form, shell
 src/routes/               pages (/, /new, /brief/[id]) and API routes (/api/briefs, /api/search, SSE)

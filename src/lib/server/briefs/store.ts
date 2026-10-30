@@ -270,6 +270,7 @@ export async function listRecentBriefs(limit = 12, marketId?: string): Promise<B
 		.select({
 			id: briefs.id,
 			status: briefs.status,
+			marketId: briefs.marketId,
 			artistName: briefs.artistName,
 			city: briefs.city,
 			country: briefs.country,
@@ -293,6 +294,7 @@ export async function listRecentBriefs(limit = 12, marketId?: string): Promise<B
 		return {
 			id: r.id,
 			status: r.status as BriefStatus,
+			marketId: r.marketId,
 			artistName: r.artistName,
 			city: r.city ?? r.localityName ?? '',
 			country: r.country ?? '',
@@ -314,6 +316,26 @@ export async function listRecentBriefs(limit = 12, marketId?: string): Promise<B
 
 export function listRecentBriefsForMarket(marketId: string, limit = 6): Promise<BriefListItem[]> {
 	return listRecentBriefs(limit, marketId);
+}
+
+/** The newest complete brief of each featured market, for the landing's examples and demo mode. */
+export async function listExampleBriefs(marketIds: string[]): Promise<BriefListItem[]> {
+	const out: BriefListItem[] = [];
+	for (const marketId of marketIds) {
+		const rows = await getDb()
+			.select({ id: briefs.id })
+			.from(briefs)
+			.where(
+				and(eq(briefs.isPublic, true), eq(briefs.marketId, marketId), eq(briefs.status, 'complete'))
+			)
+			.orderBy(desc(briefs.createdAt))
+			.limit(1);
+		if (!rows[0]) continue;
+		const items = await listRecentBriefs(50, marketId);
+		const found = items.find((b) => b.id === rows[0].id);
+		if (found) out.push(found);
+	}
+	return out;
 }
 
 /** Idempotent: inserts or refreshes the markets the app knows up front. */
