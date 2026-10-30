@@ -50,7 +50,7 @@
 			role="radio"
 			aria-checked={preference === option.value}
 			onclick={() => apply(option.value)}
-			class="rounded-sm px-2 py-0.5 type-small font-medium text-ink-muted transition-colors duration-[120ms] hover:text-ink aria-checked:bg-signal-soft aria-checked:text-signal"
+			class="rounded-sm px-1.5 py-0.5 type-small font-medium whitespace-nowrap text-ink-muted transition-colors duration-[120ms] hover:text-ink aria-checked:bg-signal-soft aria-checked:text-signal sm:px-2"
 		>
 			{option.label}
 		</button>

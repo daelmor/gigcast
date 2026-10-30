@@ -20,9 +20,11 @@
 		? 'shadow-raised'
 		: ''}"
 >
-	<div class="mx-auto flex max-w-6xl items-center justify-between gap-space-4 px-4 py-3 sm:px-6">
+	<div
+		class="mx-auto flex max-w-6xl items-center justify-between gap-space-2 px-4 py-3 sm:gap-space-4 sm:px-6"
+	>
 		<a href={resolve('/')} class="rounded-md" aria-label="gigcast home"><Logo /></a>
-		<div class="flex items-center gap-space-3">
+		<div class="flex items-center gap-space-2 sm:gap-space-3">
 			<nav class="flex items-center gap-space-1" aria-label="Main">
 				{#each links as link (link.href)}
 					<a
