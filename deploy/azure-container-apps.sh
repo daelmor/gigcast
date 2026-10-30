@@ -118,9 +118,12 @@ else
 fi
 
 FQDN="$(az containerapp show -n "${APP}" -g "${RG}" --query properties.configuration.ingress.fqdn -o tsv)"
-say "Setting ORIGIN to https://${FQDN}"
+# The public address. The custom domain is bound to the app (A record for the apex, CNAME for
+# www, asuid TXT records in Route 53); the app redirects every other host there, except /api.
+PUBLIC_ORIGIN="${PUBLIC_ORIGIN:-https://gigcast.ai}"
+say "Setting ORIGIN to ${PUBLIC_ORIGIN}"
 az containerapp update -n "${APP}" -g "${RG}" -o none \
-  --set-env-vars "ORIGIN=https://${FQDN}" "APP_BASE_URL=https://${FQDN}"
+  --set-env-vars "ORIGIN=${PUBLIC_ORIGIN}" "APP_BASE_URL=${PUBLIC_ORIGIN}"
 
 say "Scheduled ingestion job ${JOB_NAME} (${INGEST_CRON})"
 # A tiny curl container posts to the ingest endpoint on a cron. The spec goes through a YAML file
@@ -171,4 +174,4 @@ for _ in $(seq 1 30); do
   sleep 10
 done
 curl -fsS -m 10 "https://${FQDN}/api/health" && echo
-say "Done: https://${FQDN}"
+say "Done: ${PUBLIC_ORIGIN} (platform hostname https://${FQDN})"

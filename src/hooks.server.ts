@@ -43,7 +43,27 @@ export const init: ServerInit = async () => {
 	);
 };
 
+/** Host of APP_BASE_URL, the canonical public origin; undefined when unset (dev, tests). */
+function canonicalHost(): string | undefined {
+	const base = getEnv().APP_BASE_URL;
+	if (!base) return undefined;
+	try {
+		return new URL(base).host;
+	} catch {
+		return undefined;
+	}
+}
+
 export const handle: Handle = async ({ event, resolve }) => {
+	// One public address: requests for any other host the app answers on (the platform's own
+	// hostname, www) are redirected to the canonical origin. API paths are left alone so the
+	// deploy health check and the scheduled ingestion job can keep calling the platform hostname.
+	const canonical = canonicalHost();
+	const host = event.request.headers.get('x-forwarded-host') ?? event.request.headers.get('host');
+	if (canonical && host && host !== canonical && !event.url.pathname.startsWith('/api/')) {
+		const target = `https://${canonical}${event.url.pathname}${event.url.search}`;
+		return new Response(null, { status: 308, headers: { location: target } });
+	}
 	const requestId =
 		event.request.headers.get('x-request-id') ??
 		event.request.headers.get('x-cloud-trace-context')?.split('/')[0] ??
