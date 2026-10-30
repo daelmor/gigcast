@@ -6,7 +6,13 @@
 import { nanoid } from 'nanoid';
 import type { AgentEvent, AgentEventInput } from '../../brief/events.ts';
 import { sampleBrief } from '../../brief/fixtures/sample-brief.ts';
-import { BRIEF_SECTIONS, type Brief, type BriefInput } from '../../brief/schema.ts';
+import {
+	BRIEF_SECTIONS,
+	type Brief,
+	type BriefInput,
+	type CounterfactualDraft,
+	type RunSummary
+} from '../../brief/schema.ts';
 
 export interface FakeRunOptions {
 	input: BriefInput;
@@ -106,4 +112,110 @@ export async function fakeRunBrief(
 	};
 	emit({ type: 'brief.complete', briefId: options.briefId, status: 'complete' });
 	return { brief, events };
+}
+
+const FAKE_COUNTERFACTUAL: CounterfactualDraft = {
+	lineup: [
+		{
+			name: 'Gaby Moreno',
+			role: 'co_headliner',
+			why: 'Fellow Guatemalan with crossover appeal.',
+			confidence: 'high'
+		},
+		{
+			name: 'Alejandro Sanz',
+			role: 'co_headliner',
+			why: 'Same Latin pop generation and audience.',
+			confidence: 'medium'
+		},
+		{
+			name: 'Carlos Vives',
+			role: 'support',
+			why: 'Tropical-pop energy to open the night.',
+			confidence: 'low'
+		}
+	],
+	sponsors: [
+		{
+			name: 'Gallo',
+			category: 'Beer',
+			why: 'The national beer sponsors most large concerts in Guatemala.',
+			confidence: 'high'
+		},
+		{
+			name: 'Adidas',
+			category: 'Sportswear',
+			why: 'Broad lifestyle brand present in the market.',
+			confidence: 'medium'
+		},
+		{
+			name: 'Tigo',
+			category: 'Telecommunications',
+			why: 'Regional telecom with ticketing promotions.',
+			confidence: 'medium'
+		}
+	],
+	caveats: [
+		'No audience data: these are general-knowledge guesses.',
+		'Brand presence in the country was not verified.'
+	]
+};
+
+export async function fakeRunCounterfactual(options: FakeRunOptions): Promise<{
+	draft: CounterfactualDraft;
+	run: RunSummary;
+	events: AgentEvent[];
+}> {
+	const runId = `run_${nanoid(12)}`;
+	const stepMs = options.stepMs ?? 120;
+	const events: AgentEvent[] = [];
+	let seq = 0;
+	const emit = (e: AgentEventInput) => {
+		const full = { ...e, seq: seq++, at: new Date().toISOString(), runId } as AgentEvent;
+		events.push(full);
+		options.onEvent?.(full);
+	};
+	const startedAt = new Date().toISOString();
+	emit({ type: 'run.started', model: 'fake-runner', kind: 'counterfactual' });
+	await sleep(stepMs * 3, options.signal);
+	const toolCallId = `toolu_fake_${nanoid(8)}`;
+	emit({
+		type: 'tool_call.started',
+		toolCallId,
+		tool: 'emit_counterfactual',
+		input: { lineup: 3, sponsors: 3 }
+	});
+	emit({
+		type: 'tool_call.finished',
+		toolCallId,
+		tool: 'emit_counterfactual',
+		ok: true,
+		summary: '3 lineup and 3 sponsor picks without data',
+		durationMs: 5,
+		requests: []
+	});
+	const finishedAt = new Date().toISOString();
+	return {
+		draft: FAKE_COUNTERFACTUAL,
+		events,
+		run: {
+			runId,
+			kind: 'counterfactual',
+			model: 'fake-runner',
+			status: 'complete',
+			startedAt,
+			finishedAt,
+			usage: {
+				inputTokens: 900,
+				outputTokens: 400,
+				cacheReadInputTokens: 0,
+				cacheCreationInputTokens: 0
+			},
+			toolCalls: 1,
+			qlooCalls: 0,
+			qlooCacheHits: 0,
+			stopReason: 'end_turn',
+			missingSections: []
+		}
+	};
 }

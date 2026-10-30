@@ -8,6 +8,8 @@ import {
 	type ArtistPick,
 	type Brief,
 	type BriefSection,
+	type CounterfactualMatch,
+	type CounterfactualPick,
 	type Label,
 	type PlacePick,
 	type RiskItem,
@@ -350,6 +352,77 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 	};
 
 	for (const section of BRIEF_SECTIONS) renderers[section]();
+
+	// Counterfactual: the same lineup and sponsor question without any tool.
+	const cf = brief.counterfactual;
+	if (cf) {
+		heading(2, 'Would this work without Qloo?');
+		if (cf.status !== 'complete' || !cf.draft) {
+			out.push(
+				cf.status === 'skipped'
+					? 'The counterfactual run was skipped for this brief.'
+					: `The counterfactual run failed${cf.error ? `: ${cf.error}` : '.'}`
+			);
+		} else {
+			out.push(
+				`The same question was asked of ${cf.model} with every data tool removed. Left: what it answered from memory. Right: the grounded picks above. Each LLM-only name was checked against the entities Qloo returned in this run.`
+			);
+			if (cf.summary) {
+				blank();
+				out.push(
+					`- Lineup: ${cf.summary.lineupInQloo} of ${cf.summary.lineupTotal} LLM-only picks appear in Qloo's results; ${cf.summary.lineupOverlap} also chosen by the grounded run.`
+				);
+				out.push(
+					`- Sponsors: ${cf.summary.sponsorsInQloo} of ${cf.summary.sponsorsTotal} LLM-only picks appear in Qloo's results; ${cf.summary.sponsorsOverlap} also chosen by the grounded run.`
+				);
+			}
+			const matchText = (m: CounterfactualMatch | undefined): string =>
+				!m
+					? ''
+					: m.pickedByGroundedRun
+						? 'also picked by the grounded run'
+						: m.entityId
+							? `in Qloo's results${m.affinity !== undefined ? `, affinity ${num(m.affinity)}` : ''}`
+							: "not in Qloo's results for this run";
+			const comparison = (
+				title: string,
+				picks: CounterfactualPick[],
+				matches: CounterfactualMatch[] | undefined,
+				grounded: Array<{ name: string; affinity?: number; label: Label }>
+			) => {
+				heading(3, title);
+				const rows = Array.from({ length: Math.max(picks.length, grounded.length) }, (_, i) => {
+					const p = picks[i];
+					const g = grounded[i];
+					const kind = p?.role ? ` (${words(p.role)})` : p?.category ? ` (${p.category})` : '';
+					return [
+						cell(p ? `${p.name}${kind}` : undefined),
+						cell(p?.confidence),
+						cell(p ? matchText(matches?.[i]) : undefined),
+						cell(
+							g
+								? `${g.name}${g.affinity !== undefined ? ` (${pct(g.affinity)})` : ''} [${g.label}]`
+								: undefined
+						)
+					];
+				});
+				out.push(
+					...table(
+						['LLM only (no tools)', 'Confidence', 'Check against Qloo', 'Grounded in Qloo'],
+						rows
+					)
+				);
+			};
+			comparison('Lineup', cf.draft.lineup, cf.matches?.lineup, draft.lineup.picks);
+			comparison('Sponsors', cf.draft.sponsors, cf.matches?.sponsors, draft.sponsors.picks);
+			if (cf.draft.caveats.length) {
+				blank();
+				out.push('What the model said it could not know without data:');
+				blank();
+				for (const c of cf.draft.caveats) out.push(`- _${c}_`);
+			}
+		}
+	}
 
 	// Open questions
 	heading(2, 'Open questions');
