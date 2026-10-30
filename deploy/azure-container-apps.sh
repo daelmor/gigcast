@@ -113,23 +113,47 @@ az containerapp update -n "${APP}" -g "${RG}" -o none \
   --set-env-vars "ORIGIN=https://${FQDN}" "APP_BASE_URL=https://${FQDN}"
 
 say "Scheduled ingestion job ${JOB_NAME} (${INGEST_CRON})"
-# A tiny curl container posts to the ingest endpoint on a cron; the secret travels as a job secret.
-JOB_CMD="curl -fsS -m 290 -X POST -H \"Authorization: Bearer \$INGEST_JOB_SECRET\" https://${FQDN}/api/jobs/ingest"
+# A tiny curl container posts to the ingest endpoint on a cron. The spec goes through a YAML file
+# because the CLI cannot take "-c" and "curl -X ..." as argument values; the file holds the secret,
+# so it is created with owner-only permissions and removed right after.
+ENV_ID="$(az containerapp env show -n "${ENV_NAME}" -g "${RG}" --query id -o tsv)"
+JOB_SPEC="$(mktemp)"
+chmod 600 "${JOB_SPEC}"
+cat > "${JOB_SPEC}" <<YAML
+location: ${LOCATION}
+name: ${JOB_NAME}
+properties:
+  environmentId: ${ENV_ID}
+  configuration:
+    triggerType: Schedule
+    replicaTimeout: 600
+    replicaRetryLimit: 1
+    scheduleTriggerConfig:
+      cronExpression: "${INGEST_CRON}"
+      parallelism: 1
+      replicaCompletionCount: 1
+    secrets:
+      - name: ingest-job-secret
+        value: "${INGEST_JOB_SECRET}"
+  template:
+    containers:
+      - name: ingest
+        image: curlimages/curl:8.11.1
+        command: ["/bin/sh", "-c"]
+        args: ["curl -fsS -m 290 -X POST -H \"Authorization: Bearer \$INGEST_JOB_SECRET\" https://${FQDN}/api/jobs/ingest"]
+        env:
+          - name: INGEST_JOB_SECRET
+            secretRef: ingest-job-secret
+        resources:
+          cpu: 0.25
+          memory: 0.5Gi
+YAML
 if az containerapp job show -n "${JOB_NAME}" -g "${RG}" -o none 2>/dev/null; then
-  az containerapp job secret set -n "${JOB_NAME}" -g "${RG}" --secrets "ingest-job-secret=${INGEST_JOB_SECRET}" -o none
-  az containerapp job update -n "${JOB_NAME}" -g "${RG}" -o none \
-    --cron-expression "${INGEST_CRON}" \
-    --image curlimages/curl:8.11.1 --command "/bin/sh" --args "-c" "${JOB_CMD}" \
-    --set-env-vars "INGEST_JOB_SECRET=secretref:ingest-job-secret"
+  az containerapp job update -n "${JOB_NAME}" -g "${RG}" --yaml "${JOB_SPEC}" -o none
 else
-  az containerapp job create -n "${JOB_NAME}" -g "${RG}" --environment "${ENV_NAME}" -o none \
-    --trigger-type Schedule --cron-expression "${INGEST_CRON}" \
-    --replica-timeout 600 --replica-retry-limit 1 --parallelism 1 --replica-completion-count 1 \
-    --image curlimages/curl:8.11.1 --command "/bin/sh" --args "-c" "${JOB_CMD}" \
-    --cpu 0.25 --memory 0.5Gi \
-    --secrets "ingest-job-secret=${INGEST_JOB_SECRET}" \
-    --env-vars "INGEST_JOB_SECRET=secretref:ingest-job-secret"
+  az containerapp job create -n "${JOB_NAME}" -g "${RG}" --yaml "${JOB_SPEC}" -o none
 fi
+rm -f "${JOB_SPEC}"
 
 say "Waiting for the new revision"
 for _ in $(seq 1 30); do

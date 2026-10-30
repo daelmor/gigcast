@@ -35,35 +35,57 @@ export const POST: RequestHandler = async ({ request, url, locals }) => {
 	if (slug && markets.length === 0)
 		return json({ error: `Unknown market ${slug}` }, { status: 404 });
 
-	const started = Date.now();
-	const deadline = started + 240_000;
-	const summaries: IngestSummary[] = [];
-	for (const market of markets) {
-		if (Date.now() > deadline) break;
-		try {
-			summaries.push(
-				await ingestMarket(market, { budgetMs: Math.min(90_000, deadline - Date.now()) })
-			);
-		} catch (err) {
-			locals.log.error({ err, marketId: market.id }, 'ingestion failed');
-			summaries.push({
-				marketId: market.id,
-				feedsTried: 0,
-				feedsOk: 0,
-				itemsSeen: 0,
-				itemsNew: 0,
-				classified: 0,
-				errors: [err instanceof Error ? err.message : String(err)],
-				durationMs: 0
-			});
+	// Six markets with classification take several minutes, longer than the ingress allows a
+	// request to live; run in the background and answer at once. `?wait=1` keeps the old
+	// synchronous behaviour for manual checks of a single market.
+	const log = locals.log;
+	const run = async (): Promise<IngestSummary[]> => {
+		const started = Date.now();
+		const deadline = started + 20 * 60_000;
+		const summaries: IngestSummary[] = [];
+		for (const market of markets) {
+			if (Date.now() > deadline) break;
+			try {
+				summaries.push(await ingestMarket(market, { budgetMs: 120_000 }));
+			} catch (err) {
+				log.error({ err, marketId: market.id }, 'ingestion failed');
+				summaries.push({
+					marketId: market.id,
+					feedsTried: 0,
+					feedsOk: 0,
+					itemsSeen: 0,
+					itemsNew: 0,
+					classified: 0,
+					errors: [err instanceof Error ? err.message : String(err)],
+					durationMs: 0
+				});
+			}
 		}
+		log.info(
+			{
+				markets: summaries.map((s) => `${s.marketId}:${s.itemsNew}/${s.classified}`),
+				durationMs: Date.now() - started
+			},
+			'ingest job finished'
+		);
+		return summaries;
+	};
+
+	if (url.searchParams.get('wait') === '1') {
+		const summaries = await run();
+		return json({ ok: true, markets: summaries });
 	}
-	locals.log.info(
-		{
-			markets: summaries.map((s) => `${s.marketId}:${s.itemsNew}/${s.classified}`),
-			durationMs: Date.now() - started
-		},
-		'ingest job finished'
-	);
-	return json({ ok: true, durationMs: Date.now() - started, markets: summaries });
+	if (ingestInFlight) {
+		return json(
+			{ ok: true, started: false, reason: 'an ingestion is already running' },
+			{ status: 202 }
+		);
+	}
+	ingestInFlight = run().finally(() => {
+		ingestInFlight = undefined;
+	});
+	log.info({ markets: markets.map((m) => m.id) }, 'ingest job started');
+	return json({ ok: true, started: true, markets: markets.map((m) => m.id) }, { status: 202 });
 };
+
+let ingestInFlight: Promise<IngestSummary[]> | undefined;
