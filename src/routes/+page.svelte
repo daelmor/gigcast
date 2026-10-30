@@ -45,19 +45,25 @@
 	<ul class="mt-4 grid gap-4 md:grid-cols-3">
 		{#each FEATURED_MARKETS as m (m.id)}
 			<li>
-				<a
-					href="{resolve('/new')}?market={m.id}"
-					class="flex h-full flex-col rounded-xl bg-white p-5 ring-1 ring-zinc-200 transition hover:ring-indigo-400"
+				<div
+					class="flex h-full flex-col rounded-xl bg-white ring-1 ring-zinc-200 transition focus-within:ring-indigo-400 hover:ring-indigo-400"
 				>
-					<span class="font-semibold text-zinc-900">{m.name}</span>
-					<span class="text-sm text-zinc-500">{m.countryName}</span>
-					{#if m.note}<span class="mt-2 text-sm text-zinc-600">{m.note}</span>{/if}
-					<span class="mt-auto flex flex-wrap gap-1.5 pt-4">
-						{#each m.sampleArtists as a (a)}
-							<span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700">{a}</span>
-						{/each}
-					</span>
-				</a>
+					<a href="{resolve('/new')}?market={m.id}" class="flex flex-1 flex-col p-5 pb-3">
+						<span class="font-semibold text-zinc-900">{m.name}</span>
+						<span class="text-sm text-zinc-500">{m.countryName}</span>
+						{#if m.note}<span class="mt-2 text-sm text-zinc-600">{m.note}</span>{/if}
+						<span class="mt-auto flex flex-wrap gap-1.5 pt-4">
+							{#each m.sampleArtists as a (a)}
+								<span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700">{a}</span>
+							{/each}
+						</span>
+					</a>
+					<a
+						href={resolve('/market/[slug]', { slug: m.id })}
+						class="px-5 pb-4 text-xs font-medium text-indigo-600 hover:underline"
+						>Market dashboard</a
+					>
+				</div>
 			</li>
 		{/each}
 	</ul>
