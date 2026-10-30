@@ -7,8 +7,8 @@
 <svelte:head><title>New brief · gigcast</title></svelte:head>
 
 <div class="mx-auto max-w-3xl">
-	<h1 class="text-3xl font-semibold tracking-tight">New booking brief</h1>
-	<p class="text-zinc-600 mt-2 mb-8">
+	<h1 class="type-heading-1 sm:type-display">New booking brief</h1>
+	<p class="mt-space-2 mb-space-6 type-body-lg text-ink-muted">
 		Pick a market, an artist and a date window. The agent does the rest.
 	</p>
 	{#key `${data.market}|${data.artist}`}

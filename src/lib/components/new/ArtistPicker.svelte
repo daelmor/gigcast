@@ -2,6 +2,7 @@
 	import { onDestroy } from 'svelte';
 	import { artistSearchResponseSchema, type ArtistSearchResult } from '$lib/api/contracts';
 	import { findMarket } from '$lib/markets';
+	import Card from '$lib/components/ui/Card.svelte';
 	import { debounce, type FormState } from './form';
 
 	let { form, error }: { form: FormState; error?: string } = $props();
@@ -69,96 +70,101 @@
 	});
 </script>
 
-<fieldset class="bg-white ring-zinc-200 rounded-xl p-5 ring-1">
-	<legend class="px-1 text-base font-semibold">2. Artist</legend>
-	<div class="relative mt-2">
-		<input
-			id="artist-input"
-			type="text"
-			bind:value={form.artist}
-			oninput={onInput}
-			onfocus={() => (open = results.length > 0 || status === 'loading')}
-			onblur={() => (open = false)}
-			onkeydown={(e) => e.key === 'Escape' && (open = false)}
-			{placeholder}
-			aria-label="Artist"
-			autocomplete="off"
-			class="ring-zinc-300 focus:ring-indigo-600 w-full rounded-lg border-0 px-3 py-2 ring-1 focus:ring-2"
-		/>
-		{#if open}
-			<div
-				class="bg-white ring-zinc-200 absolute z-10 mt-1 max-h-80 w-full overflow-auto rounded-lg shadow-lg ring-1"
-				aria-live="polite"
-			>
-				{#if status === 'loading'}
-					<p class="text-zinc-500 flex items-center gap-2 px-3 py-3 text-sm">
-						<span
-							class="border-zinc-300 border-t-indigo-600 size-3.5 animate-spin rounded-full border-2"
-						></span>
-						Searching…
-					</p>
-				{:else if status === 'error'}
-					<p class="text-rose-700 px-3 py-3 text-sm">
-						Artist search is unavailable. You can still type the name and continue.
-					</p>
-				{:else if results.length === 0}
-					<p class="text-zinc-500 px-3 py-3 text-sm">
-						No match. You can still continue with the name as typed.
-					</p>
-				{:else}
-					<ul>
-						{#each results as a, i (i)}
-							<li>
-								<button
-									type="button"
-									onpointerdown={(e) => e.preventDefault()}
-									onclick={() => pick(a)}
-									class="hover:bg-zinc-50 flex w-full items-center gap-3 px-3 py-2 text-left"
-								>
-									{#if a.image}
-										<img
-											src={a.image}
-											alt=""
-											loading="lazy"
-											class="size-9 shrink-0 rounded-full object-cover"
-										/>
-									{:else}
-										<span class="bg-zinc-100 size-9 shrink-0 rounded-full" aria-hidden="true"
-										></span>
-									{/if}
-									<span class="min-w-0 flex-1">
-										<span class="block truncate font-medium">{a.name}</span>
-										{#if a.disambiguation}
-											<span class="text-zinc-500 block truncate text-sm">{a.disambiguation}</span>
-										{/if}
-									</span>
-									{#if a.popularity != null}
-										<span
-											class="bg-zinc-100 h-1.5 w-12 shrink-0 overflow-hidden rounded-full"
-											title="Popularity"
-										>
+<Card>
+	<fieldset class="m-0 min-w-0 border-0 p-0">
+		<legend class="px-0 type-heading-3">2. Artist</legend>
+		<div class="relative mt-space-3">
+			<input
+				id="artist-input"
+				type="text"
+				bind:value={form.artist}
+				oninput={onInput}
+				onfocus={() => (open = results.length > 0 || status === 'loading')}
+				onblur={() => (open = false)}
+				onkeydown={(e) => e.key === 'Escape' && (open = false)}
+				{placeholder}
+				aria-label="Artist"
+				autocomplete="off"
+				class="w-full rounded-sm border border-line-strong bg-surface-raised px-3 py-2 type-body text-ink placeholder:text-ink-subtle"
+			/>
+			{#if open}
+				<div
+					class="absolute z-10 mt-1 max-h-80 w-full overflow-auto rounded-md border border-line bg-surface-raised"
+					aria-live="polite"
+				>
+					{#if status === 'loading'}
+						<p class="flex items-center gap-2 px-3 py-3 type-small text-ink-subtle">
+							<span class="size-2 animate-pulse-live rounded-full bg-beam" aria-hidden="true"
+							></span>
+							Searching…
+						</p>
+					{:else if status === 'error'}
+						<p class="px-3 py-3 type-small text-critical">
+							Artist search is unavailable. You can still type the name and continue.
+						</p>
+					{:else if results.length === 0}
+						<p class="px-3 py-3 type-small text-ink-subtle">
+							No match. You can still continue with the name as typed.
+						</p>
+					{:else}
+						<ul class="divide-y divide-line">
+							{#each results as a, i (i)}
+								<li>
+									<button
+										type="button"
+										onpointerdown={(e) => e.preventDefault()}
+										onclick={() => pick(a)}
+										class="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors duration-[120ms] hover:bg-surface-sunken"
+									>
+										{#if a.image}
+											<img
+												src={a.image}
+												alt=""
+												loading="lazy"
+												class="size-9 shrink-0 rounded-full object-cover"
+											/>
+										{:else}
 											<span
-												class="bg-indigo-500 block h-full"
-												style="width: {Math.round(Math.min(1, Math.max(0, a.popularity)) * 100)}%"
+												class="size-9 shrink-0 rounded-full bg-surface-sunken"
+												aria-hidden="true"
 											></span>
+										{/if}
+										<span class="min-w-0 flex-1">
+											<span class="block truncate type-body font-medium text-ink">{a.name}</span>
+											{#if a.disambiguation}
+												<span class="block truncate type-small text-ink-muted"
+													>{a.disambiguation}</span
+												>
+											{/if}
 										</span>
-									{/if}
-								</button>
-							</li>
-						{/each}
-					</ul>
-				{/if}
-			</div>
-		{/if}
-	</div>
-	<p class="text-zinc-500 mt-2 text-sm">
-		{#if form.artistEntityId}
-			Confirmed in Qloo.
-		{:else if form.artist.trim()}
-			Not picked from the list: the agent will look the artist up itself.
-		{:else}
-			Pick from the suggestions to pin the exact artist.
-		{/if}
-	</p>
-	{#if error}<p class="text-rose-700 mt-1 text-sm" role="alert">{error}</p>{/if}
-</fieldset>
+										{#if a.popularity != null}
+											<span
+												class="h-1.5 w-12 shrink-0 overflow-hidden rounded-pill bg-surface-sunken"
+												title="Popularity"
+											>
+												<span
+													class="block h-full bg-signal"
+													style="width: {Math.round(Math.min(1, Math.max(0, a.popularity)) * 100)}%"
+												></span>
+											</span>
+										{/if}
+									</button>
+								</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
+			{/if}
+		</div>
+		<p class="mt-space-2 type-small text-ink-muted">
+			{#if form.artistEntityId}
+				Confirmed in Qloo.
+			{:else if form.artist.trim()}
+				Not picked from the list: the agent will look the artist up itself.
+			{:else}
+				Pick from the suggestions to pin the exact artist.
+			{/if}
+		</p>
+		{#if error}<p class="mt-space-1 type-small text-critical" role="alert">{error}</p>{/if}
+	</fieldset>
+</Card>

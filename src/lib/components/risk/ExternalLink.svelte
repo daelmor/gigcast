@@ -11,5 +11,10 @@
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
-<a {href} target="_blank" rel="noopener noreferrer" class={className}>{@render children()}</a>
+<a
+	{href}
+	target="_blank"
+	rel="noopener noreferrer"
+	class={className || 'text-signal hover:underline'}>{@render children()}</a
+>
 <!-- eslint-enable svelte/no-navigation-without-resolve -->
