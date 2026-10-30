@@ -227,7 +227,7 @@
 						<p class="text-sm text-zinc-700">{d.tasteMatch.detail}</p>
 						{#if d.tasteMatch.sharedTags.length > 0}
 							<div class="mt-2 flex flex-wrap gap-1.5">
-								{#each d.tasteMatch.sharedTags as tag (tag)}
+								{#each d.tasteMatch.sharedTags as tag, i (i)}
 									<span class="rounded-full bg-indigo-50 px-2 py-0.5 text-xs text-indigo-700"
 										>{tag}</span
 									>

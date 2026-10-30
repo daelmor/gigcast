@@ -1018,7 +1018,7 @@ export function createAgentTools({ client, registry, now = () => new Date() }: T
 	const emitBrief = betaZodTool({
 		name: 'emit_brief',
 		description:
-			'Deliver the finished Booking Brief as a structured object. Call exactly once, at the end, after the research tools. Every pick must name an entity id returned by a tool in this run and cite the tool call ids in `sources`. Label each section and item grounded, inferred or no_coverage. The server attaches the raw heatmap, demographics and candidate lists itself.',
+			'Deliver the finished Booking Brief as a structured object. Call exactly once, at the end, after the research tools. Every pick must name an entity id returned by a tool in this run and cite the tool call ids in `sources`. Label each section and item grounded, inferred or no_coverage. The server attaches the raw heatmap, demographics and candidate lists itself. Keep texts short so the input validates: section summaries under 150 words, each `why` under 80 words, outreach bodies under 250 words, at most 6 key points, 12 shared tags and 3 age buckets; never exceed the array sizes in the schema.',
 		inputSchema: briefDraftSchema,
 		eager_input_streaming: true,
 		run: async (input, ctx) => {

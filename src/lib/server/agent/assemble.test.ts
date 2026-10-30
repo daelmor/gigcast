@@ -315,3 +315,24 @@ describe('fallbackDraft', () => {
 		);
 	});
 });
+
+describe('buildResolution with a promoter-confirmed locality', () => {
+	it('uses the confirmed locality id when the agent skipped qloo_resolve_locality', () => {
+		const registry = new ToolRegistry(5);
+		const hinted: BriefInput = {
+			...input,
+			localityEntityId: LOCALITY_ID,
+			localityName: 'Ciudad de México'
+		};
+		const { locality } = buildResolution(hinted, registry);
+		expect(locality.method).toBe('entity_id');
+		expect(locality.entityId).toBe(LOCALITY_ID);
+		expect(locality.name).toBe('Ciudad de México');
+		expect(locality.disambiguation).toBe('confirmed by the promoter');
+	});
+
+	it('stays unresolved without a hint or a resolve call', () => {
+		const { locality } = buildResolution(input, new ToolRegistry(5));
+		expect(locality.method).toBe('unresolved');
+	});
+});

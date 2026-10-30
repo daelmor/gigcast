@@ -84,7 +84,7 @@
 							<div class="mt-2 space-y-3">
 								{#if cand.tags && cand.tags.length > 0}
 									<div class="flex flex-wrap gap-1.5">
-										{#each cand.tags as tag (tag)}
+										{#each cand.tags as tag, i (i)}
 											<span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700"
 												>{tag}</span
 											>
@@ -93,7 +93,7 @@
 								{/if}
 								{#if weights.length > 0}
 									<ul class="space-y-1 text-xs text-zinc-600">
-										{#each weights as w (w.signal + w.entity)}
+										{#each weights as w, i (i)}
 											<li class="flex justify-between gap-3">
 												<span><span class="text-zinc-500">{words(w.signal)}:</span> {w.entity}</span
 												>

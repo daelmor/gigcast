@@ -118,7 +118,7 @@
 				</p>
 			{:else}
 				<ul class="space-y-3">
-					{#each audience.hotspots as h (h.name + h.lat)}
+					{#each audience.hotspots as h, i (i)}
 						<li class="rounded-xl bg-white p-3 ring-1 ring-zinc-200">
 							<p class="font-medium text-zinc-900">{h.name}</p>
 							<p class="mt-1 text-sm text-zinc-700">{h.why}</p>

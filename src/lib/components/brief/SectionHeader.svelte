@@ -23,7 +23,7 @@
 	<p class="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-700">{note.summary}</p>
 	{#if note.caveats.length > 0}
 		<ul class="mt-2 max-w-3xl list-disc space-y-0.5 pl-5 text-xs text-zinc-500 italic">
-			{#each note.caveats as caveat (caveat)}
+			{#each note.caveats as caveat, i (i)}
 				<li>{caveat}</li>
 			{/each}
 		</ul>

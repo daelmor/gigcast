@@ -149,7 +149,7 @@
 			<div class="mt-4 border-t border-zinc-100 pt-4">
 				<h2 class="text-sm font-semibold text-zinc-900">Key points</h2>
 				<ul class="mt-2 space-y-2">
-					{#each draft.keyPoints as point (point)}
+					{#each draft.keyPoints as point, i (i)}
 						<li class="flex gap-2.5 text-sm leading-relaxed text-zinc-800">
 							<span class="mt-2 size-1.5 shrink-0 rounded-full bg-indigo-600" aria-hidden="true"
 							></span>

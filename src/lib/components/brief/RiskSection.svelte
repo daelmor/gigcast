@@ -60,7 +60,7 @@
 							{words(group.category)}
 						</h3>
 						<ul class="space-y-3">
-							{#each group.items as item (item.title + item.sourceUrl)}
+							{#each group.items as item, i (i)}
 								<li class="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
 									<div class="flex flex-wrap items-center justify-between gap-2">
 										<h4 class="font-semibold text-zinc-900">{item.title}</h4>

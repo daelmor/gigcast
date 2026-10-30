@@ -130,7 +130,7 @@
 			<p class="font-medium">{banner.message}</p>
 			{#if banner.details?.length}
 				<ul class="mt-2 list-disc pl-5">
-					{#each banner.details as d (d)}<li>{d}</li>{/each}
+					{#each banner.details as d, i (i)}<li>{d}</li>{/each}
 				</ul>
 			{/if}
 		</div>

@@ -74,6 +74,25 @@ function addUsage(total: Usage, usage: Anthropic.Beta.Messages.BetaUsage | undef
 	total.cacheCreationInputTokens += usage.cache_creation_input_tokens ?? 0;
 }
 
+/** The text of the tool_result the SDK produced for a tool use id, if it is in the conversation. */
+function findToolResultText(
+	messages: Anthropic.Beta.Messages.BetaMessageParam[],
+	toolUseId: string
+): string | undefined {
+	for (const m of messages) {
+		if (m.role !== 'user' || typeof m.content === 'string') continue;
+		for (const block of m.content) {
+			if (block.type !== 'tool_result' || block.tool_use_id !== toolUseId) continue;
+			const text =
+				typeof block.content === 'string'
+					? block.content
+					: (block.content ?? []).map((c) => (c.type === 'text' ? c.text : '')).join(' ');
+			return text.replace(/\s+/g, ' ').trim().slice(0, 300) || undefined;
+		}
+	}
+	return undefined;
+}
+
 export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult> {
 	const now = options.now ?? (() => new Date());
 	const env = getEnv();
@@ -155,6 +174,24 @@ export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult
 
 	let runner = anthropic.beta.messages.toolRunner(params, { signal: options.signal });
 
+	// Tool uses whose input fails the Zod schema never reach our tool function: the SDK answers
+	// the model with the validation error and the trace would show nothing but a long silence.
+	// Compare each turn's tool uses with the registry on the next turn and report the rejects.
+	let previousToolUses: { id: string; name: string }[] = [];
+	const reportRejectedToolUses = () => {
+		for (const use of previousToolUses) {
+			if (registry.calls.has(use.id)) continue;
+			const detail = findToolResultText(runner.params.messages, use.id);
+			emit({
+				type: 'error',
+				fatal: false,
+				message: `${use.name} input was rejected before it ran${detail ? `: ${detail}` : ''}. The model is retrying.`
+			});
+			logger.warn({ runId, tool: use.name, detail }, 'tool input rejected by schema');
+		}
+		previousToolUses = [];
+	};
+
 	// Wrap the whole consumption: with eager input streaming, JSON the SDK cannot
 	// parse rejects the iteration; re-issue from runner.params with a cap on
 	// consecutive failures, and rethrow API errors.
@@ -169,6 +206,10 @@ export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult
 				const message = await messageStream.finalMessage();
 				attempt = 0;
 				addUsage(usage, message.usage);
+				reportRejectedToolUses();
+				previousToolUses = message.content
+					.filter((b): b is Anthropic.Beta.Messages.BetaToolUseBlock => b.type === 'tool_use')
+					.map((b) => ({ id: b.id, name: b.name }));
 				stopReason = message.stop_reason ?? undefined;
 				if (text.trim()) emit({ type: 'assistant.text', text: text.trim() });
 				const hasToolUse = message.content.some((b) => b.type === 'tool_use');
@@ -209,6 +250,7 @@ export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult
 		}
 	}
 
+	reportRejectedToolUses();
 	const finishedAt = now().toISOString();
 	const totals = registry.totals();
 	let draft: BriefDraft;

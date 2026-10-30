@@ -31,7 +31,7 @@
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-zinc-100">
-					{#each pricing.tiers as tier (tier.name)}
+					{#each pricing.tiers as tier, i (i)}
 						<tr class="align-top">
 							<td class="px-4 py-3 font-medium text-zinc-900">{tier.name}</td>
 							<td class="px-4 py-3 whitespace-nowrap text-zinc-800 tabular-nums"
@@ -49,7 +49,7 @@
 		<div class="mt-4">
 			<h3 class="text-sm font-semibold text-zinc-900">Assumptions</h3>
 			<ul class="mt-1 list-disc space-y-0.5 pl-5 text-sm text-zinc-600">
-				{#each pricing.assumptions as a (a)}<li>{a}</li>{/each}
+				{#each pricing.assumptions as a, i (i)}<li>{a}</li>{/each}
 			</ul>
 		</div>
 	{/if}

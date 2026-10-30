@@ -195,6 +195,25 @@ export function buildResolution(input: BriefInput, registry: ToolRegistry): Reso
 			}
 		};
 	}
+	// The promoter confirmed the locality in the form and the agent skipped qloo_resolve_locality.
+	if (input.localityEntityId) {
+		const usedTheId = [...registry.calls.values()].some(
+			(rec) =>
+				(rec.input as { locality_id?: unknown } | undefined)?.locality_id === input.localityEntityId
+		);
+		return {
+			artist,
+			locality: {
+				method: 'entity_id',
+				entityId: input.localityEntityId,
+				name: input.localityName ?? input.city,
+				disambiguation: usedTheId
+					? 'confirmed by the promoter and used by the tools'
+					: 'confirmed by the promoter',
+				candidates
+			}
+		};
+	}
 	// Did any tool run with coordinates instead?
 	for (const rec of registry.calls.values()) {
 		const i = rec.input as { lat?: unknown; lon?: unknown } | undefined;
