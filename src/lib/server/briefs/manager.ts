@@ -89,7 +89,11 @@ function publish(briefId: string, message: HubMessage): void {
 
 function defaultRunner(): BriefRunner {
 	const env = getEnv();
-	if (env.AGENT_RUNNER === 'fake') return (o) => fakeRunBrief(o);
+	if (env.AGENT_RUNNER === 'fake') {
+		// Slow the canned trace down when a test or a screenshot needs to see the live state.
+		const stepMs = Number(process.env.FAKE_RUNNER_STEP_MS ?? 120) || 120;
+		return (o) => fakeRunBrief({ ...o, stepMs });
+	}
 	return (o) => runBrief({ ...o, qloo: getSharedQlooClient() });
 }
 

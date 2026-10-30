@@ -39,7 +39,7 @@
 		</h3>
 		<span class="text-xs text-zinc-500 tabular-nums">{formatDuration(elapsed)}</span>
 	</div>
-	<ol class="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+	<ol class="flex flex-wrap gap-2">
 		{#each BRIEF_SECTIONS as s (s)}
 			{@const st = states[s]}
 			<li
@@ -64,7 +64,7 @@
 				{:else}
 					<span class="size-2 shrink-0 rounded-full bg-zinc-300" aria-hidden="true"></span>
 				{/if}
-				<span class="truncate">{SECTION_LABELS[s]}</span>
+				<span class="whitespace-nowrap">{SECTION_LABELS[s]}</span>
 				<span class="sr-only">{st.replace('_', ' ')}</span>
 			</li>
 		{/each}

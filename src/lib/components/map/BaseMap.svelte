@@ -87,7 +87,9 @@
 	role="img"
 	aria-label={label}
 >
-	<div bind:this={container} class="absolute inset-0"></div>
+	<!-- Sized with h-full/w-full on purpose: MapLibre's own (unlayered) stylesheet sets
+	     position: relative on .maplibregl-map, which beats Tailwind's layered `absolute`. -->
+	<div bind:this={container} class="h-full w-full"></div>
 	{#if failed}
 		<div
 			class="absolute inset-0 flex items-center justify-center bg-zinc-50 p-4 text-center text-sm text-zinc-500"
