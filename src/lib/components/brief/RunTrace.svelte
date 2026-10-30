@@ -83,6 +83,8 @@
 		<ol
 			bind:this={scroller}
 			class="grid max-h-[32rem] gap-1.5 overflow-y-auto bg-surface-sunken px-4 py-3 type-data"
+			tabindex="0"
+			aria-label="Tool calls"
 		>
 			{#each rows as row, i (row.kind === 'tool' ? row.toolCallId : `${row.kind}-${row.seq}-${i}`)}
 				<li class="min-w-0 text-ink-muted">
@@ -105,12 +107,12 @@
 								>{row.tool}</span
 							>
 							<span class="flex min-w-0 items-baseline gap-space-2">
-								<span class="min-w-0 truncate text-ink-subtle">{short(row.input)}</span>
+								<span class="min-w-0 truncate text-ink-muted">{short(row.input)}</span>
 								{#if row.cacheHit}
 									<span class="rounded-sm bg-signal-soft px-1 type-data-sm text-signal">cache</span>
 								{/if}
 								{#if row.durationMs !== undefined}
-									<span class="ml-auto type-data-sm text-ink-subtle tabular-nums"
+									<span class="ml-auto type-data-sm text-ink-muted tabular-nums"
 										>{formatDuration(row.durationMs)}</span
 									>
 								{/if}
@@ -121,7 +123,7 @@
 								{row.summary}
 							</p>
 						{:else if row.pending}
-							<p class="pl-6 text-ink-subtle">Running…</p>
+							<p class="pl-6 text-ink-muted">Running…</p>
 						{/if}
 						{#if showInputs && row.input !== undefined}
 							<pre
@@ -139,7 +141,7 @@
 							{row.message}
 						</p>
 					{:else if row.kind === 'run'}
-						<p class="text-ink-subtle">Run started on {row.model} ({row.runKind})</p>
+						<p class="text-ink-muted">Run started on {row.model} ({row.runKind})</p>
 					{:else}
 						<p class="font-medium text-grounded">
 							Brief {row.status === 'complete' ? 'complete' : 'finished with gaps'}
