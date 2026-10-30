@@ -51,6 +51,8 @@
 					center,
 					zoom,
 					interactive,
+					// Keeps the canvas readable when the page is printed.
+					canvasContextAttributes: { preserveDrawingBuffer: true },
 					attributionControl: { compact: true }
 				});
 				if (interactive) {

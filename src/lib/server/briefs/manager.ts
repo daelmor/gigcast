@@ -1,22 +1,25 @@
 /**
  * Starts brief runs, persists their events as they happen and fans them out
- * to SSE subscribers on this instance. One brief = one main run (the
- * counterfactual run arrives in M3). Concurrency is capped per instance so
- * a burst of requests cannot exhaust the Qloo or Vertex budget.
+ * to SSE subscribers on this instance. One brief = the main run plus the
+ * counterfactual run (same question, no tools), executed in parallel.
+ * Concurrency is capped per instance so a burst of requests cannot exhaust
+ * the Qloo or Vertex budget.
  */
 import { nanoid } from 'nanoid';
 import type { BriefStatus, CreateBriefRequest, CreateBriefResponse } from '../../api/contracts.ts';
 import type { AgentEvent } from '../../brief/events.ts';
 import { renderBriefMarkdown } from '../../brief/markdown.ts';
-import type { Brief, BriefInput } from '../../brief/schema.ts';
+import type { Brief, BriefInput, CounterfactualPanel } from '../../brief/schema.ts';
 import { findMarket } from '../../markets.ts';
+import { compareCounterfactual } from '../agent/counterfactual-compare.ts';
+import { runCounterfactual, type CounterfactualResult } from '../agent/counterfactual.ts';
 import { runBrief } from '../agent/run.ts';
 import { getEnv } from '../env.ts';
 import { logger } from '../log.ts';
 import { getSharedQlooClient } from '../qloo/index.ts';
-import { fakeRunBrief } from './fake-runner.ts';
+import { fakeRunBrief, fakeRunCounterfactual } from './fake-runner.ts';
 import {
-	appendEvents,
+	appendEvent,
 	completeBrief,
 	createBriefRecord,
 	createRun,
@@ -35,23 +38,34 @@ export class BriefBusyError extends Error {
 	}
 }
 
+/** An event once it is persisted: `id` is the database row id, monotonic across runs of a brief. */
+export interface StoredEvent {
+	id: number;
+	event: AgentEvent;
+}
+
 export type HubMessage =
-	{ kind: 'event'; event: AgentEvent } | { kind: 'status'; status: BriefStatus; done: boolean };
+	{ kind: 'event'; stored: StoredEvent } | { kind: 'status'; status: BriefStatus; done: boolean };
 
 export interface ActiveRun {
 	briefId: string;
-	runId?: string;
-	events: AgentEvent[];
+	runIds: Set<string>;
+	/** Persisted events so far, in id order. */
+	events: StoredEvent[];
 	startedAt: number;
 	controller: AbortController;
 }
 
-export type BriefRunner = (options: {
+type RunnerOptions = {
 	input: BriefInput;
 	briefId: string;
 	onEvent: (event: AgentEvent) => void;
 	signal: AbortSignal;
-}) => Promise<{ brief: Brief; events: AgentEvent[] }>;
+};
+export type BriefRunner = (
+	options: RunnerOptions
+) => Promise<{ brief: Brief; events: AgentEvent[] }>;
+export type CounterfactualRunner = (options: RunnerOptions) => Promise<CounterfactualResult>;
 
 const active = new Map<string, ActiveRun>();
 const subscribers = new Map<string, Set<(message: HubMessage) => void>>();
@@ -87,23 +101,52 @@ function publish(briefId: string, message: HubMessage): void {
 	}
 }
 
-function defaultRunner(): BriefRunner {
+function defaultRunners(): { main: BriefRunner; counterfactual: CounterfactualRunner } {
 	const env = getEnv();
 	if (env.AGENT_RUNNER === 'fake') {
 		// Slow the canned trace down when a test or a screenshot needs to see the live state.
 		const stepMs = Number(process.env.FAKE_RUNNER_STEP_MS ?? 120) || 120;
-		return (o) => fakeRunBrief({ ...o, stepMs });
+		return {
+			main: (o) => fakeRunBrief({ ...o, stepMs }),
+			counterfactual: (o) => fakeRunCounterfactual({ ...o, stepMs })
+		};
 	}
-	return (o) => runBrief({ ...o, qloo: getSharedQlooClient() });
+	return {
+		main: (o) => runBrief({ ...o, qloo: getSharedQlooClient() }),
+		counterfactual: (o) => runCounterfactual(o)
+	};
 }
 
 export interface StartOptions {
 	runner?: BriefRunner;
+	counterfactualRunner?: CounterfactualRunner;
 	id?: string;
 }
 
+/** Attach the counterfactual result to the finished brief, comparing names against Qloo's results. */
+export function attachCounterfactual(
+	brief: Brief,
+	result: CounterfactualResult | { error: string }
+): Brief {
+	let panel: CounterfactualPanel;
+	if ('error' in result) {
+		panel = { status: 'failed', model: 'unknown', error: result.error };
+	} else if (!result.draft) {
+		panel = { status: 'failed', model: result.run.model, run: result.run, error: result.run.error };
+	} else {
+		panel = {
+			status: 'complete',
+			model: result.run.model,
+			run: result.run,
+			draft: result.draft,
+			...compareCounterfactual(result.draft, brief)
+		};
+	}
+	return { ...brief, counterfactual: panel };
+}
+
 /**
- * Create the brief row and start its run in the background. Resolves as soon
+ * Create the brief row and start its runs in the background. Resolves as soon
  * as the row exists; progress flows through the hub and the database.
  */
 export async function startBriefRun(
@@ -117,20 +160,23 @@ export async function startBriefRun(
 	const { marketId, ...input } = request;
 	const market = findMarket(marketId);
 	const briefId = options.id ?? `brief_${nanoid(10)}`;
-	const runner = options.runner ?? defaultRunner();
+	const defaults = defaultRunners();
+	const runMain = options.runner ?? defaults.main;
+	const runCf = options.counterfactualRunner ?? defaults.counterfactual;
 
 	await createBriefRecord({ id: briefId, input, marketId: market?.id ?? null, status: 'running' });
 
 	const run: ActiveRun = {
 		briefId,
+		runIds: new Set(),
 		events: [],
 		startedAt: Date.now(),
 		controller: new AbortController()
 	};
 	active.set(briefId, run);
 
-	// Serialize persistence so the run row exists before its events and the
-	// order on disk matches the order emitted.
+	// Serialize persistence so the run row exists before its events, the order on disk matches
+	// the order emitted, and subscribers see an event only once it has a database id.
 	let chain: Promise<void> = Promise.resolve();
 	const persist = (fn: () => Promise<void>) => {
 		chain = chain
@@ -140,23 +186,43 @@ export async function startBriefRun(
 	};
 
 	const onEvent = (event: AgentEvent) => {
-		run.events.push(event);
 		if (event.type === 'run.started') {
-			run.runId = event.runId;
+			run.runIds.add(event.runId);
 			persist(() => createRun({ id: event.runId, briefId, kind: event.kind, model: event.model }));
 		}
-		persist(() => appendEvents(event.runId, [event]));
-		publish(briefId, { kind: 'event', event });
+		persist(async () => {
+			const id = await appendEvent(event.runId, event);
+			if (id === undefined) return;
+			const stored = { id, event };
+			run.events.push(stored);
+			publish(briefId, { kind: 'event', stored });
+		});
 	};
 
+	const signal = run.controller.signal;
 	const execute = async () => {
-		const { brief } = await runner({ input, briefId, onEvent, signal: run.controller.signal });
+		const [main, cf] = await Promise.all([
+			runMain({ input, briefId, onEvent, signal }),
+			runCf({ input, briefId, onEvent, signal }).catch((err: unknown) => ({
+				error: err instanceof Error ? err.message : String(err)
+			}))
+		]);
+		const brief = attachCounterfactual(main.brief, cf);
 		const markdown = renderBriefMarkdown(brief);
 		await chain;
 		await completeBrief(briefId, brief, markdown);
 		await finishRun(brief.run);
+		if (brief.counterfactual?.run) await finishRun(brief.counterfactual.run);
 		publish(briefId, { kind: 'status', status: brief.run.status, done: true });
-		logger.info({ briefId, runId: brief.run.runId, status: brief.run.status }, 'brief persisted');
+		logger.info(
+			{
+				briefId,
+				runId: brief.run.runId,
+				status: brief.run.status,
+				counterfactual: brief.counterfactual?.status
+			},
+			'brief persisted'
+		);
 	};
 
 	void execute()
@@ -165,7 +231,7 @@ export async function startBriefRun(
 			logger.error({ err, briefId }, 'brief run crashed');
 			await chain;
 			await setBriefStatus(briefId, 'failed', message).catch(() => undefined);
-			if (run.runId) await failRun(run.runId, message).catch(() => undefined);
+			for (const runId of run.runIds) await failRun(runId, message).catch(() => undefined);
 			publish(briefId, { kind: 'status', status: 'failed', done: true });
 		})
 		.finally(() => {

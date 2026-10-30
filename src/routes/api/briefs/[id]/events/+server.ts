@@ -1,13 +1,15 @@
 /**
- * Server-sent events for a brief run. Replays the persisted events after
- * `Last-Event-ID` (or `?after=`), then follows the run live when it is
- * running on this instance, or by polling the database when it runs
- * elsewhere, and closes with a `done` event once the brief is terminal.
+ * Server-sent events for a brief. Replays the persisted events of every run
+ * of the brief after `Last-Event-ID` (or `?after=`), then follows the runs
+ * live when they execute on this instance, or by polling the database when
+ * they run elsewhere, and closes with a `done` event once the brief is
+ * terminal. Event ids are the database row ids, monotonic across the main and
+ * counterfactual runs.
  */
 import { error, type RequestHandler } from '@sveltejs/kit';
 import type { BriefStatus } from '$lib/api/contracts';
-import { getActiveRun, subscribe } from '$lib/server/briefs/manager';
-import { getBriefHead, getEventsAfter } from '$lib/server/briefs/store';
+import { getActiveRun, subscribe, type StoredEvent } from '$lib/server/briefs/manager';
+import { getBriefEventsAfter, getBriefHead } from '$lib/server/briefs/store';
 
 const HEARTBEAT_MS = 15_000;
 const POLL_MS = 2_000;
@@ -20,8 +22,8 @@ export const GET: RequestHandler = async ({ params, request, url, locals }) => {
 
 	const fromHeader = request.headers.get('last-event-id');
 	const fromQuery = url.searchParams.get('after');
-	const after = Number(fromHeader ?? fromQuery ?? -1);
-	let lastSeq = Number.isFinite(after) ? after : -1;
+	const after = Number(fromHeader ?? fromQuery ?? 0);
+	let lastId = Number.isFinite(after) && after > 0 ? after : 0;
 
 	const encoder = new TextEncoder();
 	let closed = false;
@@ -39,9 +41,9 @@ export const GET: RequestHandler = async ({ params, request, url, locals }) => {
 					close();
 				}
 			};
-			const send = (event: string, data: unknown, seq?: number) =>
+			const send = (event: string, data: unknown, eventId?: number) =>
 				write(
-					`${seq !== undefined ? `id: ${seq}\n` : ''}event: ${event}\ndata: ${JSON.stringify(data)}\n\n`
+					`${eventId !== undefined ? `id: ${eventId}\n` : ''}event: ${event}\ndata: ${JSON.stringify(data)}\n\n`
 				);
 			const close = () => {
 				if (closed) return;
@@ -60,11 +62,11 @@ export const GET: RequestHandler = async ({ params, request, url, locals }) => {
 				send('done', { status });
 				close();
 			};
-			const sendEvents = (events: { seq: number }[]) => {
-				for (const e of events) {
-					if (e.seq <= lastSeq) continue;
-					send('agent', e, e.seq);
-					lastSeq = e.seq;
+			const sendStored = (rows: StoredEvent[]) => {
+				for (const row of rows) {
+					if (row.id <= lastId) continue;
+					send('agent', row.event, row.id);
+					lastId = row.id;
 				}
 			};
 
@@ -73,15 +75,15 @@ export const GET: RequestHandler = async ({ params, request, url, locals }) => {
 			write(': connected\n\n');
 
 			const follow = async () => {
-				if (head.mainRunId) sendEvents(await getEventsAfter(head.mainRunId, lastSeq));
+				sendStored(await getBriefEventsAfter(id, lastId));
 				if (isTerminal(head.status)) return finish(head.status);
 				send('status', { status: head.status });
 
 				const activeRun = getActiveRun(id);
 				if (activeRun) {
-					sendEvents(activeRun.events);
+					sendStored(activeRun.events);
 					unsubscribe = subscribe(id, (message) => {
-						if (message.kind === 'event') sendEvents([message.event]);
+						if (message.kind === 'event') sendStored([message.stored]);
 						else if (message.done) finish(message.status);
 						else send('status', { status: message.status });
 					});
@@ -89,7 +91,7 @@ export const GET: RequestHandler = async ({ params, request, url, locals }) => {
 					if (!getActiveRun(id)) {
 						const fresh = await getBriefHead(id);
 						if (fresh && isTerminal(fresh.status)) {
-							if (fresh.mainRunId) sendEvents(await getEventsAfter(fresh.mainRunId, lastSeq));
+							sendStored(await getBriefEventsAfter(id, lastId));
 							finish(fresh.status);
 						}
 					}
@@ -101,7 +103,7 @@ export const GET: RequestHandler = async ({ params, request, url, locals }) => {
 					if (closed) return;
 					const fresh = await getBriefHead(id);
 					if (!fresh) return finish('failed');
-					if (fresh.mainRunId) sendEvents(await getEventsAfter(fresh.mainRunId, lastSeq));
+					sendStored(await getBriefEventsAfter(id, lastId));
 					if (isTerminal(fresh.status)) return finish(fresh.status);
 					pollTimer = setTimeout(() => void poll().catch(onError), POLL_MS);
 				};

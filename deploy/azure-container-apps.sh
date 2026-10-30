@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# Deploy gigcast to Azure Container Apps.
+#
+# Run by a human (or an agent) with `az login` done in the target subscription. Reads the
+# secrets from the environment and never prints them:
+#
+#   QLOO_API_KEY                    Qloo hackathon key
+#   DATABASE_URL                    Neon connection string (pooled, with sslmode=require)
+#   GOOGLE_APPLICATION_CREDENTIALS  path to the GCP service-account JSON (Claude on Vertex AI)
+#   GOOGLE_CLOUD_PROJECT            GCP project that hosts Claude on Vertex AI
+#
+# Typical use: load the local env file into the shell, then run this script.
+#
+# Resources (all in one resource group): Azure Container Registry (Basic), a Container Apps
+# environment with its Log Analytics workspace, and the container app with external ingress.
+# The GCP credentials and the two secrets are stored as Container Apps secrets; the JSON is
+# mounted as a file so the Google SDK reads it through GOOGLE_APPLICATION_CREDENTIALS.
+#
+# Overrides: RG, LOCATION, APP, ENV_NAME, ACR, MIN_REPLICAS, MAX_REPLICAS.
+set -euo pipefail
+
+RG="${RG:-rg-gigcast}"
+LOCATION="${LOCATION:-eastus}"
+APP="${APP:-gigcast}"
+ENV_NAME="${ENV_NAME:-cae-gigcast}"
+MIN_REPLICAS="${MIN_REPLICAS:-1}"
+MAX_REPLICAS="${MAX_REPLICAS:-1}"
+
+: "${QLOO_API_KEY:?QLOO_API_KEY is required}"
+: "${DATABASE_URL:?DATABASE_URL is required}"
+: "${GOOGLE_APPLICATION_CREDENTIALS:?GOOGLE_APPLICATION_CREDENTIALS (path) is required}"
+: "${GOOGLE_CLOUD_PROJECT:?GOOGLE_CLOUD_PROJECT is required}"
+[ -r "$GOOGLE_APPLICATION_CREDENTIALS" ] || { echo "cannot read $GOOGLE_APPLICATION_CREDENTIALS" >&2; exit 1; }
+
+SUB_ID="$(az account show --query id -o tsv)"
+SUB_NAME="$(az account show --query name -o tsv)"
+# Registry names are global and alphanumeric; derive a stable one from the subscription.
+ACR="${ACR:-gigcast$(printf '%s' "$SUB_ID" | tr -d '-' | cut -c1-10)}"
+TAG="$(git rev-parse --short HEAD)"
+IMAGE="${ACR}.azurecr.io/gigcast:${TAG}"
+
+say() { printf '\n==> %s\n' "$*"; }
+
+say "Subscription ${SUB_NAME}, resource group ${RG} in ${LOCATION}, app ${APP}, image ${IMAGE}"
+az config set extension.use_dynamic_install=yes_without_prompt -o none 2>/dev/null || true
+
+say "Resource group"
+az group create -n "${RG}" -l "${LOCATION}" -o none
+
+say "Container registry ${ACR}"
+az acr show -n "${ACR}" -g "${RG}" -o none 2>/dev/null ||
+  az acr create -n "${ACR}" -g "${RG}" --sku Basic -o none
+
+say "Building the image in the registry (linux/amd64, context filtered by .dockerignore)"
+az acr build -r "${ACR}" -g "${RG}" -t "gigcast:${TAG}" -t "gigcast:latest" --platform linux/amd64 . >/dev/null
+
+say "Container Apps environment ${ENV_NAME}"
+az containerapp env show -n "${ENV_NAME}" -g "${RG}" -o none 2>/dev/null ||
+  az containerapp env create -n "${ENV_NAME}" -g "${RG}" -l "${LOCATION}" -o none
+
+SA_JSON="$(cat "${GOOGLE_APPLICATION_CREDENTIALS}")"
+ENV_VARS=(
+  "GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}"
+  "ANTHROPIC_VERTEX_REGION=global"
+  "GOOGLE_APPLICATION_CREDENTIALS=/mnt/secrets/gcp-sa-json"
+  "QLOO_BASE_URL=https://hackathon.api.qloo.com"
+  "QLOO_MODE=live"
+  "QLOO_CACHE_BACKEND=postgres"
+  "MIGRATE_ON_START=true"
+  "MAX_CONCURRENT_RUNS=2"
+  "LOG_LEVEL=info"
+  "NODE_ENV=production"
+  "PORT=3000"
+  "HOST=0.0.0.0"
+  "QLOO_API_KEY=secretref:qloo-api-key"
+  "DATABASE_URL=secretref:database-url"
+)
+
+if az containerapp show -n "${APP}" -g "${RG}" -o none 2>/dev/null; then
+  say "Updating secrets and the running app"
+  az containerapp secret set -n "${APP}" -g "${RG}" -o none \
+    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}"
+  az containerapp registry set -n "${APP}" -g "${RG}" --server "${ACR}.azurecr.io" --identity system -o none
+  az containerapp update -n "${APP}" -g "${RG}" -o none \
+    --image "${IMAGE}" \
+    --min-replicas "${MIN_REPLICAS}" --max-replicas "${MAX_REPLICAS}" \
+    --set-env-vars "${ENV_VARS[@]}"
+else
+  say "Creating the app"
+  # One replica: the live SSE hub is per process (the Postgres fallback keeps a second replica
+  # correct). min 1 keeps the agent loop alive after the HTTP request that started it returned.
+  az containerapp create -n "${APP}" -g "${RG}" -o none \
+    --environment "${ENV_NAME}" \
+    --image "${IMAGE}" \
+    --registry-server "${ACR}.azurecr.io" --registry-identity system --system-assigned \
+    --target-port 3000 --ingress external --transport auto \
+    --min-replicas "${MIN_REPLICAS}" --max-replicas "${MAX_REPLICAS}" \
+    --cpu 1.0 --memory 2.0Gi \
+    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" \
+    --secret-volume-mount /mnt/secrets \
+    --env-vars "${ENV_VARS[@]}"
+fi
+
+FQDN="$(az containerapp show -n "${APP}" -g "${RG}" --query properties.configuration.ingress.fqdn -o tsv)"
+say "Setting ORIGIN to https://${FQDN}"
+az containerapp update -n "${APP}" -g "${RG}" -o none \
+  --set-env-vars "ORIGIN=https://${FQDN}" "APP_BASE_URL=https://${FQDN}"
+
+say "Waiting for the new revision"
+for _ in $(seq 1 30); do
+  if curl -fsS -m 10 "https://${FQDN}/api/health" >/dev/null 2>&1; then break; fi
+  sleep 10
+done
+curl -fsS -m 10 "https://${FQDN}/api/health" && echo
+say "Done: https://${FQDN}"

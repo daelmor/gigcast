@@ -51,7 +51,10 @@ export const briefRecordSchema = z.object({
 	brief: briefSchema.nullable(),
 	markdown: z.string().nullable(),
 	runs: z.array(runRecordSchema),
-	events: z.array(agentEventSchema)
+	/** Events of every run (main and counterfactual), in storage order. */
+	events: z.array(agentEventSchema),
+	/** Storage id of the last event included, 0 for none; the SSE resume point. */
+	lastEventId: z.number().int().nonnegative().default(0)
 });
 export type BriefRecord = z.infer<typeof briefRecordSchema>;
 

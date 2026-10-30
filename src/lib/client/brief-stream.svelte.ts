@@ -19,25 +19,27 @@ export class BriefStream {
 	#source: EventSource | undefined;
 	// Bookkeeping only, never rendered, so it does not need to be reactive.
 	// eslint-disable-next-line svelte/prefer-svelte-reactivity
-	#seen = new Set<number>();
+	#seen = new Set<string>();
+	/** Database id of the last event received; the SSE `id:` field. */
+	#lastId = 0;
 
 	constructor(
 		readonly briefId: string,
 		initialEvents: AgentEvent[] = [],
-		initialStatus: BriefStatus = 'running'
+		initialStatus: BriefStatus = 'running',
+		/** Database id of the last event already rendered by the server, 0 for none. */
+		readonly initialAfter = 0
 	) {
 		this.events = initialEvents;
 		this.status = initialStatus;
-		for (const e of initialEvents) this.#seen.add(e.seq);
-	}
-
-	get lastSeq(): number {
-		return this.events.length ? this.events[this.events.length - 1].seq : -1;
+		for (const e of initialEvents) this.#seen.add(`${e.runId}:${e.seq}`);
 	}
 
 	start(): void {
 		if (this.#source || typeof EventSource === 'undefined') return;
-		const source = new EventSource(`/api/briefs/${this.briefId}/events?after=${this.lastSeq}`);
+		const source = new EventSource(
+			`/api/briefs/${this.briefId}/events?after=${this.#lastId || this.initialAfter}`
+		);
 		this.#source = source;
 		source.onopen = () => {
 			this.connected = true;
@@ -49,9 +51,14 @@ export class BriefStream {
 			else this.error = 'Connection lost; reconnecting.';
 		};
 		source.addEventListener('agent', (message) => {
-			const parsed = agentEventSchema.safeParse(JSON.parse((message as MessageEvent).data));
-			if (!parsed.success || this.#seen.has(parsed.data.seq)) return;
-			this.#seen.add(parsed.data.seq);
+			const m = message as MessageEvent;
+			const id = Number(m.lastEventId);
+			if (Number.isFinite(id) && id > this.#lastId) this.#lastId = id;
+			const parsed = agentEventSchema.safeParse(JSON.parse(m.data));
+			if (!parsed.success) return;
+			const key = `${parsed.data.runId}:${parsed.data.seq}`;
+			if (this.#seen.has(key)) return;
+			this.#seen.add(key);
 			this.events = [...this.events, parsed.data];
 		});
 		source.addEventListener('status', (message) => {

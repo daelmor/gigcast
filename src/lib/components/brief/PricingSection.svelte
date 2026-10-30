@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PriceLevelChart from './PriceLevelChart.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 	import { pct } from './format';
 	import type { Brief } from '$lib/brief/schema';
@@ -45,6 +46,7 @@
 			</table>
 		</div>
 	{/if}
+	<PriceLevelChart {brief} />
 	{#if pricing.assumptions.length > 0}
 		<div class="mt-4">
 			<h3 class="text-sm font-semibold text-zinc-900">Assumptions</h3>

@@ -1,76 +1,86 @@
-# Deploying gigcast to Cloud Run
+# Deploying gigcast
 
-One container (SvelteKit with adapter-node) on Cloud Run in the same Google Cloud project as Claude on Vertex AI (`n1-data`), with a hosted Postgres database. The script `deploy/cloud-run.sh` does every Google Cloud step; this page explains what it needs and why.
+One container (SvelteKit with adapter-node), a hosted Postgres on Neon, and Claude on Vertex AI in Google Cloud project `n1-data`. The app runs on **Azure Container Apps** (David's call, 2026-10-30); the Google Cloud Run path is kept below as the alternative.
 
-## Who can run it
+## Azure Container Apps (current)
 
-The deploy needs a human with `gcloud auth login` as an owner or editor of the project. The service account the assistant works with (`claude-code-reviewer@n1-data`) only has Vertex AI permissions, so it cannot create the Cloud Run service, the Artifact Registry repository, the secrets or the runtime service account. Roles the deploying account uses: Cloud Run Admin, Artifact Registry Admin, Cloud Build Editor, Secret Manager Admin, Service Account Admin and Service Account User, Service Usage Admin.
+### Who can run it
 
-## 1. Postgres
+Anyone with `az login` in the target subscription (`Fegora`) and rights to create a resource group. The script creates everything else. The Google side needs nothing new: the app authenticates to Vertex AI with the existing service-account JSON, mounted as a secret file.
 
-Cloud Run does not host databases. Pick one of:
+### 1. Postgres on Neon
 
-- **Neon** (recommended for the hackathon): free tier, serverless, reachable over TLS without a VPC. Create a project, copy the pooled connection string and append `?sslmode=require` if it is not already there. Drizzle migrations run at server start through the same URL.
-- **Supabase**: use the *session* pooler connection string (port 5432) so prepared statements work; the transaction pooler needs `prepare: false` in postgres.js, which the app does not set.
-- **Cloud SQL**: enable `sqladmin.googleapis.com`, create a Postgres 16 instance, a database and a user, then deploy with `--add-cloudsql-instances PROJECT:REGION:INSTANCE` and a URL of the form `postgres://USER:PASSWORD@/DB?host=/cloudsql/PROJECT:REGION:INSTANCE`. The runtime service account also needs `roles/cloudsql.client`. Costs money from the first hour.
+The Neon project `gigcast` (branch `production`, database `neondb`) was created by David; `neon init` pulled `DATABASE_URL` (pooled) and `DATABASE_URL_UNPOOLED` into the local env file. The app uses the pooled URL; postgres.js and the Drizzle migrator both work through Neon's pooler, and `pnpm db:migrate` against it succeeded before the first deploy. The connection string carries `sslmode=require`.
 
-Whatever the choice, the value goes into Secret Manager, never into the repo or a shell history line with the value in clear:
+### 2. Deploy
+
+Load the local env file into the shell (it holds `QLOO_API_KEY`, `DATABASE_URL`, `GOOGLE_APPLICATION_CREDENTIALS` and `GOOGLE_CLOUD_PROJECT`), then:
 
 ```sh
-printf '%s' "$DATABASE_URL" | gcloud secrets create gigcast-database-url --data-file=- --project n1-data
+./deploy/azure-container-apps.sh
 ```
 
-## 2. Secrets
+What it does, in order: resource group `rg-gigcast` in `eastus`; an Azure Container Registry (Basic, name derived from the subscription id); `az acr build` of the Dockerfile for linux/amd64 in the registry (the upload honours `.dockerignore`, so secrets and caches never leave the machine); a Container Apps environment `cae-gigcast` with its Log Analytics workspace; the container app `gigcast` with a system-assigned identity that pulls from the registry; the secrets `qloo-api-key`, `database-url` and `gcp-sa-json`, the last one mounted as the file `/mnt/secrets/gcp-sa-json` and pointed to by `GOOGLE_APPLICATION_CREDENTIALS`; finally `ORIGIN` and `APP_BASE_URL` set to the app's FQDN. Rerunning the script rebuilds the image with the current git SHA, refreshes the secrets and rolls a new revision.
 
-Two secrets, created once (read from stdin so the values do not appear in the command):
+Settings and why:
+
+| Setting | Value | Reason |
+| --- | --- | --- |
+| Replicas | min 1, max 1 | The live SSE hub is per process and a brief run continues after the request that started it returned; one warm replica keeps both simple. The Postgres fallback keeps a second replica correct if the maximum is raised. |
+| CPU / memory | 1 vCPU / 2 GiB | The agent loop is I/O bound; heatmap payloads are the largest objects. |
+| Ingress | external, HTTPS, port 3000 | Judges open the demo without an account. Briefs are public read-only links by design. |
+| `MIGRATE_ON_START=true` | env | Drizzle migrations apply when the container starts; the `drizzle/` folder ships in the image. |
+| `MAX_CONCURRENT_RUNS=2` | env | Protects the Qloo monthly quota and the Vertex budget; extra requests get 429. |
+
+Environment set by the script: `GOOGLE_CLOUD_PROJECT`, `ANTHROPIC_VERTEX_REGION=global`, `GOOGLE_APPLICATION_CREDENTIALS=/mnt/secrets/gcp-sa-json`, `QLOO_BASE_URL`, `QLOO_MODE=live`, `QLOO_CACHE_BACKEND=postgres`, `MIGRATE_ON_START=true`, `MAX_CONCURRENT_RUNS=2`, `LOG_LEVEL=info`, `NODE_ENV=production`, `PORT=3000`, `HOST=0.0.0.0`, plus `ORIGIN` and `APP_BASE_URL`. Secrets as env: `QLOO_API_KEY`, `DATABASE_URL`.
+
+Overrides: `RG`, `LOCATION`, `APP`, `ENV_NAME`, `ACR`, `MIN_REPLICAS`, `MAX_REPLICAS`.
+
+### 3. Verify
+
+```sh
+FQDN=$(az containerapp show -n gigcast -g rg-gigcast --query properties.configuration.ingress.fqdn -o tsv)
+curl -fsS "https://$FQDN/api/health"
+```
+
+Open `https://$FQDN/new`, pick a market and an artist, and watch the trace. The first brief for a market makes every Qloo call live; the second for the same inputs is mostly cache hits.
+
+### Operations
+
+- Logs: `az containerapp logs show -n gigcast -g rg-gigcast --follow` (console) or query the Log Analytics workspace. Every line is JSON with a `requestId`; runs log `brief started`, `brief run finished` and `brief persisted` with the brief id.
+- Rotate a secret: `az containerapp secret set -n gigcast -g rg-gigcast --secrets qloo-api-key=...` then `az containerapp revision restart` (or redeploy).
+- Rollback: `az containerapp revision list` and `az containerapp ingress traffic set --revision-weight <revision>=100`.
+- Ingress closes idle or very long HTTP requests after about four minutes; the SSE client reconnects with `Last-Event-ID` and the server replays, so a ten-minute brief still streams.
+- Costs: Consumption plan, one always-on replica of 1 vCPU / 2 GiB. Set `MIN_REPLICAS=0` to scale to zero between demos, at the cost of a cold start and of runs dying if the only viewer closes the tab.
+- Switching models: set `CLAUDE_PLANNER_MODEL` on the app (`az containerapp update --set-env-vars`) once Claude 5.5 is enabled in `n1-data`.
+
+### Tear down
+
+```sh
+az group delete -n rg-gigcast --yes --no-wait
+```
+
+## Google Cloud Run (alternative)
+
+Kept for the record; not used.
+
+### Who can run it
+
+A human with `gcloud auth login` as an owner or editor of the project. The service account the assistant works with (`claude-code-reviewer@n1-data`) only has Vertex AI permissions, so it cannot create the Cloud Run service, the Artifact Registry repository, the secrets or the runtime service account. Roles the deploying account uses: Cloud Run Admin, Artifact Registry Admin, Cloud Build Editor, Secret Manager Admin, Service Account Admin and Service Account User, Service Usage Admin.
+
+### Postgres
+
+Neon works unchanged (TLS, no VPC). Alternatives: Supabase with the *session* pooler (port 5432); Cloud SQL with `--add-cloudsql-instances PROJECT:REGION:INSTANCE`, a URL of the form `postgres://USER:PASSWORD@/DB?host=/cloudsql/PROJECT:REGION:INSTANCE` and `roles/cloudsql.client` on the runtime service account.
+
+### Secrets and deploy
 
 ```sh
 printf '%s' "$QLOO_API_KEY" | gcloud secrets create gigcast-qloo-api-key --data-file=- --project n1-data
 printf '%s' "$DATABASE_URL" | gcloud secrets create gigcast-database-url --data-file=- --project n1-data
-```
-
-Rotate with `gcloud secrets versions add <name> --data-file=-`; Cloud Run picks up `latest` on the next deploy or revision.
-
-## 3. Deploy
-
-```sh
 ./deploy/cloud-run.sh
 ```
 
-What it does, in order: enables the APIs (Run, Artifact Registry, Cloud Build, Secret Manager, Vertex AI), creates the Docker repository `gigcast`, creates the runtime service account `gigcast-run` with `roles/aiplatform.user`, grants it `secretAccessor` on both secrets, builds the image with Cloud Build from the repo (`.gcloudignore` keeps secrets and caches out of the upload), deploys the service and finally sets `ORIGIN` and `APP_BASE_URL` to the service URL.
-
-Service settings and why:
-
-| Setting | Value | Reason |
-| --- | --- | --- |
-| `--max-instances` | 1 | The live event hub is per process; the Postgres fallback keeps a second instance correct but the demo does not need one. |
-| `--no-cpu-throttling` | on | A brief run continues after `POST /api/briefs` returns; without this the CPU is throttled between requests. |
-| `--timeout` | 900 s | The SSE connection stays open for the whole run (about five minutes). |
-| `--concurrency` | 20 | Plenty for a demo; runs are capped separately by `MAX_CONCURRENT_RUNS=2`. |
-| `--memory` / `--cpu` | 1 GiB / 1 | The agent loop is I/O bound; the heatmap payloads are the largest objects. |
-| `MIGRATE_ON_START=true` | env | Drizzle migrations apply when the container starts; the `drizzle/` folder ships in the image. |
-| `--allow-unauthenticated` | on | Judges open the demo without a Google account. Briefs are public read-only links by design. |
-
-Environment variables set by the script: `GOOGLE_CLOUD_PROJECT`, `ANTHROPIC_VERTEX_REGION=global`, `QLOO_BASE_URL`, `QLOO_MODE=live`, `QLOO_CACHE_BACKEND=postgres`, `MIGRATE_ON_START=true`, `MAX_CONCURRENT_RUNS=2`, `LOG_LEVEL=info`, `NODE_ENV=production`, plus `ORIGIN` and `APP_BASE_URL` after the first deploy. Secrets mounted as env: `QLOO_API_KEY`, `DATABASE_URL`. Authentication to Vertex uses the attached service account; no JSON key is involved.
-
-Overrides: `PROJECT`, `REGION` (default `us-central1`), `SERVICE`, `REPO`, `SA_NAME`, `MAX_INSTANCES`.
-
-## 4. Verify
-
-```sh
-URL=$(gcloud run services describe gigcast --region us-central1 --format 'value(status.url)')
-curl -fsS "$URL/api/health"
-```
-
-Then open `$URL/new`, pick Guatemala City and Ricardo Arjona, and watch the trace. The first brief in a fresh database makes every Qloo call live (about 25 calls); the second one for the same inputs is mostly cache hits.
-
-## Operations
-
-- Logs: `gcloud run services logs read gigcast --region us-central1 --limit 100`. Every line is JSON with a `requestId`; agent runs log `brief started`, `brief run finished` and `brief persisted` with the brief id.
-- Redeploy: rerun the script; the image tag is the git short SHA.
-- Rollback: `gcloud run services update-traffic gigcast --region us-central1 --to-revisions <revision>=100`.
-- Costs: with `--no-cpu-throttling` and `--min-instances 0` you pay for instance time while a request or a run is active and nothing when idle. Keep `--max-instances 1` unless the Qloo monthly quota (50,000 calls) and the Vertex budget are raised.
-- Switching models: set `CLAUDE_PLANNER_MODEL` on the service once Claude 5.5 is enabled in the project's Model Garden.
+The script enables the APIs, creates the Docker repository and the runtime service account `gigcast-run` (`roles/aiplatform.user`, `secretAccessor` on both secrets), builds with Cloud Build, deploys with `--max-instances 1 --no-cpu-throttling --timeout 900 --concurrency 20 --memory 1Gi` and `MIGRATE_ON_START=true`, and sets `ORIGIN` to the service URL. On Cloud Run the attached service account authenticates to Vertex AI; no JSON key is involved.
 
 ## Local Docker check
 

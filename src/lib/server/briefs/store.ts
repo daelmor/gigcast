@@ -107,12 +107,51 @@ export async function failRun(runId: string, error: string): Promise<void> {
 		.where(eq(briefRuns.id, runId));
 }
 
+/** Insert one event and return its row id (undefined when it was already stored). */
+export async function appendEvent(runId: string, event: AgentEvent): Promise<number | undefined> {
+	const rows = await getDb()
+		.insert(agentEvents)
+		.values({ runId, seq: event.seq, type: event.type, payload: event })
+		.onConflictDoNothing()
+		.returning({ id: agentEvents.id });
+	return rows[0]?.id;
+}
+
 export async function appendEvents(runId: string, events: AgentEvent[]): Promise<void> {
 	if (!events.length) return;
 	await getDb()
 		.insert(agentEvents)
 		.values(events.map((e) => ({ runId, seq: e.seq, type: e.type, payload: e })))
 		.onConflictDoNothing();
+}
+
+export interface StoredEventRow {
+	id: number;
+	event: AgentEvent;
+}
+
+/**
+ * Events of every run of a brief with a row id greater than `afterId`, in id
+ * order. The row id is monotonic across the main and counterfactual runs, so
+ * it doubles as the SSE event id.
+ */
+export async function getBriefEventsAfter(
+	briefId: string,
+	afterId: number
+): Promise<StoredEventRow[]> {
+	const rows = await getDb()
+		.select({ id: agentEvents.id, payload: agentEvents.payload })
+		.from(agentEvents)
+		.innerJoin(briefRuns, eq(agentEvents.runId, briefRuns.id))
+		.where(and(eq(briefRuns.briefId, briefId), gt(agentEvents.id, afterId)))
+		.orderBy(asc(agentEvents.id));
+	const out: StoredEventRow[] = [];
+	for (const row of rows) {
+		const parsed = agentEventSchema.safeParse(row.payload);
+		if (parsed.success) out.push({ id: row.id, event: parsed.data });
+		else logger.warn({ issues: parsed.error.issues.length }, 'skipping malformed persisted event');
+	}
+	return out;
 }
 
 function parseEvents(rows: { payload: unknown }[]): AgentEvent[] {
@@ -187,8 +226,9 @@ export async function getBriefRecord(id: string): Promise<BriefRecord | undefine
 		.from(briefRuns)
 		.where(eq(briefRuns.briefId, id))
 		.orderBy(asc(briefRuns.startedAt));
-	const mainRun = runs.find((r) => r.kind === 'main') ?? runs[0];
-	const events = mainRun ? await getEventsAfter(mainRun.id, -1) : [];
+	const storedEvents = await getBriefEventsAfter(id, 0);
+	const events = storedEvents.map((row) => row.event);
+	const lastEventId = storedEvents.length ? storedEvents[storedEvents.length - 1].id : 0;
 
 	const inputParsed = briefInputSchema.safeParse(row.input);
 	const input: BriefInput = inputParsed.success
@@ -220,7 +260,8 @@ export async function getBriefRecord(id: string): Promise<BriefRecord | undefine
 		brief,
 		markdown: row.markdown,
 		runs: runs.map(toRunRecord),
-		events
+		events,
+		lastEventId
 	};
 }
 

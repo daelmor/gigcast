@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import Label from '../ui/Label.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
@@ -72,5 +73,13 @@
 				</li>
 			{/each}
 		</ul>
+		<p class="mt-3 text-sm print:hidden">
+			<a
+				href={resolve('/brief/[id]/drafts', { id: brief.id })}
+				class="font-medium text-indigo-600 hover:text-indigo-800"
+			>
+				All drafts on one page
+			</a>
+		</p>
 	{/if}
 </section>
