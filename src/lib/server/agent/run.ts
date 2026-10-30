@@ -131,6 +131,7 @@ export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult
 	let stopReason: string | undefined;
 	let fatalError: string | undefined;
 	let truncated = false;
+	let toolErrors = 0;
 
 	const params = {
 		model,
@@ -217,7 +218,8 @@ export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult
 		const failedTools = [...registry.calls.values()].filter(
 			(c) => !c.ok && c.tool !== 'emit_brief'
 		).length;
-		status = fatalError || truncated || failedTools > 0 ? 'partial' : 'complete';
+		status = fatalError || truncated ? 'partial' : 'complete';
+		toolErrors = failedTools;
 	} else {
 		const reason =
 			fatalError ??
@@ -239,6 +241,7 @@ export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult
 		toolCalls: totals.toolCalls,
 		qlooCalls: totals.qlooCalls,
 		qlooCacheHits: totals.qlooCacheHits,
+		toolErrors,
 		stopReason,
 		missingSections: [],
 		error: fatalError

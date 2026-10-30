@@ -376,6 +376,7 @@ const rawBrief: Brief = {
 		]
 	},
 	artifacts: {
+		calls: [],
 		heatmap: {
 			cells: [
 				{

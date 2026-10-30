@@ -25,7 +25,16 @@ pnpm check && pnpm lint && pnpm test
 ```
 
 Copy `.env.example` to a local env file and fill in the values; the browser
-never sees them. `pnpm probe` runs the Qloo API probe that produced
+never sees them.
+
+Build a brief from the terminal (streams the agent trace to stderr, prints the
+Markdown to stdout and writes JSON, events and Markdown under `.cache/briefs/`):
+
+```sh
+pnpm brief --city "Guatemala City" --country GT --artist "Ricardo Arjona" \
+  --from 2026-11-20 --to 2026-11-22
+# --mode replay serves everything from the Qloo cache (no API key needed after the hackathon)
+``` `pnpm probe` runs the Qloo API probe that produced
 [docs/qloo-findings.md](docs/qloo-findings.md) (`QLOO_PROBE_REPLAY=1` re-renders
 it from the local cache without calling the API).
 

@@ -206,6 +206,13 @@ const PLACE_CATEGORIES = [
 const round = (n: number | null | undefined, digits = 3): number | undefined =>
 	typeof n === 'number' && Number.isFinite(n) ? Number(n.toFixed(digits)) : undefined;
 
+function tagNames(entity: QlooEntity, limit: number): string[] | undefined {
+	const names = (entity.tags ?? [])
+		.map((t) => t.name)
+		.filter((n): n is string => typeof n === 'string');
+	return names.length ? names.slice(0, limit) : undefined;
+}
+
 function stringArray(value: unknown, limit = 5): string[] | undefined {
 	if (!Array.isArray(value)) return undefined;
 	const out = value.filter((v): v is string => typeof v === 'string').slice(0, limit);
@@ -229,7 +236,7 @@ function toCandidate(entity: QlooEntity): Candidate {
 		affinity: round(entity.query?.affinity),
 		popularity: round(entity.popularity, 3) ?? null,
 		subtype: entity.subtype,
-		tags: entity.tags?.map((t) => t.name).slice(0, 12),
+		tags: tagNames(entity, 12),
 		explainability,
 		lat: entity.location?.lat,
 		lon: entity.location?.lon,
@@ -283,7 +290,7 @@ function compactPlace(entity: QlooEntity, c: Candidate) {
 		distanceKm: round(entity.query?.distance, 1),
 		priceLevel: c.priceLevel ?? undefined,
 		rating: c.rating ?? undefined,
-		kinds: entity.tags?.map((t) => t.name).slice(0, 4),
+		kinds: tagNames(entity, 4),
 		liveMusic: props.live_music === true ? true : undefined,
 		eventSpaces: props.event_spaces === true ? true : undefined
 	};
@@ -833,7 +840,7 @@ export function createAgentTools({ client, registry, now = () => new Date() }: T
 					'filter.type': 'urn:entity:artist',
 					'filter.start_date': fmt(start),
 					'filter.end_date': fmt(end),
-					take: 400
+					take: 50
 				});
 				rec.requests.push(requestRecord(res));
 				const points = res.data.results.trending

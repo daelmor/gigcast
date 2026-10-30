@@ -98,7 +98,9 @@ function collectSourceRefs(brief: Brief): SourceRef[] {
 		a.cityArtists?.source,
 		a.lineupCandidates?.source,
 		a.sponsorCandidates?.source,
-		...(a.placeCandidates ?? []).map((p) => p.source)
+		...(a.placeCandidates ?? []).map((p) => p.source),
+		// Every other tool call that made a Qloo request, so any cited id resolves to a source.
+		...(a.calls ?? [])
 	];
 	const seen = new Map<string, SourceRef>();
 	for (const ref of candidates) {

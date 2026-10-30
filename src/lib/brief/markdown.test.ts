@@ -134,7 +134,7 @@ describe('renderBriefMarkdown', () => {
 		expect(md).not.toMatch(/undefined|null|NaN/);
 		const sparse: Brief = {
 			...sampleBrief,
-			artifacts: {},
+			artifacts: { calls: [] },
 			draft: {
 				...sampleBrief.draft,
 				risks: undefined,

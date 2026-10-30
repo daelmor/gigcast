@@ -267,6 +267,8 @@ export type Candidate = z.infer<typeof candidateSchema>;
 const withSource = <T extends z.ZodType>(items: T) => z.object({ items, source: sourceRefSchema });
 
 export const briefArtifactsSchema = z.object({
+	/** Every tool call that made a Qloo request, so any cited tool call id resolves to a source. */
+	calls: z.array(sourceRefSchema).default([]),
 	heatmap: z
 		.object({
 			cells: z.array(heatmapCellLiteSchema),
@@ -360,6 +362,8 @@ export const runSummarySchema = z.object({
 	toolCalls: z.number().int().nonnegative(),
 	qlooCalls: z.number().int().nonnegative(),
 	qlooCacheHits: z.number().int().nonnegative(),
+	/** Tool calls that failed and were recovered by the agent (reflected in labels, not in status). */
+	toolErrors: z.number().int().nonnegative().optional(),
 	stopReason: z.string().optional(),
 	missingSections: z.array(z.string()).default([]),
 	error: z.string().optional()

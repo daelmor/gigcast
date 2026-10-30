@@ -70,7 +70,9 @@ function largest<K extends ToolArtifact['kind']>(
 }
 
 export function buildArtifacts(registry: ToolRegistry): BriefArtifacts {
-	const artifacts: BriefArtifacts = {};
+	const artifacts: BriefArtifacts = {
+		calls: [...registry.calls.values()].filter((r) => r.requests.length > 0).map(sourceRef)
+	};
 
 	const heat = largest(artifactsOfKind(registry, 'heatmap'), (a) => a.cells.length);
 	if (heat)

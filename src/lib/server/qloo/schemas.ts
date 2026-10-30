@@ -14,7 +14,7 @@ export const tagRefSchema = z
 	.object({
 		id: str.optional(),
 		tag_id: str.optional(),
-		name: str,
+		name: str.optional(),
 		type: str.optional(),
 		subtype: str.optional(),
 		weight: num.nullable().optional()
