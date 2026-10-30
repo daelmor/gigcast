@@ -17,8 +17,8 @@ export function normalizeName(name: string): string {
 		.toLowerCase()
 		.replace(/&/g, ' and ')
 		.replace(/[^a-z0-9]+/g, ' ')
-		.replace(/^(the|los|las|el|la) /, '')
-		.trim();
+		.trim()
+		.replace(/^(the|los|las|el|la) /, '');
 }
 
 interface Named {
