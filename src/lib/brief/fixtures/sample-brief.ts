@@ -578,6 +578,129 @@ const rawBrief: Brief = {
 		qlooCacheHits: 3,
 		stopReason: 'end_turn',
 		missingSections: ['risks']
+	},
+	counterfactual: {
+		status: 'complete',
+		model: 'claude-opus-4-6',
+		run: {
+			runId: 'run_01JRUNSAMPLE0002',
+			kind: 'counterfactual',
+			model: 'claude-opus-4-6',
+			status: 'complete',
+			startedAt: '2026-10-30T14:02:00.000Z',
+			finishedAt: '2026-10-30T14:02:21.000Z',
+			usage: {
+				inputTokens: 1840,
+				outputTokens: 1260,
+				cacheReadInputTokens: 0,
+				cacheCreationInputTokens: 0
+			},
+			toolCalls: 0,
+			qlooCalls: 0,
+			qlooCacheHits: 0,
+			stopReason: 'end_turn',
+			missingSections: []
+		},
+		draft: {
+			lineup: [
+				{
+					name: 'Gaby Moreno',
+					role: 'co_headliner',
+					why: 'Guatemala most internationally known singer-songwriter, with a loyal home audience.',
+					confidence: 'high'
+				},
+				{
+					name: 'Ricardo Montaner',
+					role: 'co_headliner',
+					why: 'A Latin ballad figure whose audience probably overlaps with Arjona fans.',
+					confidence: 'medium'
+				},
+				{
+					name: 'Malacates Trebol Shop',
+					role: 'opener',
+					why: 'A long-running Guatemalan rock band that often opens large local shows.',
+					confidence: 'medium'
+				},
+				{
+					name: 'Alux Nahual',
+					role: 'support',
+					why: 'A classic national rock act; I am unsure whether it is currently active.',
+					confidence: 'low'
+				}
+			],
+			sponsors: [
+				{
+					name: 'Adidas',
+					category: 'Sportswear',
+					why: 'Global brand with a strong presence in Latin American live events.',
+					confidence: 'medium'
+				},
+				{
+					name: 'Coca-Cola',
+					category: 'Beverages',
+					why: 'Long history of concert sponsorship in Guatemala.',
+					confidence: 'high'
+				},
+				{
+					name: 'Banco Industrial',
+					category: 'Banking',
+					why: 'Largest local bank and a frequent sponsor of national cultural events.',
+					confidence: 'medium'
+				},
+				{
+					name: 'Tigo',
+					category: 'Telecom',
+					why: 'Leading mobile operator that tends to back large concerts.',
+					confidence: 'low'
+				}
+			],
+			caveats: [
+				'I have no access to current audience data, so these picks come from general reputation.',
+				'I cannot verify availability, recent activity or whether a brand matches this audience today.'
+			]
+		},
+		matches: {
+			lineup: [
+				{
+					entityId: '27B180A1-3E0A-4340-81A3-57FB51816E2D',
+					qlooName: 'Gaby Moreno',
+					affinity: 0.89,
+					pickedByGroundedRun: true
+				},
+				{
+					entityId: 'C0FFEE00-1111-4222-8333-444455556666',
+					qlooName: 'Ricardo Montaner',
+					affinity: 0.71,
+					pickedByGroundedRun: false
+				},
+				{ pickedByGroundedRun: false },
+				{ pickedByGroundedRun: false }
+			],
+			sponsors: [
+				{
+					entityId: 'F3A10C55-1B2D-4E7A-8C10-6A5B1D0E7701',
+					qlooName: 'Adidas',
+					affinity: 0.91,
+					pickedByGroundedRun: true
+				},
+				{
+					entityId: 'C0FFEE00-2222-4222-8333-444455556666',
+					qlooName: 'Coca-Cola',
+					affinity: 0.62,
+					pickedByGroundedRun: false
+				},
+				{ pickedByGroundedRun: false },
+				{ pickedByGroundedRun: false }
+			]
+		},
+		summary: {
+			lineupTotal: 4,
+			lineupInQloo: 2,
+			lineupOverlap: 1,
+			sponsorsTotal: 4,
+			sponsorsInQloo: 2,
+			sponsorsOverlap: 1
+		}
 	}
 };
 

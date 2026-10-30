@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AudienceSection from './AudienceSection.svelte';
+	import CounterfactualSection from './CounterfactualSection.svelte';
 	import DemandSection from './DemandSection.svelte';
 	import LineupSection from './LineupSection.svelte';
 	import MethodSection from './MethodSection.svelte';
@@ -58,6 +59,7 @@
 		{ id: 'demand', title: 'Demand and fit', label: draft.demandAndFit.note.label },
 		{ id: 'lineup', title: 'Lineup', label: draft.lineup.note.label },
 		{ id: 'sponsors', title: 'Sponsors', label: draft.sponsors.note.label },
+		{ id: 'counterfactual', title: 'LLM only vs. Qloo' },
 		{ id: 'venues', title: 'Venues and partners', label: draft.venuesAndPartners.note.label },
 		{ id: 'pricing', title: 'Pricing guidance', label: draft.pricing.note.label },
 		{ id: 'risks', title: 'Risk panel', label: draft.risks?.note.label ?? 'no_coverage' },
@@ -164,6 +166,7 @@
 		<DemandSection {brief} />
 		<LineupSection {brief} />
 		<SponsorsSection {brief} />
+		<CounterfactualSection {brief} />
 		<VenuesSection {brief} />
 		<PricingSection {brief} />
 		<RiskSection {brief} />
