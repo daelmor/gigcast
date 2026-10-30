@@ -15,7 +15,9 @@ export interface LocalityCandidate {
 	lat?: number;
 	lon?: number;
 	popularity?: number;
-	/** True when the candidate passed the country check. */
+	/** ISO 3166-1 alpha-2 read from the disambiguation's last segment, when known. */
+	countryCode?: string;
+	/** True when the candidate passed the country check (always true when no country was asked for). */
 	acceptable: boolean;
 }
 
@@ -84,6 +86,56 @@ const COUNTRY_HINTS: Record<string, string[]> = {
 	PT: ['portugal']
 };
 
+/** Country names as they appear at the end of a locality disambiguation (local and English). */
+const COUNTRY_CODES_BY_NAME: Record<string, string> = {
+	guatemala: 'GT',
+	'el salvador': 'SV',
+	honduras: 'HN',
+	nicaragua: 'NI',
+	'costa rica': 'CR',
+	panama: 'PA',
+	belize: 'BZ',
+	belice: 'BZ',
+	'republica dominicana': 'DO',
+	'dominican republic': 'DO',
+	'puerto rico': 'PR',
+	cuba: 'CU',
+	jamaica: 'JM',
+	mexico: 'MX',
+	colombia: 'CO',
+	venezuela: 'VE',
+	ecuador: 'EC',
+	peru: 'PE',
+	bolivia: 'BO',
+	chile: 'CL',
+	argentina: 'AR',
+	uruguay: 'UY',
+	paraguay: 'PY',
+	brasil: 'BR',
+	brazil: 'BR',
+	'united states of america': 'US',
+	'united states': 'US',
+	'estados unidos': 'US',
+	canada: 'CA',
+	espana: 'ES',
+	spain: 'ES',
+	portugal: 'PT',
+	'united kingdom': 'GB',
+	france: 'FR',
+	germany: 'DE',
+	deutschland: 'DE',
+	italy: 'IT',
+	italia: 'IT'
+};
+
+/** "Tampa, Hillsborough, Florida, United States of America" -> "US"; undefined when unknown. */
+export function countryCodeFromDisambiguation(disambiguation?: string): string | undefined {
+	if (!disambiguation) return undefined;
+	const last = disambiguation.split(',').pop();
+	if (!last) return undefined;
+	return COUNTRY_CODES_BY_NAME[normalizeText(last)];
+}
+
 /** Hints for a country given as an ISO 3166-1 alpha-2 code or a plain name. */
 export function countryHintsFor(country: string): string[] {
 	const code = country.trim().toUpperCase();
@@ -103,7 +155,11 @@ export function candidateFromSearch(
 ): LocalityCandidate {
 	const text = normalizeText(`${result.name} ${result.disambiguation ?? ''}`);
 	const rejected = (criteria.rejectHints ?? []).some((h) => text.includes(normalizeText(h)));
-	const matches = criteria.countryHints.some((h) => text.includes(normalizeText(h)));
+	// No hints means no country was asked for: every candidate is acceptable and the
+	// promoter picks by the disambiguation.
+	const matches =
+		criteria.countryHints.length === 0 ||
+		criteria.countryHints.some((h) => text.includes(normalizeText(h)));
 	return {
 		entityId: result.entity_id,
 		name: result.name,
@@ -111,6 +167,7 @@ export function candidateFromSearch(
 		lat: result.location?.lat,
 		lon: result.location?.lon,
 		popularity: result.popularity ?? undefined,
+		countryCode: countryCodeFromDisambiguation(result.disambiguation ?? undefined),
 		acceptable: matches && !rejected
 	};
 }

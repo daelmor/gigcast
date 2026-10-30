@@ -42,8 +42,8 @@
 
 	const events = $derived(stream && !terminal ? stream.events : record.events);
 	const status = $derived(stream && !terminal ? stream.status : record.status);
-	// Two runs share the stream: the main brief and the counterfactual (no tools). The trace
-	// shows the main run; the counterfactual gets a status line until the document arrives.
+	// Two runs share the stream: the main brief and a second, tool-less run the document does
+	// not show. The trace follows the main run only.
 	const mainRunId = $derived(
 		events.find((e) => e.type === 'run.started' && e.kind === 'main')?.runId
 	);
@@ -55,22 +55,6 @@
 			? events.filter((e) => e.runId === mainRunId)
 			: events.filter((e) => e.runId !== cfRunId)
 	);
-	const cfState = $derived.by<'pending' | 'running' | 'done' | 'failed'>(() => {
-		if (!cfRunId) return 'pending';
-		const own = events.filter((e) => e.runId === cfRunId);
-		if (
-			own.some((e) => e.type === 'tool_call.finished' && e.tool === 'emit_counterfactual' && e.ok)
-		)
-			return 'done';
-		if (own.some((e) => e.type === 'error' && e.fatal)) return 'failed';
-		return 'running';
-	});
-	const cfText: Record<typeof cfState, string> = {
-		pending: 'Waiting to start.',
-		running: 'Answering the same lineup and sponsor question with no tools, in parallel.',
-		done: 'Done. The comparison appears in the document when the brief finishes.',
-		failed: 'Failed. The document will say so; the grounded brief is unaffected.'
-	};
 	const lastError = $derived(
 		record.runs
 			.map((r) => r.error)
@@ -145,7 +129,7 @@
 	<meta
 		name="description"
 		content="Booking Brief for {record.input.artist} in {record.input.city}, {record.input
-			.country}, grounded in Qloo."
+			.country}, grounded in cultural data."
 	/>
 </svelte:head>
 
@@ -245,8 +229,9 @@
 				{record.input.artist} in {record.input.city}, {record.input.country}
 			</h1>
 			<p class="mt-space-3 max-w-2xl type-body text-ink-muted">
-				Date window {dateWindow}. The agent is calling Qloo and composing the document; a brief
-				takes about five minutes. You can keep this page open or come back to this link later.
+				Date window {dateWindow}. The agent is querying the taste graph and composing the document;
+				a brief takes about five minutes. You can keep this page open or come back to this link
+				later.
 			</p>
 			{#if stream && !stream.connected && !stream.done}
 				<p class="mt-space-2 type-small text-caution">
@@ -261,31 +246,6 @@
 		<div class="grid gap-space-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
 			<div>
 				<RunProgress events={mainEvents} {status} />
-				<Card class="mt-space-4">
-					<div class="flex items-center justify-between gap-space-3">
-						<h3 class="type-heading-3 text-ink">LLM only vs. Qloo</h3>
-						<span
-							class="inline-flex items-center gap-1.5 type-small font-semibold {cfState === 'done'
-								? 'text-grounded'
-								: cfState === 'failed'
-									? 'text-critical'
-									: 'text-ink-muted'}"
-						>
-							<span
-								class="size-2 rounded-full {cfState === 'done'
-									? 'bg-grounded'
-									: cfState === 'failed'
-										? 'bg-critical'
-										: cfState === 'running'
-											? 'animate-pulse-live bg-beam'
-											: 'border border-ink-subtle'}"
-								aria-hidden="true"
-							></span>
-							{cfState === 'pending' ? 'pending' : cfState}
-						</span>
-					</div>
-					<p class="mt-space-1 type-small text-ink-muted">{cfText[cfState]}</p>
-				</Card>
 			</div>
 			<div>
 				<RunTrace events={mainEvents} live {status} />

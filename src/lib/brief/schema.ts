@@ -14,9 +14,10 @@ export const labelSchema = z.enum(['grounded', 'inferred', 'no_coverage']);
 export type Label = z.infer<typeof labelSchema>;
 
 export const LABEL_HELP: Record<Label, string> = {
-	grounded: 'Backed by a Qloo result; the entity id was returned by the cited tool call.',
-	inferred: 'The model reasoned on top of grounded data; not itself a Qloo result.',
-	no_coverage: 'Qloo returned nothing usable for this item or section.'
+	grounded:
+		'Backed by a result in the taste graph; the entity id was returned by the cited tool call.',
+	inferred: 'The model reasoned on top of grounded data; not itself a data result.',
+	no_coverage: 'The taste graph returned nothing usable for this item or section.'
 };
 
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD');

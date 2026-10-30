@@ -7,7 +7,6 @@ export { default as DemandSection } from './DemandSection.svelte';
 export { default as EChart } from './EChart.svelte';
 export { default as LineupSection } from './LineupSection.svelte';
 export { default as SponsorsSection } from './SponsorsSection.svelte';
-export { default as CounterfactualSection } from './CounterfactualSection.svelte';
 export { default as VenuesSection } from './VenuesSection.svelte';
 export { default as PricingSection } from './PricingSection.svelte';
 export { default as RiskSection } from './RiskSection.svelte';

@@ -56,8 +56,7 @@
 <figure class="mt-4 rounded-lg border border-line bg-surface-raised p-4 print:break-inside-avoid">
 	{#if dist.total === 0 && !dist.fromHeatmap}
 		<p class="type-small text-ink-muted">
-			No price-level data came back from Qloo for this area, so the tiers rest on the audience
-			signals alone.
+			No price-level data came back for this area, so the tiers rest on the audience signals alone.
 		</p>
 	{:else}
 		{#if dist.total > 0}
@@ -78,7 +77,7 @@
 		{/if}
 	{/if}
 	<figcaption class="mt-3 type-small text-ink-subtle">
-		Price levels of the places Qloo returned near the heat ({dist.total}
+		Price levels of the places returned near the heat ({dist.total}
 		{dist.total === 1 ? 'place' : 'places'}), the proxy behind the tiers.
 	</figcaption>
 </figure>

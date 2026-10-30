@@ -2,31 +2,25 @@
 	import { onDestroy } from 'svelte';
 	import type { Map as MaplibreMap, Marker } from 'maplibre-gl';
 	import Card from '$lib/components/ui/Card.svelte';
-	import Chip from '$lib/components/ui/Chip.svelte';
 	import BaseMap from '$lib/components/map/BaseMap.svelte';
 	import { theme } from '$lib/client/theme-colors.svelte';
 	import { localitySearchResponseSchema, type LocalitySearchResult } from '$lib/api/contracts';
-	import { FEATURED_MARKETS, KNOWN_MARKETS, findMarket, type KnownMarket } from '$lib/markets';
-	import { COUNTRIES, OTHER_COUNTRY, debounce, type FormState } from './form';
+	import { FEATURED_MARKETS, findMarket, type KnownMarket } from '$lib/markets';
+	import { debounce, type FormState } from './form';
 
 	let { form, error, onpicked }: { form: FormState; error?: string; onpicked?: () => void } =
 		$props();
 
 	const field =
 		'rounded-sm border border-line-strong bg-surface-raised px-3 py-2 type-body text-ink placeholder:text-ink-subtle';
-	const others = KNOWN_MARKETS.filter((m) => !m.featured);
 
 	let query = $state('');
-	let countrySelect = $state('');
-	let customCountry = $state('');
 	let results = $state<LocalitySearchResult[]>([]);
 	let status = $state<'idle' | 'loading' | 'done' | 'error'>('idle');
 	let point = $state<[number, number] | undefined>(
 		// Initial prefill from a known market, set below by selectMarket.
 		undefined
 	);
-
-	const country = $derived(countrySelect === OTHER_COUNTRY ? customCountry.trim() : countrySelect);
 
 	let map: MaplibreMap | undefined;
 	let marker: Marker | undefined;
@@ -44,10 +38,17 @@
 		query = '';
 	}
 
+	/** The country as the search result states it: the ISO code when known, else the last segment of the disambiguation. */
+	function countryOf(r: LocalitySearchResult): string {
+		if (r.countryCode) return r.countryCode;
+		const last = r.disambiguation?.split(',').pop()?.trim();
+		return last && last.length >= 2 ? last : '';
+	}
+
 	function selectLocality(r: LocalitySearchResult) {
 		form.marketId = undefined;
 		form.city = r.name;
-		form.country = country || form.country;
+		form.country = countryOf(r) || form.country;
 		form.localityEntityId = r.entityId;
 		form.localityName = r.name;
 		point = r.lat !== undefined && r.lon !== undefined ? [r.lon, r.lat] : undefined;
@@ -65,7 +66,7 @@
 		if (status === 'done') status = 'idle';
 	}
 
-	const search = debounce(async (q: string, c: string) => {
+	const search = debounce(async (q: string) => {
 		controller?.abort();
 		const own = new AbortController();
 		controller = own;
@@ -73,10 +74,9 @@
 		const timer = setTimeout(() => own.abort(new DOMException('timeout', 'TimeoutError')), 12_000);
 		status = 'loading';
 		try {
-			const res = await fetch(
-				`/api/search/localities?q=${encodeURIComponent(q)}&country=${encodeURIComponent(c)}`,
-				{ signal: own.signal }
-			);
+			const res = await fetch(`/api/search/localities?q=${encodeURIComponent(q)}`, {
+				signal: own.signal
+			});
 			if (!res.ok) throw new Error(String(res.status));
 			results = localitySearchResponseSchema.parse(await res.json()).results;
 			status = 'done';
@@ -91,7 +91,7 @@
 
 	function onInput() {
 		const q = query.trim();
-		if (q.length < 2 || !country) {
+		if (q.length < 2) {
 			search.cancel();
 			controller?.abort();
 			results = [];
@@ -99,7 +99,7 @@
 			return;
 		}
 		status = 'loading';
-		search(q, country);
+		search(q);
 	}
 
 	onDestroy(() => {
@@ -158,7 +158,7 @@
 	<fieldset class="m-0 min-w-0 border-0 p-0">
 		<legend class="px-0 type-heading-3">1. Market</legend>
 
-		<div class="mt-space-3 grid gap-space-3 sm:grid-cols-3">
+		<div class="mt-space-3 grid gap-space-3 sm:grid-cols-2 lg:grid-cols-3">
 			{#each FEATURED_MARKETS as m (m.id)}
 				<Card
 					interactive
@@ -177,53 +177,22 @@
 				</Card>
 			{/each}
 		</div>
-		<div class="mt-space-3 flex flex-wrap gap-space-2">
-			{#each others as m (m.id)}
-				<Chip pressed={form.marketId === m.id} onclick={() => selectMarket(m)}>{m.name}</Chip>
-			{/each}
-		</div>
 
 		<div class="mt-space-5 border-t border-line pt-space-4">
 			<p class="type-label text-ink-subtle">Other city</p>
-			<div class="mt-2 grid gap-2 sm:grid-cols-[1fr_12rem]">
-				<input
-					type="text"
-					bind:value={query}
-					oninput={onInput}
-					onkeydown={(e) => e.key === 'Escape' && closeResults()}
-					placeholder="Search a city"
-					aria-label="City name"
-					autocomplete="off"
-					class="{field} w-full"
-				/>
-				<select
-					bind:value={countrySelect}
-					onchange={onInput}
-					aria-label="Country"
-					class="{field} w-full"
-				>
-					<option value="" disabled>Country</option>
-					{#each COUNTRIES as c (c.code)}
-						<option value={c.code}>{c.name} ({c.code})</option>
-					{/each}
-					<option value={OTHER_COUNTRY}>Other</option>
-				</select>
-			</div>
-			{#if countrySelect === OTHER_COUNTRY}
-				<input
-					type="text"
-					bind:value={customCountry}
-					oninput={onInput}
-					placeholder="ISO code or country name"
-					aria-label="Other country code"
-					class="{field} mt-2 w-full sm:w-64"
-				/>
-			{/if}
+			<input
+				type="text"
+				bind:value={query}
+				oninput={onInput}
+				onkeydown={(e) => e.key === 'Escape' && closeResults()}
+				placeholder="Search a city"
+				aria-label="City name"
+				autocomplete="off"
+				class="{field} mt-2 w-full"
+			/>
 
 			<div class="mt-2 type-small" aria-live="polite">
-				{#if query.trim().length >= 2 && !country}
-					<p class="text-ink-subtle">Choose a country to search.</p>
-				{:else if status === 'loading'}
+				{#if status === 'loading'}
 					<p class="flex items-center gap-2 text-ink-subtle">
 						<span class="size-2 animate-pulse-live rounded-full bg-beam" aria-hidden="true"></span>
 						Searching…
@@ -254,17 +223,13 @@
 									: ''}"
 							>
 								<span class="min-w-0">
-									<span
-										class="block truncate type-body font-medium {r.acceptable
-											? 'text-ink'
-											: 'text-ink-muted'}">{r.name}</span
-									>
+									<span class="block truncate type-body font-medium text-ink">{r.name}</span>
 									{#if r.disambiguation}
 										<span class="block truncate type-small text-ink-muted">{r.disambiguation}</span>
 									{/if}
 								</span>
-								{#if !r.acceptable}
-									<span class="shrink-0 type-small text-ink-subtle">different country</span>
+								{#if r.countryCode}
+									<span class="shrink-0 type-data-sm text-ink-muted">{r.countryCode}</span>
 								{/if}
 							</button>
 						</li>
@@ -280,8 +245,8 @@
 
 		<BaseMap
 			class="mt-3 h-[220px]"
-			center={point ?? [-85, 15]}
-			zoom={point ? 10 : 3.2}
+			center={point ?? [-78, 8]}
+			zoom={point ? 10 : 1.9}
 			interactive={false}
 			{onready}
 			label={chosenLabel ? `Map centred on ${chosenLabel}` : 'Map of the Americas'}

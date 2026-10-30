@@ -8,6 +8,14 @@ Last updated: 2026-10-30 (end of M4 and M5).
 - Deploy with `./deploy/azure-container-apps.sh` after loading the local env file; `docs/deploy.md` explains every setting.
 - Demo mode: the landing's "See a finished brief" cards open the newest complete brief of each featured market; every Qloo response behind them is cached in Postgres, so a rerun of the same inputs is fast even if the hackathon key slows down (`QLOO_MODE=replay` serves the cache only if the key dies).
 
+## Product refresh after the design pass — done (2026-10-30)
+
+- Featured markets: Mexico City, São Paulo, Buenos Aires; New York City, Los Angeles, Tampa. Locality ids, heatmap sizes, sample artists and local outlets verified live (see `docs/qloo-findings.md`, "Markets added 2026-10-30").
+- `/new`: the city search needs no country; results show the disambiguation and country code. The quick-pick chips for other cities are gone. The artist hint shows only with suggestions.
+- Landing: "Booking Briefs grounded in cultural data", "Why gigcast", featured markets grouped by region, no "How it works". Logo cropped to its artwork and 32px tall.
+- Brief view and Markdown: the "LLM only vs. grounded" comparison is no longer shown; wording says "the taste graph" / "cultural data" except where provenance is shown.
+- Demo briefs for the five new markets: see "Still open for David" if any is missing.
+
 ## Design system — done (2026-10-30)
 
 The gigcast design system is applied end to end on the `design-system` branch: semantic colour, type, spacing and radius tokens in `src/lib/styles/tokens.css` (the only file that holds hex), Light and Dark themes with a System/Light/Dark toggle in the header, self-hosted Sora and IBM Plex, brand SVGs, favicons, manifest and Open Graph image, the shared `Button`, `EvidenceLabel`, `Badge`, `Chip` and `Card` components with a tones map, themed ECharts and MapLibre (dark basemap, heat ramp from the heat tokens), and every page restyled on those pieces. Copy, behaviour and the Grounded / Inferred / No coverage labels did not change.

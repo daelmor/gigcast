@@ -40,7 +40,7 @@
 	{#if lineup.picks.length === 0}
 		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			No lineup suggestions in this brief. {lineup.note.label === 'no_coverage'
-				? 'Qloo returned no similar artists for this market.'
+				? 'The taste graph returned no similar artists for this market.'
 				: ''}
 		</p>
 	{:else}
@@ -68,7 +68,7 @@
 					{#if cand && ((cand.tags?.length ?? 0) > 0 || Object.keys(cand.explainability ?? {}).length > 0)}
 						{@const weights = topWeights(cand)}
 						<details class="mt-space-3 type-small">
-							<summary class="cursor-pointer font-semibold text-signal">Why Qloo links them</summary
+							<summary class="cursor-pointer font-semibold text-signal">Why they are linked</summary
 							>
 							<div class="mt-space-2 space-y-space-3">
 								{#if cand.tags && cand.tags.length > 0}

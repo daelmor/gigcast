@@ -126,7 +126,7 @@
 					<div class="h-full rounded-pill bg-chart-1" style:width={pct(d.popularity)}></div>
 				</div>
 				<p class="mt-space-3 type-small text-ink-subtle">
-					Share of Qloo entities of this kind that the artist out-ranks.
+					Share of entities of this kind in the taste graph that the artist out-ranks.
 				</p>
 			{:else}
 				<p class="mt-space-2 type-small text-ink-muted">No popularity figure was available.</p>
@@ -211,7 +211,7 @@
 				</div>
 			{:else}
 				<p class="mt-space-2 type-small text-ink-muted">
-					Qloo returned no demographic data for this artist.
+					The taste graph returned no demographic data for this artist.
 				</p>
 			{/if}
 		</Card>

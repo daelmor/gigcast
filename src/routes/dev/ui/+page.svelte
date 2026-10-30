@@ -111,7 +111,7 @@
 			<p class="type-numeral">1,757</p>
 			<p class="type-heading-3">Sponsors this audience over-indexes on</p>
 			<p class="type-body-lg">A promoter picks an artist, a city and dates.</p>
-			<p class="type-body">Qloo's Taste AI links artists, brands, places and neighbourhoods.</p>
+			<p class="type-body">One affinity graph links artists, brands, places and neighbourhoods.</p>
 			<p class="type-small text-ink-muted">Nov 20–22, 2026 · Guatemala City</p>
 			<p class="type-label text-ink-subtle">On this page</p>
 			<p class="type-data">urn:entity:artist · filter.location=GT-guatemala</p>

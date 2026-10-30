@@ -1,10 +1,11 @@
 /**
- * News ingestion for a market: Google News RSS searches (Spanish and English)
- * plus the market's local outlets, deduplicated by canonical URL and title,
- * stored as headlines only, then classified by the small model in batches.
+ * News ingestion for a market: Google News RSS searches in the market's press
+ * language (Spanish, Portuguese or English) plus an English search for the
+ * others, plus the market's local outlets, deduplicated by canonical URL and
+ * title, stored as headlines only, then classified by the small model in batches.
  */
 import { and, desc, eq, isNull, sql } from 'drizzle-orm';
-import type { KnownMarket } from '../../markets.ts';
+import type { KnownMarket, NewsLang } from '../../markets.ts';
 import { getDb } from '../db/index.ts';
 import { newsClassifications, newsItems } from '../db/schema.ts';
 import { logger } from '../log.ts';
@@ -48,93 +49,102 @@ export interface IngestSummary {
 interface Query {
 	label: string;
 	url: string;
-	lang: 'es' | 'en';
+	lang: NewsLang;
 	outlet: string | null;
 }
 
-const gnews = (q: string, lang: 'es' | 'en', country: string) => {
+const gnews = (q: string, lang: NewsLang, country: string) => {
 	const params = new URLSearchParams({ q });
 	if (lang === 'es') {
 		params.set('hl', 'es-419');
 		params.set('gl', country);
 		params.set('ceid', `${country}:es-419`);
+	} else if (lang === 'pt') {
+		params.set('hl', 'pt-BR');
+		params.set('gl', country);
+		params.set('ceid', `${country}:pt-419`);
 	} else {
 		params.set('hl', 'en-US');
-		params.set('gl', 'US');
-		params.set('ceid', 'US:en');
+		params.set('gl', country === 'US' ? 'US' : country);
+		params.set('ceid', `${country === 'US' ? 'US' : country}:en`);
 	}
 	return `https://news.google.com/rss/search?${params.toString()}`;
 };
 
+/** Topic searches per press language: events, security, politics and health, weather and transport. */
+const TOPICS: Record<NewsLang, Record<string, string>> = {
+	es: {
+		events: '(concierto OR festival OR estadio)',
+		security: '(seguridad OR violencia OR protesta OR bloqueo OR manifestación)',
+		'politics-health': '(elecciones OR huelga OR alerta sanitaria OR dengue)',
+		'weather-transport': '(lluvias OR tormenta OR huracán OR inundación OR aeropuerto OR tránsito)'
+	},
+	pt: {
+		events: '(show OR festival OR estádio)',
+		security: '(segurança OR violência OR protesto OR bloqueio OR manifestação)',
+		'politics-health': '(eleições OR greve OR alerta sanitário OR dengue)',
+		'weather-transport': '(chuvas OR tempestade OR enchente OR aeroporto OR trânsito)'
+	},
+	en: {
+		events: '(concert OR festival OR stadium)',
+		security: '(shooting OR protest OR security OR curfew)',
+		'politics-health': '(election OR strike OR health alert OR outbreak)',
+		'weather-transport': '(storm OR hurricane OR flooding OR airport OR transit)'
+	}
+};
+
+const ARTIST_TOPIC: Record<NewsLang, string> = {
+	es: '(concierto OR gira OR cancela)',
+	pt: '(show OR turnê OR cancela)',
+	en: '(tour OR concert OR cancelled)'
+};
+
 /** The searches and feeds for a market; the outlet list comes from the market config. */
 export function buildQueries(market: KnownMarket, options: IngestOptions = {}): Query[] {
-	const es = market.localityName;
+	const local = market.localityName;
 	const en = market.name;
 	const c = market.country;
-	const queries: Query[] = [
-		{
-			label: 'events',
-			lang: 'es',
-			outlet: null,
-			url: gnews(`"${es}" (concierto OR festival OR estadio)`, 'es', c)
-		},
-		{
-			label: 'security',
-			lang: 'es',
-			outlet: null,
-			url: gnews(
-				`"${es}" (seguridad OR violencia OR protesta OR bloqueo OR manifestación)`,
-				'es',
-				c
-			)
-		},
-		{
-			label: 'politics-health',
-			lang: 'es',
-			outlet: null,
-			url: gnews(`"${es}" (elecciones OR huelga OR alerta sanitaria OR dengue)`, 'es', c)
-		},
-		{
-			label: 'weather-transport',
-			lang: 'es',
-			outlet: null,
-			url: gnews(
-				`"${es}" (lluvias OR tormenta OR huracán OR inundación OR aeropuerto OR tránsito)`,
-				'es',
-				c
-			)
-		},
-		{
+	const lang = market.lang;
+	const queries: Query[] = Object.entries(TOPICS[lang]).map(([label, terms]) => ({
+		label,
+		lang,
+		outlet: null,
+		url: gnews(`"${local}" ${terms}`, lang, c)
+	}));
+	if (lang !== 'en') {
+		queries.push({
 			label: 'english',
 			lang: 'en',
 			outlet: null,
 			url: gnews(
 				`"${en}" ${market.countryName} (concert OR protest OR security OR election OR storm)`,
 				'en',
-				c
+				'US'
 			)
-		}
-	];
+		});
+	}
 	if (options.artist) {
 		queries.push({
 			label: 'artist',
-			lang: 'es',
+			lang,
 			outlet: null,
-			url: gnews(`"${options.artist}" (concierto OR gira OR cancela)`, 'es', c)
+			url: gnews(`"${options.artist}" ${ARTIST_TOPIC[lang]}`, lang, c)
 		});
-		queries.push({
-			label: 'artist-en',
-			lang: 'en',
-			outlet: null,
-			url: gnews(`"${options.artist}" (tour OR concert OR cancelled)`, 'en', c)
-		});
+		if (lang !== 'en') {
+			queries.push({
+				label: 'artist-en',
+				lang: 'en',
+				outlet: null,
+				url: gnews(`"${options.artist}" ${ARTIST_TOPIC.en}`, 'en', 'US')
+			});
+		}
 	}
 	if (options.venue) {
 		queries.push({
 			label: 'venue',
-			lang: 'es',
+			lang,
 			outlet: null,
-			url: gnews(`"${options.venue}" "${es}"`, 'es', c)
+			url: gnews(`"${options.venue}" "${local}"`, lang, c)
 		});
 	}
 	for (const outlet of market.outlets) {
@@ -156,7 +166,7 @@ interface Normalized {
 	snippet: string | null;
 	source: string | null;
 	publishedAt: Date | null;
-	lang: 'es' | 'en';
+	lang: NewsLang;
 	query: string;
 }
 

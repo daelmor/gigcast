@@ -30,7 +30,7 @@
 		['Model', run.model],
 		['Status', run.status],
 		['Tool calls', n(run.toolCalls)],
-		['Qloo calls', `${n(run.qlooCalls)} (${n(run.qlooCacheHits)} cache hits)`],
+		['Data requests', `${n(run.qlooCalls)} (${n(run.qlooCacheHits)} cache hits)`],
 		['Input tokens', n(run.usage.inputTokens)],
 		['Output tokens', n(run.usage.outputTokens)],
 		['Cache read tokens', n(run.usage.cacheReadInputTokens)],

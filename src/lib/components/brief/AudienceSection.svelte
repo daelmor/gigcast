@@ -110,7 +110,8 @@
 				No heatmap for this market <EvidenceLabel label="no_coverage" />
 			</p>
 			<p class="mx-auto mt-space-1 max-w-xl type-small text-ink-muted">
-				Qloo returned no audience cells for this artist and locality, so there is nothing to map.
+				The taste graph returned no audience cells for this artist and locality, so there is nothing
+				to map.
 			</p>
 			<p class="mx-auto mt-space-2 max-w-xl type-small text-ink-subtle">{audience.note.summary}</p>
 		</div>

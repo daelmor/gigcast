@@ -99,7 +99,7 @@ export const artistSearchResponseSchema = z.object({
 });
 export type ArtistSearchResponse = z.infer<typeof artistSearchResponseSchema>;
 
-// GET /api/search/localities?q=&country= ---------------------------------
+// GET /api/search/localities?q=[&country=] -------------------------------
 
 export const localitySearchResultSchema = z.object({
 	entityId: z.string(),
@@ -107,7 +107,9 @@ export const localitySearchResultSchema = z.object({
 	disambiguation: z.string().optional(),
 	lat: z.number().optional(),
 	lon: z.number().optional(),
-	/** True when the disambiguation matches the requested country. */
+	/** ISO 3166-1 alpha-2 read from the disambiguation, when known. */
+	countryCode: z.string().optional(),
+	/** True when the disambiguation matches the requested country (always true without one). */
 	acceptable: z.boolean()
 });
 export type LocalitySearchResult = z.infer<typeof localitySearchResultSchema>;
@@ -152,7 +154,12 @@ export const marketDashboardSchema = z.object({
 		note: z.string().optional(),
 		sampleArtists: z.array(z.string()),
 		outlets: z.array(
-			z.object({ name: z.string(), url: z.string(), rss: z.string(), lang: z.enum(['es', 'en']) })
+			z.object({
+				name: z.string(),
+				url: z.string(),
+				rss: z.string(),
+				lang: z.enum(['es', 'en', 'pt'])
+			})
 		)
 	}),
 	/** Classified news of the last 60 days, advisories and the decayed score. */

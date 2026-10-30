@@ -31,7 +31,7 @@ export const POST: RequestHandler = async ({ request, url, locals }) => {
 	const slug = url.searchParams.get('market');
 	const markets = slug
 		? [findMarket(slug)].filter((m): m is NonNullable<typeof m> => Boolean(m))
-		: KNOWN_MARKETS.filter((m) => m.featured || m.outlets.length > 0);
+		: KNOWN_MARKETS.filter((m) => m.featured);
 	if (slug && markets.length === 0)
 		return json({ error: `Unknown market ${slug}` }, { status: 404 });
 
