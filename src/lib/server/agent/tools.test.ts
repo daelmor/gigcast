@@ -4,13 +4,7 @@ import { sampleBrief } from '../../brief/fixtures/sample-brief.ts';
 import { MemoryCacheStore } from '../qloo/cache.ts';
 import { QlooClient } from '../qloo/client.ts';
 import { cachedResponseFor, loadSamples, seedStore, type Sample } from '../qloo/test-support.ts';
-import {
-	createAgentTools,
-	QLOO_TOOL_NAMES,
-	ToolBudgetExceeded,
-	ToolRegistry,
-	type ToolCallRecord
-} from './tools.ts';
+import { createAgentTools, QLOO_TOOL_NAMES, ToolRegistry, type ToolCallRecord } from './tools.ts';
 
 const ARTIST_ID = 'BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3';
 const LOCALITY_ID = '6A479AAF-1D8D-4EA2-AC1E-29B0906063AC';
@@ -231,31 +225,24 @@ describe('replay miss', () => {
 });
 
 describe('tool budget', () => {
-	it('stops a call that exceeds the budget and keeps counting', async () => {
+	it('refuses a call that exceeds the budget, records it, and keeps counting', async () => {
 		const onStarted = vi.fn();
 		const onFinished = vi.fn();
 		const { registry, call } = setup(2, { onStarted, onFinished });
 		const input = { artist_ids: [ARTIST_ID] };
 		await call('qloo_artist_tags', input);
 		await call('qloo_artist_tags', input);
-		// ToolRegistry.begin throws before the tool's try/catch, so the third call rejects
-		// (the SDK tool runner turns that into an is_error tool result).
-		await expect(call('qloo_artist_tags', input)).rejects.toBeInstanceOf(ToolBudgetExceeded);
+		const third = await call('qloo_artist_tags', input);
+		expect(typeof third.json.error).toBe('string');
+		expect(third.json.action).toMatch(/emit_brief/);
 		expect(registry.count).toBe(3);
 		expect(registry.remaining).toBe(0);
+		// The refused call is still traced: started and finished (not ok), with no Qloo request.
 		expect(onStarted).toHaveBeenCalledTimes(3);
-		expect(onFinished).toHaveBeenCalledTimes(2);
-	});
-
-	// Intended behaviour (errorPayload has a ToolBudgetExceeded branch with an `action`), but
-	// registry.begin() runs outside each tool's try/catch so the payload is never produced.
-	it.fails('returns an emit_brief instruction as JSON when over budget', async () => {
-		const { call } = setup(2);
-		const input = { artist_ids: [ARTIST_ID] };
-		await call('qloo_artist_tags', input);
-		await call('qloo_artist_tags', input);
-		const third = await call('qloo_artist_tags', input);
-		expect(third.json.action).toMatch(/emit_brief/);
+		expect(onFinished).toHaveBeenCalledTimes(3);
+		const refused = [...registry.calls.values()][2];
+		expect(refused.ok).toBe(false);
+		expect(refused.requests).toHaveLength(0);
 	});
 });
 

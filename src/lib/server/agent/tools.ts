@@ -145,7 +145,11 @@ export class ToolRegistry {
 		};
 		this.calls.set(toolCallId, record);
 		this.events.onStarted?.(record);
-		if (this.counter > this.maxToolCalls) throw new ToolBudgetExceeded(this.maxToolCalls);
+		if (this.counter > this.maxToolCalls) {
+			const err = new ToolBudgetExceeded(this.maxToolCalls);
+			this.finish(record, false, err.message);
+			throw err;
+		}
 		return record;
 	}
 
@@ -1029,7 +1033,7 @@ export function createAgentTools({ client, registry, now = () => new Date() }: T
 	});
 
 	// Deterministic order: the tool list is part of the cached prompt prefix.
-	return [
+	const tools = [
 		searchEntity,
 		resolveLocalityTool,
 		similarArtists,
@@ -1044,6 +1048,22 @@ export function createAgentTools({ client, registry, now = () => new Date() }: T
 		artistTags,
 		emitBrief
 	];
+	// registry.begin() throws ToolBudgetExceeded before a tool's own try/catch; turn that into the
+	// instruction payload so the model is told to call emit_brief instead of seeing a bare error.
+	return tools.map((tool) => ({
+		...tool,
+		run: async (input: unknown, ctx?: BetaToolRunContext) => {
+			try {
+				return await (tool.run as (i: unknown, c?: BetaToolRunContext) => Promise<string>)(
+					input,
+					ctx
+				);
+			} catch (err) {
+				if (err instanceof ToolBudgetExceeded) return errorPayload(err);
+				throw err;
+			}
+		}
+	}));
 }
 
 export type AgentTools = ReturnType<typeof createAgentTools>;
