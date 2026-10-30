@@ -1,2 +1,26 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+@layer base {
+	html {
+		font-family:
+			ui-sans-serif,
+			system-ui,
+			-apple-system,
+			'Segoe UI',
+			Roboto,
+			'Helvetica Neue',
+			Arial,
+			sans-serif;
+		-webkit-text-size-adjust: 100%;
+	}
+	body {
+		@apply bg-zinc-50 text-zinc-900 antialiased;
+	}
+	:focus-visible {
+		@apply outline-2 outline-offset-2 outline-indigo-600;
+	}
+	a {
+		text-underline-offset: 2px;
+	}
+}
