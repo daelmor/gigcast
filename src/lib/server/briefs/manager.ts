@@ -13,7 +13,7 @@ import { findMarket } from '../../markets.ts';
 import { runBrief } from '../agent/run.ts';
 import { getEnv } from '../env.ts';
 import { logger } from '../log.ts';
-import { createQlooClient } from '../qloo/index.ts';
+import { getSharedQlooClient } from '../qloo/index.ts';
 import { fakeRunBrief } from './fake-runner.ts';
 import {
 	appendEvents,
@@ -90,7 +90,7 @@ function publish(briefId: string, message: HubMessage): void {
 function defaultRunner(): BriefRunner {
 	const env = getEnv();
 	if (env.AGENT_RUNNER === 'fake') return (o) => fakeRunBrief(o);
-	return (o) => runBrief({ ...o, qloo: createQlooClient() });
+	return (o) => runBrief({ ...o, qloo: getSharedQlooClient() });
 }
 
 export interface StartOptions {

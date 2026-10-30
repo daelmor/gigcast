@@ -17,6 +17,8 @@ export class BriefStream {
 	ondone?: (status: BriefStatus) => void;
 
 	#source: EventSource | undefined;
+	// Bookkeeping only, never rendered, so it does not need to be reactive.
+	// eslint-disable-next-line svelte/prefer-svelte-reactivity
 	#seen = new Set<number>();
 
 	constructor(

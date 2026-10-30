@@ -3,7 +3,7 @@ import type { ApiError, LocalitySearchResponse } from '$lib/api/contracts';
 import { logger } from '$lib/server/log';
 import {
 	countryHintsFor,
-	createQlooClient,
+	getSharedQlooClient,
 	defaultRejectHints,
 	searchLocalities
 } from '$lib/server/qloo';
@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		return json({ query, country, results: [] } satisfies LocalitySearchResponse);
 	}
 	try {
-		const { candidates } = await searchLocalities(createQlooClient(), query, {
+		const { candidates } = await searchLocalities(getSharedQlooClient(), query, {
 			cityName: query,
 			countryHints: countryHintsFor(country),
 			rejectHints: defaultRejectHints(country)
