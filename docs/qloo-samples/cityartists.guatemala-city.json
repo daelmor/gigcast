@@ -1,0 +1,565 @@
+{
+  "note": "/v2/insights artist, signal.location (Guatemala City)",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:entity:artist",
+      "signal.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+      "take": 20
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "entities": [
+        {
+          "name": "Gaby Moreno",
+          "entity_id": "27B180A1-3E0A-4340-81A3-57FB51816E2D",
+          "type": "urn:entity",
+          "subtype": "urn:entity:artist",
+          "properties": {
+            "image": {
+              "url": "https://images.qloo.com/i/27B180A1-3E0A-4340-81A3-57FB51816E2D-420x-auto.jpg"
+            },
+            "vocals": "Gaby Moreno's vocals are characterized by a warm, soulful tone with a smooth delivery that conveys deep emotion. She often employs a blend of blues and Latin vocal stylings, with a clear and expressive voice that adapts well to both intimate acoustic settings and fuller band arrangements.",
+            "aliases": [
+              "Gabriela Moreno"
+            ],
+            "members": [],
+            "is_group": false,
+            "biography": "Born in Guatemala City, Gaby Moreno developed a passion for music early in life, influenced by her multicultural background and exposure to various musical styles. She moved to the United States to pursue her music career, where she gained recognition for her unique blend of blues, soul, and Latin s...",
+            "known_for": "Her soulful voice, genre-blending music, and authentic storytelling through lyrics.",
+            "start_year": 2006,
+            "description": "Gaby Moreno is a Guatemalan singer-songwriter and guitarist whose music blends blues, soul, folk, and Latin influences. She is recognized for her rich, emotive voice and her ability to cross genres seamlessly, incorporating elements of jazz and world music into her work. Moreno has received critical...",
+            "instruments": [
+              "Guitar",
+              "Vocals",
+              "Piano"
+            ],
+            "collaborators": [
+              "Ricardo Arjona",
+              "Van Dyke Parks",
+              "T-Bone Burnett"
+            ],
+            "date_of_birth": "1981-12-16",
+            "influenced_by": [
+              "Billie Holiday",
+              "Nina Simone",
+              "Mercedes Sosa"
+            ],
+            "notable_songs": [
+              "Fuiste Tú",
+              "All That I Can See",
+              "Ave Que Emigra"
+            ],
+            "lyrical_themes": [
+              "Love",
+              "Heartbreak",
+              "Identity"
+            ],
+            "place_of_birth": "Guatemala City, Guatemala, Guate",
+            "primary_genres": [
+              "Blues",
+              "Soul",
+              "Folk"
+            ],
+            "characteristics": [
+              "Emotive",
+              "Soulful",
+              "Versatile"
+            ],
+            "cultural_impact": "Gaby Moreno has contributed to increasing the visibility of Latin American artists in the blues and soul genres, bridging cultural gaps and inspiring a new generation of bilingual and bicultural musicians.",
+            "obscurity_scale": [
+              "4"
+            ],
+            "secondary_genres": [
+              "Jazz",
+              "World Music",
+              "Singer-Songwriter"
+            ],
+            "associated_brands": [],
+            "genres_influenced": [
+              "Latin Blues",
+              "Contemporary Folk",
+              "Soul Fusion"
+            ],
+            "performance_style": "Gaby Moreno's performance style is intimate and expressive, often featuring acoustic arrangements that highlight her vocal and guitar skills, creating a personal connection with the audience.",
+            "artists_influenced": [
+              "Ximena Sariñana",
+              "Carla Morrison",
+              "Natalia Lafourcade"
+            ],
+            "short_descriptions": [
+              {
+                "value": "Guatemaltekische Singer-Songwriterin, bekannt für ihre Mischung aus Blues, Soul und lateinamerikanischen Einflüssen.",
+                "languages": [
+                  "de"
+                ]
+              },
+              {
+                "value": "Cantautora guatemalteca reconocida por fusionar blues, soul y ritmos latinos en su música.",
+                "languages": [
+                  "es"
+                ]
+              },
+              {
+                "value": "Guatemalan singer-songwriter known for blending blues, soul, and Latin influences.",
+                "languages": [
+                  "en"
+                ]
+              }
+            ],
+            "adjectives_for_fans": [
+              "Loyal",
+              "Diverse",
+              "Passionate"
+            ],
+            "adjectives_for_music": [
+              "Soulful",
+              "Bluesy",
+              "Melodic"
+            ],
+            "lyrical_themes_description": "Gaby Moreno's lyrics often explore themes of love and heartbreak, personal identity, social justice, and empowerment, reflecting her experiences and cultural heritage.",
+            "adjectives_for_performance_style": [
+              "Intimate",
+              "Expressive",
+              "Engaging"
+            ],
+            "creative_and_specific_adjectives_for_music": [
+              "Latin Blues",
+              "Soulful Folk",
+              "Acoustic Jazz"
+            ]
+          },
+          "popularity": 0.9033383795686452,
+          "tags": [
+            {
+              "id": "urn:tag:audience:qloo:loyal",
+              "name": "Loyal",
+              "type": "urn:tag:audience:qloo"
+            },
+            {
+              "id": "urn:tag:genre:music:blues",
+              "name": "Blues",
+              "type": "urn:tag:genre:music"
+            },
+            {
+              "id": "urn:tag:style:qloo:intimate",
+              "name": "Intimate",
+              "type": "urn:tag:style:qloo"
+            }
+          ],
+          "query": {
+            "affinity": 1,
+            "measurements": {
+              "audience_growth": 0
+            }
+          },
+          "disambiguation": "Gaby Moreno",
+          "external": {
+            "imdb": [
+              {
+                "id": "nm3072516"
+              }
+            ],
+            "lastfm": [
+              {
+                "id": "gaby%20moreno",
+                "listeners": 70466,
+                "scrobbles": 593248
+              }
+            ],
+            "spotify": [
+              {
+                "id": "0K9pSmFx0kWESA9jqx8aCW",
+                "verified": true,
+                "followers": 59709,
+                "last_release": 2020,
+                "first_release": 2008,
+                "monthly_listeners": 300778
+              }
+            ],
+            "facebook": [
+              {
+                "id": "gabymorenoband"
+              }
+            ],
+            "wikidata": [
+              {
+                "id": "q511537"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "gaby_moreno"
+              }
+            ],
+            "musicbrainz": [
+              {
+                "id": "4aec1363-ab7a-4de2-a253-c529eeec55bd",
+                "artist_type": "Person"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Ricardo Arjona",
+          "entity_id": "CA98034C-6AD8-44AA-898E-038495C4E116",
+          "type": "urn:entity",
+          "subtype": "urn:entity:artist",
+          "properties": {
+            "image": {
+              "url": "https://images.qloo.com/i/CA98034C-6AD8-44AA-898E-038495C4E116-420x-auto.jpg"
+            },
+            "vocals": "Ricardo Arjona's vocals are characterized by a warm baritone tone with expressive delivery, capable of conveying deep emotion and storytelling through his singing. His vocal style complements his lyrical content, often intimate and reflective.",
+            "aliases": [
+              "Ricardo Arjona Morales"
+            ],
+            "members": [],
+            "is_group": false,
+            "biography": "Born in 1964 in Guatemala City, Ricardo Arjona began his musical career in the 1980s, initially struggling to gain recognition. His breakthrough came in the 1990s with albums that combined Latin pop and rock with insightful lyrics addressing love, social issues, and human experiences. Over the decad...",
+            "known_for": "Ricardo Arjona is known for his poetic songwriting, emotional vocal delivery, and blending of Latin pop with socially conscious themes.",
+            "start_year": 1985,
+            "voice_type": [
+              "Baritone"
+            ],
+            "description": "Ricardo Arjona is a Guatemalan singer-songwriter renowned for his poetic and socially conscious lyrics, blending Latin pop, rock, and folk influences. He has achieved widespread success across Latin America and internationally, known for his storytelling and emotional depth in music.",
+            "instruments": [
+              "Guitar",
+              "Piano"
+            ],
+            "collaborators": [
+              "Gaby Moreno",
+              "Marc Anthony",
+              "Chenoa"
+            ],
+            "date_of_birth": "1964-01-19",
+            "influenced_by": [
+              "Silvio Rodríguez",
+              "Joan Manuel Serrat",
+              "Caetano Veloso"
+            ],
+            "notable_songs": [
+              "Mujeres",
+              "Historia De Taxi",
+              "Señora De Las Cuatro Décadas"
+            ],
+            "lyrical_themes": [
+              "Love",
+              "Social Issues",
+              "Human Experience"
+            ],
+            "primary_genres": [
+              "Latin Pop",
+              "Pop Rock",
+              "Ballad"
+            ],
+            "characteristics": [
+              "Poetic",
+              "Emotional",
+              "Socially Conscious"
+            ],
+            "cultural_impact": "Ricardo Arjona has had a significant impact on Latin American music, influencing a generation of singer-songwriters with his poetic lyricism and blending of genres, contributing to the popularization of socially conscious themes in mainstream Latin pop.",
+            "obscurity_scale": [
+              "3"
+            ],
+            "secondary_genres": [
+              "Folk",
+              "Rock",
+              "Tropical"
+            ],
+            "associated_brands": [],
+            "genres_influenced": [
+              "Latin Pop",
+              "Latin Rock",
+              "Singer-Songwriter"
+            ],
+            "performance_style": "Arjona's performance style is intimate and expressive, often focusing on storytelling and emotional connection with the audience through his vocals and acoustic instrumentation.",
+            "artists_influenced": [
+              "Gaby Moreno",
+              "Fonseca",
+              "Carlos Vives"
+            ],
+            "short_descriptions": [
+              {
+                "value": "Guatemaltekischer Singer-Songwriter, bekannt für poetische Texte und vielfältige Musikstile.",
+                "languages": [
+                  "de"
+                ]
+              },
+              {
+                "value": "Guatemalan singer-songwriter known for his poetic lyrics and diverse musical styles.",
+                "languages": [
+                  "en"
+                ]
+              },
+              {
+                "value": "Cantautor guatemalteco famoso por sus letras poéticas y su variedad de estilos musicales.",
+                "languages": [
+                  "es"
+                ]
+              }
+            ],
+            "adjectives_for_fans": [
+              "Loyal",
+              "Passionate",
+              "Reflective"
+            ],
+            "adjectives_for_music": [
+              "Poetic",
+              "Melodic",
+              "Emotional"
+            ],
+            "lyrical_themes_description": "Arjona's lyrics explore themes of love, social justice, human relationships, and everyday life, often with poetic and metaphorical language that invites reflection and emotional connection.",
+            "adjectives_for_performance_style": [
+              "Intimate",
+              "Expressive",
+              "Engaging"
+            ],
+            "creative_and_specific_adjectives_for_music": [
+              "Latin Pop Ballad",
+              "Socially Conscious Folk",
+              "Melodic Rock Fusion"
+            ]
+          },
+          "popularity": 0.9883084626021535,
+          "tags": [
+            {
+              "id": "urn:tag:theme:qloo:love",
+              "name": "Love",
+              "type": "urn:tag:theme:qloo"
+            },
+            {
+              "id": "urn:tag:audience:qloo:diverse",
+              "name": "Diverse",
+              "type": "urn:tag:audience:qloo"
+            },
+            {
+              "id": "urn:tag:voice_type:qloo:baritone",
+              "name": "Baritone",
+              "type": "urn:tag:voice_type:qloo"
+            }
+          ],
+          "query": {
+            "affinity": 0.9999855342781788,
+            "measurements": {
+              "audience_growth": 0
+            }
+          },
+          "disambiguation": "Ricardo Arjona",
+          "external": {
+            "imdb": [
+              {
+                "id": "nm0035015"
+              }
+            ],
+            "lastfm": [
+              {
+                "id": "ricardo%20arjona",
+                "listeners": 346646,
+                "scrobbles": 7193316
+              }
+            ],
+            "spotify": [
+              {
+                "id": "0h1zs4CTlU9D2QtgPxptUD",
+                "verified": true,
+                "followers": 5824756,
+                "last_release": 2020,
+                "first_release": 1993,
+                "monthly_listeners": 5519536
+              }
+            ],
+            "twitter": [
+              {
+                "id": "ricardo_arjona"
+              }
+            ],
+            "facebook": [
+              {
+                "id": "arjonaoficial"
+              }
+            ],
+            "wikidata": [
+              {
+                "id": "q719841"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "ricardoarjona"
+              }
+            ],
+            "musicbrainz": [
+              {
+                "id": "40627299-0979-45ba-8924-2af5fdc36ea8",
+                "artist_type": "Person"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Carl Nunes",
+          "entity_id": "EF8A0C55-059E-4184-A557-8CB965D00348",
+          "type": "urn:entity",
+          "subtype": "urn:entity:artist",
+          "properties": {
+            "image": {
+              "url": "https://images.qloo.com/i/EF8A0C55-059E-4184-A557-8CB965D00348-420x-auto.jpg"
+            },
+            "aliases": [],
+            "members": [],
+            "is_group": false,
+            "biography": "Carl Nunes is an American electronic music producer and DJ who emerged in the early 2000s. He gained recognition for his melodic and rhythmic house tracks, blending progressive and deep house elements. Over the years, he has released numerous singles and remixes, performing at various clubs and fest...",
+            "known_for": "Melodic and rhythmic house music production and DJ performances.",
+            "start_year": 2000,
+            "description": "Carl Nunes is an electronic music producer and DJ specializing in house and dance genres. He is recognized for his contributions to the electronic music scene with a focus on progressive and deep house styles.",
+            "instruments": [
+              "Synthesizer",
+              "Drum Machine",
+              "Digital Audio Workstation"
+            ],
+            "collaborators": [
+              "Kaskade",
+              "Deadmau5"
+            ],
+            "influenced_by": [
+              "Daft Punk",
+              "Sasha",
+              "John Digweed"
+            ],
+            "notable_songs": [
+              "The Calling",
+              "The Calling (Carl Nunes Remix)",
+              "The Calling (Original Mix)"
+            ],
+            "lyrical_themes": [],
+            "primary_genres": [
+              "Electronic",
+              "House",
+              "Dance"
+            ],
+            "characteristics": [
+              "Energetic",
+              "Melodic",
+              "Rhythmic"
+            ],
+            "cultural_impact": "Carl Nunes has contributed to the popularization of progressive and deep house music in the electronic dance music scene, influencing both fans and upcoming producers.",
+            "obscurity_scale": [
+              "5"
+            ],
+            "secondary_genres": [
+              "Progressive House",
+              "Deep House"
+            ],
+            "associated_brands": [],
+            "genres_influenced": [
+              "Progressive House",
+              "Deep House",
+              "Electronic Dance Music"
+            ],
+            "performance_style": "Carl Nunes is known for his dynamic and engaging DJ performances that energize dance floors with melodic and rhythmic house music.",
+            "artists_influenced": [
+              "Various Progressive House Producers",
+              "Deep House Artists"
+            ],
+            "short_descriptions": [
+              {
+                "value": "Electronic music producer and DJ known for house and dance music.",
+                "languages": [
+                  "en"
+                ]
+              },
+              {
+                "value": "Elektronischer Musikproduzent und DJ, bekannt für House- und Dance-Musik.",
+                "languages": [
+                  "de"
+                ]
+              },
+              {
+                "value": "Productor de música electrónica y DJ conocido por su música house y dance.",
+                "languages": [
+                  "es"
+                ]
+              }
+            ],
+            "adjectives_for_fans": [
+              "Dedicated",
+              "Energetic",
+              "Passionate"
+            ],
+            "adjectives_for_music": [
+              "Melodic",
+              "Energetic",
+              "Rhythmic"
+            ],
+            "adjectives_for_performance_style": [
+              "Dynamic",
+              "Engaging",
+              "Energetic"
+            ],
+            "creative_and_specific_adjectives_for_music": [
+              "Progressive House",
+              "Deep House",
+              "Melodic Techno"
+            ]
+          },
+          "popularity": 0.35500265418870297,
+          "tags": [
+            {
+              "id": "urn:tag:style:qloo:dynamic",
+              "name": "Dynamic",
+              "type": "urn:tag:style:qloo"
+            },
+            {
+              "id": "urn:tag:audience:qloo:dedicated",
+              "name": "Dedicated",
+              "type": "urn:tag:audience:qloo"
+            },
+            {
+              "id": "urn:tag:audience:qloo:loyal",
+              "name": "Loyal",
+              "type": "urn:tag:audience:qloo"
+            }
+          ],
+          "query": {
+            "affinity": 0.9999710683290771,
+            "measurements": {
+              "audience_growth": 0
+            }
+          },
+          "disambiguation": "Carl Nunes",
+          "external": {
+            "spotify": [
+              {
+                "id": "4BkTFXaUWivBQa2UBqygbK",
+                "verified": true,
+                "followers": 6880,
+                "last_release": 2020,
+                "first_release": 2010,
+                "monthly_listeners": 11449
+              }
+            ],
+            "twitter": [
+              {
+                "id": "carlnunesmusic"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "carlnunesmusic"
+              }
+            ],
+            "musicbrainz": [
+              {
+                "id": "072d8d6c-7228-452a-b459-3911e77569e1",
+                "artist_type": "Person"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

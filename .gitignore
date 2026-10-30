@@ -47,3 +47,6 @@ hackathon-qloo-prompt-idea-*.md
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Agent worktrees created during development
+.claude/worktrees/

@@ -1,0 +1,632 @@
+{
+  "note": "/v2/insights (trends.bias)",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:entity:artist",
+      "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+      "bias.trends": "high",
+      "take": 5
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "entities": [
+        {
+          "name": "Tainy",
+          "entity_id": "B7E0DE43-AF9C-45A2-B721-04C762B2E995",
+          "type": "urn:entity",
+          "subtype": "urn:entity:artist",
+          "properties": {
+            "akas": [
+              {
+                "value": "塔尼",
+                "languages": [
+                  "zh"
+                ]
+              },
+              {
+                "value": "Tainy",
+                "languages": [
+                  "pt_pt",
+                  "pl",
+                  "pt"
+                ]
+              }
+            ],
+            "image": {
+              "url": "https://images.qloo.com/i/B7E0DE43-AF9C-45A2-B721-04C762B2E995-420x-auto.jpg"
+            },
+            "aliases": [
+              "Tainy"
+            ],
+            "members": [],
+            "is_group": false,
+            "biography": "Marco Masís, known professionally as Tainy, was born in Puerto Rico and started producing music as a teenager. He gained early recognition working with reggaeton pioneers and quickly became one of the most sought-after producers in Latin music. Over the years, Tainy has collaborated with top artists...",
+            "known_for": "Innovative production in reggaeton and Latin urban music, shaping the modern sound of the genre.",
+            "start_year": 2003,
+            "description": "Tainy, born Marco Masís, is a Puerto Rican record producer and songwriter who has played a pivotal role in shaping the sound of modern reggaeton and Latin urban music. He began his career at a young age and quickly rose to prominence by producing hits for major artists in the Latin music scene. Tain...",
+            "instruments": [
+              "Digital Audio Workstation",
+              "Synthesizer",
+              "Drum Machine"
+            ],
+            "collaborators": [
+              "Bad Bunny",
+              "J Balvin",
+              "Daddy Yankee"
+            ],
+            "date_of_birth": "1989-08-09",
+            "influenced_by": [
+              "Luny Tunes",
+              "Nely",
+              "DJ Nelson"
+            ],
+            "notable_songs": [
+              "Callaíta",
+              "Adicto",
+              "Si Se Da"
+            ],
+            "lyrical_themes": [
+              "Love",
+              "Party",
+              "Street Life"
+            ],
+            "place_of_birth": "San Juan, Puerto Rico",
+            "primary_genres": [
+              "Reggaeton",
+              "Latin Urban"
+            ],
+            "characteristics": [
+              "Innovative",
+              "Influential",
+              "Versatile"
+            ],
+            "cultural_impact": "Tainy has significantly influenced the global popularity of reggaeton and Latin urban music, helping to bring these genres into mainstream international markets and shaping the sound of contemporary Latin music production.",
+            "obscurity_scale": [
+              "3"
+            ],
+            "secondary_genres": [
+              "Trap Latino",
+              "Dancehall",
+              "Pop"
+            ],
+            "associated_brands": [
+              "Sony Music Latin",
+              "Universal Music Latino"
+            ],
+            "genres_influenced": [
+              "Reggaeton",
+              "Latin Urban",
+              "Trap Latino"
+            ],
+            "performance_style": "Tainy is known for his dynamic and engaging live DJ sets and performances, often incorporating cutting-edge production techniques and collaborations with top Latin artists.",
+            "artists_influenced": [
+              "Bad Bunny",
+              "J Balvin",
+              "Ozuna"
+            ],
+            "short_descriptions": [
+              {
+                "value": "Tainy est un producteur et compositeur portoricain célèbre pour son influence dans le reggaeton et la musique urbaine latine.",
+                "languages": [
+                  "fr"
+                ]
+              },
+              {
+                "value": "Tainy es un productor y compositor puertorriqueño reconocido por su trabajo influyente en el reggaetón y la música urbana latina.",
+                "languages": [
+                  "es"
+                ]
+              },
+              {
+                "value": "Tainy is a Puerto Rican record producer and songwriter known for his influential work in reggaeton and Latin urban music.",
+                "languages": [
+                  "en"
+                ]
+              }
+            ],
+            "adjectives_for_fans": [
+              "Passionate",
+              "Loyal",
+              "Energetic"
+            ],
+            "adjectives_for_music": [
+              "Catchy",
+              "Rhythmic",
+              "Energetic"
+            ],
+            "lyrical_themes_description": "Tainy's productions often explore themes common in reggaeton and Latin urban music, including love, partying, street life, romance, and heartbreak, reflecting the vibrant and emotional aspects of Latin culture.",
+            "adjectives_for_performance_style": [
+              "Dynamic",
+              "Engaging",
+              "Energetic"
+            ],
+            "creative_and_specific_adjectives_for_music": [
+              "Reggaeton",
+              "Latin Trap",
+              "Dancehall-Infused"
+            ]
+          },
+          "popularity": 0.9619074769478796,
+          "tags": [
+            {
+              "id": "urn:tag:style:qloo:electro_latin",
+              "name": "Electro Latin",
+              "type": "urn:tag:style:qloo"
+            },
+            {
+              "id": "urn:tag:audience:qloo:diverse",
+              "name": "Diverse",
+              "type": "urn:tag:audience:qloo"
+            },
+            {
+              "id": "urn:tag:music:qloo:rhythmic",
+              "name": "Rhythmic",
+              "type": "urn:tag:music:qloo"
+            }
+          ],
+          "query": {
+            "affinity": 0.7524898293169365,
+            "measurements": {
+              "audience_growth": 0
+            }
+          },
+          "disambiguation": "Tainy",
+          "external": {
+            "imdb": [
+              {
+                "id": "nm9757681"
+              }
+            ],
+            "lastfm": [
+              {
+                "id": "tainy",
+                "listeners": 586925,
+                "scrobbles": 24069787
+              }
+            ],
+            "spotify": [
+              {
+                "id": "0GM7qgcRCORpGnfcN2tCiB",
+                "verified": true,
+                "followers": 223406,
+                "last_release": 2020,
+                "first_release": 2006,
+                "monthly_listeners": 21652373
+              }
+            ],
+            "twitter": [
+              {
+                "id": "tainywy"
+              },
+              {
+                "id": "tainy"
+              }
+            ],
+            "facebook": [
+              {
+                "id": "tainyofficial"
+              }
+            ],
+            "wikidata": [
+              {
+                "id": "q2541526"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "tainyoficial"
+              },
+              {
+                "id": "tainy"
+              }
+            ],
+            "musicbrainz": [
+              {
+                "id": "7e92584c-ca97-48bf-8a12-0327db0f6ac8",
+                "artist_type": "Person"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Rauw Alejandro",
+          "entity_id": "77A93A61-4A62-4466-B031-B9CC7485AA56",
+          "type": "urn:entity",
+          "subtype": "urn:entity:artist",
+          "properties": {
+            "image": {
+              "url": "https://images.qloo.com/i/77A93A61-4A62-4466-B031-B9CC7485AA56-420x-auto.jpg"
+            },
+            "vocals": "Rauw Alejandro's vocals are characterized by a smooth and melodic tone, often blending singing and rhythmic vocal delivery typical of reggaeton and Latin urban genres. His vocal style incorporates elements of R&B, with a focus on emotional expression and catchy hooks.",
+            "aliases": [
+              "Rauw Alejandro"
+            ],
+            "members": [],
+            "is_group": false,
+            "biography": "Rauw Alejandro was born in Puerto Rico and began his music career in the late 2010s. He quickly rose to prominence with his unique blend of reggaeton and R&B, gaining a strong following in Latin America and beyond. His early life was marked by a passion for music and dance, which influenced his ener...",
+            "known_for": "Known for his smooth vocals, innovative blend of reggaeton and R&B, and dynamic stage presence.",
+            "start_year": 2014,
+            "description": "Rauw Alejandro is a Puerto Rican singer and songwriter who has gained international fame for his contributions to reggaeton, Latin urban, and Latin pop music. He is known for blending traditional reggaeton rhythms with contemporary R&B and trap influences, creating a modern and versatile sound. Sinc...",
+            "instruments": [
+              "Vocals"
+            ],
+            "collaborators": [
+              "Anuel AA",
+              "J Balvin",
+              "Camilo"
+            ],
+            "date_of_birth": "1993-01-10",
+            "influenced_by": [
+              "Daddy Yankee",
+              "Don Omar",
+              "Tego Calderón"
+            ],
+            "notable_songs": [
+              "Todo De Ti",
+              "Tattoo",
+              "Fantasías"
+            ],
+            "lyrical_themes": [
+              "Love",
+              "Romance",
+              "Party"
+            ],
+            "place_of_birth": "San Juan, Puerto Rico",
+            "primary_genres": [
+              "Reggaeton",
+              "Latin Urban",
+              "Latin Pop"
+            ],
+            "characteristics": [
+              "Versatile",
+              "Smooth",
+              "Dynamic"
+            ],
+            "cultural_impact": "Rauw Alejandro has played a significant role in the global popularization of reggaeton and Latin urban music, influencing a new generation of artists and expanding the reach of Latin music worldwide. His innovative style and collaborations have helped bridge traditional Latin sounds with contemporar...",
+            "obscurity_scale": [
+              "2"
+            ],
+            "secondary_genres": [
+              "R&B",
+              "Trap Latino"
+            ],
+            "associated_brands": [
+              "Nike",
+              "Adidas"
+            ],
+            "genres_influenced": [
+              "Latin Urban",
+              "Reggaeton",
+              "Latin Pop"
+            ],
+            "performance_style": "Rauw Alejandro's performance style is energetic and charismatic, combining dance and live vocals to create engaging and dynamic shows.",
+            "artists_influenced": [
+              "Sech",
+              "Feid",
+              "Myke Towers"
+            ],
+            "short_descriptions": [
+              {
+                "value": "Chanteur et auteur-compositeur portoricain célèbre pour sa musique reggaeton et urbaine latine.",
+                "languages": [
+                  "fr"
+                ]
+              },
+              {
+                "value": "Puerto Rican singer and songwriter known for his reggaeton and Latin urban music.",
+                "languages": [
+                  "en"
+                ]
+              },
+              {
+                "value": "Cantante y compositor puertorriqueño conocido por su música reggaetón y urbana latina.",
+                "languages": [
+                  "es"
+                ]
+              }
+            ],
+            "adjectives_for_fans": [
+              "Passionate",
+              "Energetic",
+              "Loyal"
+            ],
+            "adjectives_for_music": [
+              "Catchy",
+              "Rhythmic",
+              "Melodic"
+            ],
+            "lyrical_themes_description": "Rauw Alejandro's lyrics often explore themes of love and romance, with a focus on relationships, passion, and emotional experiences. His songs also celebrate partying, dancing, and youthful energy, reflecting the vibrant culture of Latin urban music.",
+            "adjectives_for_performance_style": [
+              "Energetic",
+              "Charismatic",
+              "Engaging"
+            ],
+            "creative_and_specific_adjectives_for_music": [
+              "Latin Urban",
+              "Reggaeton Fusion",
+              "R&B Infused"
+            ]
+          },
+          "popularity": 0.9730157481863044,
+          "tags": [
+            {
+              "id": "urn:tag:artist:qloo:innovative",
+              "name": "Innovative",
+              "type": "urn:tag:artist:qloo"
+            },
+            {
+              "id": "urn:tag:audience:qloo:loyal",
+              "name": "Loyal",
+              "type": "urn:tag:audience:qloo"
+            },
+            {
+              "id": "urn:tag:subgenre:qloo:r_b",
+              "name": "R&B",
+              "type": "urn:tag:subgenre:qloo"
+            }
+          ],
+          "query": {
+            "affinity": 0.7498352056908587,
+            "measurements": {
+              "audience_growth": 0
+            }
+          },
+          "disambiguation": "Rauw Alejandro",
+          "external": {
+            "imdb": [
+              {
+                "id": "nm10282885"
+              }
+            ],
+            "lastfm": [
+              {
+                "id": "rauw%20alejandro",
+                "listeners": 751706,
+                "scrobbles": 55685611
+              }
+            ],
+            "spotify": [
+              {
+                "id": "1mcTU81TzQhprhouKaTkpq",
+                "verified": true,
+                "followers": 3149217,
+                "last_release": 2020,
+                "first_release": 2016,
+                "monthly_listeners": 26805976
+              }
+            ],
+            "twitter": [
+              {
+                "id": "rauwalejandro"
+              }
+            ],
+            "facebook": [
+              {
+                "id": "rauwalejandro"
+              }
+            ],
+            "wikidata": [
+              {
+                "id": "q61586861"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "rauwalejandro"
+              }
+            ],
+            "musicbrainz": [
+              {
+                "id": "197b70c7-8910-4030-ad03-632d82aa40e3",
+                "artist_type": "Person"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Karol G",
+          "entity_id": "658495BB-DF77-472E-A6B2-9E37FF248FB3",
+          "type": "urn:entity",
+          "subtype": "urn:entity:artist",
+          "properties": {
+            "image": {
+              "url": "https://images.qloo.com/i/658495BB-DF77-472E-A6B2-9E37FF248FB3-420x-auto.jpg"
+            },
+            "vocals": "Karol G's vocals are characterized by a smooth yet powerful delivery, blending melodic singing with rhythmic rap elements typical of reggaeton and Latin trap genres.",
+            "aliases": [
+              "Carolina Giraldo Navarro"
+            ],
+            "members": [],
+            "is_group": false,
+            "biography": "Karol G was born on February 14, 1991, in Medellín, Colombia. She began her music career participating in various singing competitions and gradually gained recognition in the Latin music scene. Her breakthrough came with hits like \"Ahora Me Llama\" and \"Tusa,\" which established her as a prominent fig...",
+            "known_for": "Karol G is known for her distinctive blend of reggaeton and Latin trap, her empowering lyrics, and her role as a leading female artist in Latin urban music.",
+            "start_year": 2010,
+            "description": "Karol G, born Carolina Giraldo Navarro, is a Colombian singer and songwriter who rose to fame with her reggaeton and Latin trap music. She is recognized for blending urban rhythms with pop influences, creating a distinctive sound that has garnered international success. Karol G has become one of the...",
+            "instruments": [
+              "Vocals"
+            ],
+            "collaborators": [
+              "Nicki Minaj",
+              "Anuel AA",
+              "J Balvin"
+            ],
+            "date_of_birth": "1991-02-14",
+            "influenced_by": [
+              "Ivy Queen",
+              "Daddy Yankee",
+              "Don Omar"
+            ],
+            "notable_songs": [
+              "Tusa",
+              "Ahora Me Llama",
+              "Bichota"
+            ],
+            "lyrical_themes": [
+              "Love",
+              "Empowerment",
+              "Heartbreak"
+            ],
+            "place_of_birth": "Medellín, Antioquia, Colombia",
+            "primary_genres": [
+              "Reggaeton",
+              "Latin Pop",
+              "Trap Latino"
+            ],
+            "characteristics": [
+              "Charismatic",
+              "Versatile",
+              "Powerful"
+            ],
+            "cultural_impact": "Karol G has significantly impacted Latin urban music by breaking gender barriers in a male-dominated genre, inspiring many female artists, and popularizing reggaeton and Latin trap globally.",
+            "obscurity_scale": [
+              "2"
+            ],
+            "secondary_genres": [
+              "Urbano Latino",
+              "Hip Hop",
+              "Dancehall"
+            ],
+            "associated_brands": [
+              "Adidas",
+              "Pepsi"
+            ],
+            "genres_influenced": [
+              "Latin Urban",
+              "Reggaeton",
+              "Latin Trap"
+            ],
+            "performance_style": "Karol G's performance style is energetic and engaging, combining strong vocal delivery with dynamic stage presence and interaction with the audience.",
+            "artists_influenced": [
+              "Natti Natasha",
+              "Becky G",
+              "Farina"
+            ],
+            "short_descriptions": [
+              {
+                "value": "Kolumbianische Sängerin und Songwriterin, bekannt für ihre Reggaetón- und Latin-Trap-Musik.",
+                "languages": [
+                  "de"
+                ]
+              },
+              {
+                "value": "Cantante y compositora colombiana reconocida por su música reggaetón y Latin trap.",
+                "languages": [
+                  "es"
+                ]
+              },
+              {
+                "value": "Chanteuse et auteure-compositrice colombienne célèbre pour sa musique reggaetón et Latin trap.",
+                "languages": [
+                  "fr"
+                ]
+              }
+            ],
+            "adjectives_for_fans": [
+              "Loyal",
+              "Passionate",
+              "Diverse"
+            ],
+            "adjectives_for_music": [
+              "Catchy",
+              "Rhythmic",
+              "Energetic"
+            ],
+            "lyrical_themes_description": "Karol G's lyrics often explore themes of romantic relationships, female empowerment, overcoming heartbreak, celebration, and self-confidence, resonating with a broad audience especially young women.",
+            "adjectives_for_performance_style": [
+              "Energetic",
+              "Engaging",
+              "Charismatic"
+            ],
+            "creative_and_specific_adjectives_for_music": [
+              "Reggaeton",
+              "Latin Trap",
+              "Urbano Latino"
+            ]
+          },
+          "popularity": 0.984969427678273,
+          "tags": [
+            {
+              "id": "urn:tag:genre:music:latin",
+              "name": "Latin",
+              "type": "urn:tag:genre:music"
+            },
+            {
+              "id": "urn:tag:style:qloo:latin_pop",
+              "name": "Latin Pop",
+              "type": "urn:tag:style:qloo"
+            },
+            {
+              "id": "urn:tag:influenced_by:qloo:daddy_yankee",
+              "name": "Daddy Yankee",
+              "type": "urn:tag:influenced_by:qloo"
+            }
+          ],
+          "query": {
+            "affinity": 0.7477027861519401,
+            "measurements": {
+              "audience_growth": 0
+            }
+          },
+          "disambiguation": "Karol G",
+          "external": {
+            "imdb": [
+              {
+                "id": "nm8766882"
+              }
+            ],
+            "lastfm": [
+              {
+                "id": "karol%20g",
+                "listeners": 1141428,
+                "scrobbles": 51509377
+              }
+            ],
+            "spotify": [
+              {
+                "id": "790FomKkXshlbRYZFtlgla",
+                "verified": true,
+                "followers": 13752893,
+                "last_release": 2020,
+                "first_release": 2014,
+                "monthly_listeners": 32635212
+              }
+            ],
+            "twitter": [
+              {
+                "id": "karolg"
+              },
+              {
+                "id": "karolgmusic"
+              }
+            ],
+            "facebook": [
+              {
+                "id": "karolgoficial"
+              }
+            ],
+            "wikidata": [
+              {
+                "id": "q22001324"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "karolg"
+              }
+            ],
+            "musicbrainz": [
+              {
+                "id": "0f1a58c0-be64-4fb3-9332-e741ad50768f",
+                "artist_type": "Person"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

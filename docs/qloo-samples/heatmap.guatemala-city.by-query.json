@@ -1,0 +1,78 @@
+{
+  "note": "/v2/insights heatmap, filter.location.query (Guatemala City)",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:heatmap",
+      "filter.location.query": "Guatemala City, Guatemala",
+      "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "heatmap": [
+        {
+          "location": {
+            "latitude": 14.628983,
+            "longitude": -90.51842,
+            "geohash": "9fxehpn"
+          },
+          "query": {
+            "affinity": 0.9953161592505855,
+            "affinity_rank": 1,
+            "popularity": 0.7377049180327869,
+            "entity_artist_affinity_rank": 1,
+            "entity_artist_affinity": 0.9953161592505855
+          }
+        },
+        {
+          "location": {
+            "latitude": 14.613876,
+            "longitude": -90.54863,
+            "geohash": "9fxe5s2"
+          },
+          "query": {
+            "affinity": 0.9953161592505855,
+            "affinity_rank": 1,
+            "popularity": 0.7271662763466042,
+            "entity_artist_affinity_rank": 1,
+            "entity_artist_affinity": 0.9953161592505855
+          }
+        },
+        {
+          "location": {
+            "latitude": 14.653702,
+            "longitude": -90.44151,
+            "geohash": "9fxemgw"
+          },
+          "query": {
+            "affinity": 0.9953161592505855,
+            "affinity_rank": 1,
+            "popularity": 0.4953161592505855,
+            "entity_artist_affinity_rank": 1,
+            "entity_artist_affinity": 0.9953161592505855
+          }
+        }
+      ]
+    },
+    "query": {
+      "localities": {
+        "filter": [
+          {
+            "entity_id": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+            "name": "Guatemala City",
+            "subtype": "urn:entity:locality",
+            "location": {
+              "lat": 14.632690259731042,
+              "lon": -90.478876556537
+            },
+            "popularity": 0.9986972,
+            "disambiguation": "Guatemala City, Guatemala Department, Guatemala"
+          }
+        ]
+      }
+    }
+  }
+}

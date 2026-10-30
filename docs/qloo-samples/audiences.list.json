@@ -1,0 +1,82 @@
+{
+  "note": "/v2/audiences (filter.parents.types=urn:audience:communities)",
+  "request": {
+    "endpoint": "/v2/audiences",
+    "params": {
+      "filter.parents.types": "urn:audience:communities",
+      "take": 20
+    }
+  },
+  "status": 200,
+  "body": {
+    "totalRequestDuration": 6,
+    "success": true,
+    "results": {
+      "audiences": [
+        {
+          "entity_id": "DA61B8AD-6D79-4B0C-BEA0-EC966C93902E",
+          "name": "AAPI",
+          "parents": [
+            {
+              "id": "urn:audience:communities",
+              "name": "Communities",
+              "type": "urn:audience"
+            }
+          ],
+          "type": "urn:audience:communities",
+          "id": "urn:audience:communities:aapi",
+          "disambiguation": "Aapi (Communities)",
+          "tags": [
+            {
+              "id": "urn:tag:collection:canonical",
+              "name": "Canonical",
+              "type": "urn:tag:collection"
+            }
+          ]
+        },
+        {
+          "entity_id": "E47478B9-8ED2-449B-B854-6344059742E3",
+          "name": "Latino",
+          "parents": [
+            {
+              "id": "urn:audience:communities",
+              "name": "Communities",
+              "type": "urn:audience"
+            }
+          ],
+          "type": "urn:audience:communities",
+          "id": "urn:audience:communities:latino",
+          "disambiguation": "Latino (Communities)",
+          "tags": [
+            {
+              "id": "urn:tag:collection:canonical",
+              "name": "Canonical",
+              "type": "urn:tag:collection"
+            }
+          ]
+        },
+        {
+          "entity_id": "6BED625C-E312-47E9-A4B5-F978C7778269",
+          "name": "LGBTQ",
+          "parents": [
+            {
+              "id": "urn:audience:communities",
+              "name": "Communities",
+              "type": "urn:audience"
+            }
+          ],
+          "type": "urn:audience:communities",
+          "id": "urn:audience:communities:lgbtq",
+          "disambiguation": "Lgbtq (Communities)",
+          "tags": [
+            {
+              "id": "urn:tag:collection:canonical",
+              "name": "Canonical",
+              "type": "urn:tag:collection"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

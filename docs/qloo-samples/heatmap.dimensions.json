@@ -1,0 +1,100 @@
+{
+  "note": "/v2/insights heatmap with heatmap.dimensions",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:heatmap",
+      "filter.location.query": "Mexico City, Mexico",
+      "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+      "heatmap.dimensions": "quality,popularity,price_level"
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "heatmap": [
+        {
+          "location": {
+            "latitude": 19.311218,
+            "longitude": -99.19006,
+            "geohash": "9g3myg"
+          },
+          "query": {
+            "affinity": 1,
+            "affinity_rank": 0.7752874451691143,
+            "popularity": 0.8425774877650897,
+            "entity_artist_affinity_rank": 0.973343,
+            "entity_artist_affinity": 0.7128874388254486,
+            "quality_affinity_rank": 0.7264859543906318,
+            "popularity_affinity_rank": 0.2552097166240544,
+            "price_level_affinity_rank": 0.75,
+            "price_level_total_count": 1,
+            "quality_affinity": 0.9794745484400657,
+            "popularity_affinity": 0.9950738916256158,
+            "price_level_affinity": 0.9975369458128078
+          }
+        },
+        {
+          "location": {
+            "latitude": 19.421082,
+            "longitude": -99.22302,
+            "geohash": "9g3qqp"
+          },
+          "query": {
+            "affinity": 0.9991843393148451,
+            "affinity_rank": 0.7663474422668302,
+            "popularity": 0.5815660685154975,
+            "entity_artist_affinity_rank": 0.943968,
+            "entity_artist_affinity": 0.5269168026101142,
+            "quality_affinity_rank": 0.6937638365074592,
+            "popularity_affinity_rank": 0.07241681709352127,
+            "price_level_affinity_rank": 1,
+            "price_level_total_count": 1,
+            "quality_affinity": 0.9195402298850575,
+            "popularity_affinity": 0.7955665024630542,
+            "price_level_affinity": 0.9991789819376026
+          }
+        },
+        {
+          "location": {
+            "latitude": 19.212341,
+            "longitude": -99.25598,
+            "geohash": "9g3mm3"
+          },
+          "query": {
+            "affinity": 0.99836867862969,
+            "affinity_rank": 0.7505924327829836,
+            "popularity": 0.6533442088091354,
+            "entity_artist_affinity_rank": 0.970711,
+            "entity_artist_affinity": 0.6933115823817292,
+            "quality_affinity_rank": 0.8187726140022278,
+            "popularity_affinity_rank": 0.2421751171297065,
+            "price_level_affinity_rank": null,
+            "price_level_total_count": 0,
+            "quality_affinity": 0.9991789819376026,
+            "popularity_affinity": 0.9926108374384236,
+            "price_level_affinity": null
+          }
+        }
+      ]
+    },
+    "query": {
+      "localities": {
+        "filter": [
+          {
+            "entity_id": "B7114A68-EA17-4514-BE69-F67590C681D8",
+            "name": "Mexico City",
+            "subtype": "urn:entity:locality",
+            "location": {
+              "lat": 19.27689675652405,
+              "lon": -99.13941406175974
+            },
+            "popularity": 0.99993354,
+            "disambiguation": "Mexico City, Mexico"
+          }
+        ]
+      }
+    }
+  }
+}

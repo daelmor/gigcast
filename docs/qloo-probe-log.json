@@ -1,0 +1,5546 @@
+{
+  "generatedAt": "2026-10-30T08:37:51.324Z",
+  "baseUrl": "https://hackathon.api.qloo.com",
+  "requests": [
+    {
+      "id": "auth.hackathon",
+      "endpoint": "/search",
+      "params": {
+        "query": "Bad Bunny",
+        "types": "urn:entity:artist",
+        "take": 2
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1801,
+      "count": 2,
+      "fetchedAt": "2026-10-30T08:28:50.594Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49558",
+        "x-month-ratelimit-reset": "2591057.32",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "auth.production",
+      "endpoint": "/search",
+      "params": {
+        "query": "Bad Bunny",
+        "types": "urn:entity:artist",
+        "take": 2
+      },
+      "base": "https://api.qloo.com",
+      "status": 401,
+      "ms": 315,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:28:51.033Z",
+      "replayed": true
+    },
+    {
+      "id": "search.types-urn",
+      "endpoint": "/search",
+      "params": {
+        "query": "Bad Bunny",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 155,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:51.313Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49557",
+        "x-month-ratelimit-reset": "2591055.16",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "search.types-short",
+      "endpoint": "/search",
+      "params": {
+        "query": "Bad Bunny",
+        "types": "artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 78,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:28:51.514Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49556",
+        "x-month-ratelimit-reset": "2591054.87",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.71"
+      }
+    },
+    {
+      "id": "search.filter-type",
+      "endpoint": "/search",
+      "params": {
+        "query": "Bad Bunny",
+        "filter.type": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 201,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:51.839Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49555",
+        "x-month-ratelimit-reset": "2591054.68",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.52"
+      }
+    },
+    {
+      "id": "search.no-types",
+      "endpoint": "/search",
+      "params": {
+        "query": "Bad Bunny",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 223,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:52.186Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49554",
+        "x-month-ratelimit-reset": "2591054.35",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.19"
+      }
+    },
+    {
+      "id": "artist.global.bad-bunny",
+      "endpoint": "/search",
+      "params": {
+        "query": "Bad Bunny",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 158,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:52.471Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49553",
+        "x-month-ratelimit-reset": "2591054",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.global.karol-g",
+      "endpoint": "/search",
+      "params": {
+        "query": "Karol G",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 181,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:52.775Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49552",
+        "x-month-ratelimit-reset": "2591053.72",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.72"
+      }
+    },
+    {
+      "id": "artist.global.coldplay",
+      "endpoint": "/search",
+      "params": {
+        "query": "Coldplay",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 137,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:53.036Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49551",
+        "x-month-ratelimit-reset": "2591053.42",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.41"
+      }
+    },
+    {
+      "id": "artist.global.shakira",
+      "endpoint": "/search",
+      "params": {
+        "query": "Shakira",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 187,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:53.347Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49550",
+        "x-month-ratelimit-reset": "2591053.15",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.15"
+      }
+    },
+    {
+      "id": "artist.global.daddy-yankee",
+      "endpoint": "/search",
+      "params": {
+        "query": "Daddy Yankee",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 164,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:53.634Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49549",
+        "x-month-ratelimit-reset": "2591052.85",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.global.feid",
+      "endpoint": "/search",
+      "params": {
+        "query": "Feid",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 172,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:53.929Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49548",
+        "x-month-ratelimit-reset": "2591052.56",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.71"
+      }
+    },
+    {
+      "id": "artist.global.rauw-alejandro",
+      "endpoint": "/search",
+      "params": {
+        "query": "Rauw Alejandro",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 189,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:54.241Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49547",
+        "x-month-ratelimit-reset": "2591052.27",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.42"
+      }
+    },
+    {
+      "id": "artist.global.grupo-frontera",
+      "endpoint": "/search",
+      "params": {
+        "query": "Grupo Frontera",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 153,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:54.522Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49546",
+        "x-month-ratelimit-reset": "2591051.94",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.09"
+      }
+    },
+    {
+      "id": "artist.global.peso-pluma",
+      "endpoint": "/search",
+      "params": {
+        "query": "Peso Pluma",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 193,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:54.838Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49545",
+        "x-month-ratelimit-reset": "2591051.67",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.global.taylor-swift",
+      "endpoint": "/search",
+      "params": {
+        "query": "Taylor Swift",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 135,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:55.097Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49544",
+        "x-month-ratelimit-reset": "2591051.36",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.69"
+      }
+    },
+    {
+      "id": "tags.place.bar",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "bar",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 96,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:55.320Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49543",
+        "x-month-ratelimit-reset": "2591051.09",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.42"
+      }
+    },
+    {
+      "id": "tags.place.hotel",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "hotel",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 85,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:55.530Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49542",
+        "x-month-ratelimit-reset": "2591050.87",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.2"
+      }
+    },
+    {
+      "id": "tags.place.restaurant",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "restaurant",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 142,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:55.795Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49541",
+        "x-month-ratelimit-reset": "2591050.66",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "tags.place.night-club",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "night club",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 176,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:56.094Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49540",
+        "x-month-ratelimit-reset": "2591050.39",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.73"
+      }
+    },
+    {
+      "id": "tags.place.concert-hall",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "concert hall",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 253,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:56.471Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49539",
+        "x-month-ratelimit-reset": "2591050.09",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.43"
+      }
+    },
+    {
+      "id": "tags.place.stadium",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "stadium",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 139,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:56.732Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49538",
+        "x-month-ratelimit-reset": "2591049.72",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.06"
+      }
+    },
+    {
+      "id": "tags.place.arena",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "arena",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 133,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:56.987Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49537",
+        "x-month-ratelimit-reset": "2591049.46",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "tags.place.theater",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "theater",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 161,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:57.272Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49536",
+        "x-month-ratelimit-reset": "2591049.2",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.74"
+      }
+    },
+    {
+      "id": "tags.place.performing-arts-theater",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "performing arts theater",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 257,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:57.652Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49535",
+        "x-month-ratelimit-reset": "2591048.92",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.46"
+      }
+    },
+    {
+      "id": "tags.place.event-venue",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "event venue",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 415,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:58.189Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49534",
+        "x-month-ratelimit-reset": "2591048.54",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.07"
+      }
+    },
+    {
+      "id": "tags.place.live-music-venue",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "live music venue",
+        "filter.parents.types": "urn:entity:place",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 330,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:58.641Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49533",
+        "x-month-ratelimit-reset": "2591048",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "tags.music.reggaeton",
+      "endpoint": "/v2/tags",
+      "params": {
+        "filter.query": "reggaeton",
+        "filter.parents.types": "urn:entity:artist",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 168,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:28:58.932Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49532",
+        "x-month-ratelimit-reset": "2591047.55",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.54"
+      }
+    },
+    {
+      "id": "similar.anchor",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 10,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 204,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:28:59.265Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49531",
+        "x-month-ratelimit-reset": "2591047.25",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.24"
+      }
+    },
+    {
+      "id": "brands.anchor.global",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 207,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:28:59.675Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49530",
+        "x-month-ratelimit-reset": "2591046.92",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "demographics.anchor",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:demographics",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 91,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:28:59.901Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49529",
+        "x-month-ratelimit-reset": "2591046.5",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.58"
+      }
+    },
+    {
+      "id": "tags.anchor",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:tag",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 384,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:00.418Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49528",
+        "x-month-ratelimit-reset": "2591046.28",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.36"
+      }
+    },
+    {
+      "id": "heatmap.dimensions",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "heatmap.dimensions": "quality,popularity,price_level"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 499,
+      "count": 1227,
+      "fetchedAt": "2026-10-30T08:29:01.113Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49527",
+        "x-month-ratelimit-reset": "2591045.77",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "heatmap.signal-location",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "signal.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 154,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:01.394Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49526",
+        "x-month-ratelimit-reset": "2591045.07",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.3"
+      }
+    },
+    {
+      "id": "heatmap.boundary-locality",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "output.heatmap.boundary": "locality"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 93,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:01.611Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49525",
+        "x-month-ratelimit-reset": "2591044.79",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.02"
+      }
+    },
+    {
+      "id": "audiences.types",
+      "endpoint": "/v2/audiences/types",
+      "params": {
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 84,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:29:01.817Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49524",
+        "x-month-ratelimit-reset": "2591044.57",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "audiences.list",
+      "endpoint": "/v2/audiences",
+      "params": {
+        "filter.parents.types": "urn:audience:communities",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 781,
+      "count": 4,
+      "fetchedAt": "2026-10-30T08:29:02.722Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49523",
+        "x-month-ratelimit-reset": "2591044.36",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.78"
+      }
+    },
+    {
+      "id": "entities.anchor",
+      "endpoint": "/entities",
+      "params": {
+        "entity_ids": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 115,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:29:02.962Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49522",
+        "x-month-ratelimit-reset": "2591043.46",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "trending.anchor",
+      "endpoint": "/v2/trending",
+      "params": {
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "filter.type": "urn:entity:artist",
+        "filter.start_date": "2025-01-01",
+        "filter.end_date": "2025-12-31",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 81,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:29:03.166Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49521",
+        "x-month-ratelimit-reset": "2591043.23",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.76"
+      }
+    },
+    {
+      "id": "trending.anchor-recent",
+      "endpoint": "/v2/trending",
+      "params": {
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "filter.type": "urn:entity:artist",
+        "filter.start_date": "2026-08-01",
+        "filter.end_date": "2026-10-29",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 80,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:29:03.369Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49520",
+        "x-month-ratelimit-reset": "2591043.02",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.56"
+      }
+    },
+    {
+      "id": "trending.anchor-brand",
+      "endpoint": "/v2/trending",
+      "params": {
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "filter.type": "urn:entity:brand",
+        "filter.start_date": "2025-01-01",
+        "filter.end_date": "2025-12-31",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 514,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:29:04.006Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49519",
+        "x-month-ratelimit-reset": "2591042.81",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.35"
+      }
+    },
+    {
+      "id": "heatmap.boundary-urn-locality",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "output.heatmap.boundary": "urn:entity:locality"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 11225,
+      "count": 57,
+      "fetchedAt": "2026-10-30T08:29:15.944Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49518",
+        "x-month-ratelimit-reset": "2591042.18",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "compare.artist-vs-city",
+      "endpoint": "/v2/insights/compare",
+      "params": {
+        "a.signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "b.signal.location.query": "Guatemala City, Guatemala",
+        "take": 10
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 73,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:16.148Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49517",
+        "x-month-ratelimit-reset": "2591030.24",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "trends.v2-category",
+      "endpoint": "/v2/trends/category",
+      "params": {
+        "type": "urn:entity:artist",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 404,
+      "ms": 65,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:16.337Z",
+      "replayed": true
+    },
+    {
+      "id": "trends.v2-trending",
+      "endpoint": "/v2/trending",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 73,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:16.533Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49516",
+        "x-month-ratelimit-reset": "2591029.86",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.61"
+      }
+    },
+    {
+      "id": "trends.v1-category",
+      "endpoint": "/trends/category",
+      "params": {
+        "type": "urn:entity:artist",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 404,
+      "ms": 62,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:16.718Z",
+      "replayed": true
+    },
+    {
+      "id": "trends.v2-entity",
+      "endpoint": "/v2/trends/entity",
+      "params": {
+        "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "start_date": "2026-08-01",
+        "end_date": "2026-10-29"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 404,
+      "ms": 66,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:16.906Z",
+      "replayed": true
+    },
+    {
+      "id": "trends.bias",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "bias.trends": "high",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 3104,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:29:20.134Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49515",
+        "x-month-ratelimit-reset": "2591029.29",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.05"
+      }
+    },
+    {
+      "id": "compare.v2-artist",
+      "endpoint": "/v2/insights/compare",
+      "params": {
+        "a.signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "b.signal.interests.entities": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+        "filter.type": "urn:entity:artist",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 996,
+      "count": 38,
+      "fetchedAt": "2026-10-30T08:29:21.255Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49514",
+        "x-month-ratelimit-reset": "2591026.05",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "compare.v2-tag",
+      "endpoint": "/v2/insights/compare",
+      "params": {
+        "a.signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "b.signal.interests.entities": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+        "filter.type": "urn:tag",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1018,
+      "count": 38,
+      "fetchedAt": "2026-10-30T08:29:22.401Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49513",
+        "x-month-ratelimit-reset": "2591024.93",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "analysis.v1",
+      "endpoint": "/analysis",
+      "params": {
+        "entity_ids": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3,B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+        "filter.type": "urn:entity:artist",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 404,
+      "ms": 64,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:22.592Z",
+      "replayed": true
+    },
+    {
+      "id": "analysis.v2",
+      "endpoint": "/v2/analysis",
+      "params": {
+        "entity_ids": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3,B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+        "filter.type": "urn:entity:artist",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 404,
+      "ms": 78,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:22.793Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49512",
+        "x-month-ratelimit-reset": "2591023.6",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "analysis.v1-compare",
+      "endpoint": "/analysis/compare",
+      "params": {
+        "entities.a": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "entities.b": "B6FA456F-B729-4700-B01F-E82AD3AC8ADA",
+        "filter.type": "urn:entity:artist"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 404,
+      "ms": 67,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:22.983Z",
+      "replayed": true
+    },
+    {
+      "id": "errors.type-music",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:music",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 78,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:23.184Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49511",
+        "x-month-ratelimit-reset": "2591023.21",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.61"
+      }
+    },
+    {
+      "id": "errors.type-food",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:food_and_drink",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 74,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:23.380Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49510",
+        "x-month-ratelimit-reset": "2591023.01",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.4"
+      }
+    },
+    {
+      "id": "errors.no-type",
+      "endpoint": "/v2/insights",
+      "params": {
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 78,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:23.581Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49509",
+        "x-month-ratelimit-reset": "2591022.81",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.21"
+      }
+    },
+    {
+      "id": "errors.no-signal",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 70,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:23.774Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49508",
+        "x-month-ratelimit-reset": "2591022.61",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.01"
+      }
+    },
+    {
+      "id": "errors.bad-entity",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "not-a-real-id",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 400,
+      "ms": 75,
+      "count": null,
+      "fetchedAt": "2026-10-30T08:29:23.971Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49507",
+        "x-month-ratelimit-reset": "2591022.42",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g1.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1403,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:25.498Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49506",
+        "x-month-ratelimit-reset": "2591022.22",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.8"
+      }
+    },
+    {
+      "id": "params.g1.e1",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.price_level.min": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 441,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:26.075Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49505",
+        "x-month-ratelimit-reset": "2591020.69",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g1.e2",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.price_level.max": 1
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 802,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:27.009Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49504",
+        "x-month-ratelimit-reset": "2591020.12",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.42"
+      }
+    },
+    {
+      "id": "params.g1.e3",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.popularity.min": 0.8
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 571,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:27.715Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49503",
+        "x-month-ratelimit-reset": "2591019.18",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g1.e4",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.rating.min": 4.5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 611,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:28.457Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49502",
+        "x-month-ratelimit-reset": "2591018.48",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.29"
+      }
+    },
+    {
+      "id": "params.g1.e5",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.tags": "urn:tag:genre:place:restaurant:bar"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 321,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:28.908Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49501",
+        "x-month-ratelimit-reset": "2591017.73",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g1.e6",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.exclude.tags": "urn:tag:genre:place:restaurant:bar"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1712,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:30.749Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49500",
+        "x-month-ratelimit-reset": "2591017.28",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.54"
+      }
+    },
+    {
+      "id": "params.g1.e7",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.demographics.age": "36_to_55"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1921,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:32.801Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49499",
+        "x-month-ratelimit-reset": "2591015.44",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g1.e8",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "page": 2
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1327,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:34.327Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49498",
+        "x-month-ratelimit-reset": "2591013.39",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g1.e9",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.bogus_parameter": 1
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1315,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:35.834Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49497",
+        "x-month-ratelimit-reset": "2591011.86",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g2.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "POINT(-99.1332 19.4326)",
+        "filter.location.radius": 15000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 631,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:36.658Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49496",
+        "x-month-ratelimit-reset": "2591010.36",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g2.e1",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "POINT(-99.1332 19.4326)",
+        "filter.location.radius": 2000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 185,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:37.035Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49495",
+        "x-month-ratelimit-reset": "2591009.53",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.17"
+      }
+    },
+    {
+      "id": "params.g2.e2",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "POINT(-99.1332 19.4326)",
+        "filter.location.radius": 50000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 860,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:38.090Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49494",
+        "x-month-ratelimit-reset": "2591009.16",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g3.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 111,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:38.332Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49493",
+        "x-month-ratelimit-reset": "2591008.1",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g3.e1",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.demographics.age": "36_to_55"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 148,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:38.606Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49492",
+        "x-month-ratelimit-reset": "2591007.86",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.76"
+      }
+    },
+    {
+      "id": "params.g3.e2",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.demographics.age": "24_and_younger"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 6900,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:45.634Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49491",
+        "x-month-ratelimit-reset": "2591007.59",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.49"
+      }
+    },
+    {
+      "id": "params.g3.e3",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.demographics.gender": "female"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 7493,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:53.253Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49490",
+        "x-month-ratelimit-reset": "2591000.56",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g3.e4",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.location.query": "Mexico City, Mexico"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 646,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:54.088Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49489",
+        "x-month-ratelimit-reset": "2590992.93",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g3.e5",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.location.query": "Guatemala City, Guatemala"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 646,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:54.925Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49488",
+        "x-month-ratelimit-reset": "2590992.1",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.17"
+      }
+    },
+    {
+      "id": "params.g3.e6",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.popularity.min": 0.9
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 652,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:55.764Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49487",
+        "x-month-ratelimit-reset": "2590991.27",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g3.e7",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.tags": "urn:tag:genre:music:reggaeton"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 113,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:56.065Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49486",
+        "x-month-ratelimit-reset": "2590990.42",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.15"
+      }
+    },
+    {
+      "id": "params.g3.e8",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.location.query": "Mexico City, Mexico"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 169,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:56.423Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49485",
+        "x-month-ratelimit-reset": "2590990.12",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g3.e9",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.price_level.min": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 130,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:56.746Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49484",
+        "x-month-ratelimit-reset": "2590989.76",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.64"
+      }
+    },
+    {
+      "id": "params.g4.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 209,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:57.202Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49483",
+        "x-month-ratelimit-reset": "2590989.44",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.32"
+      }
+    },
+    {
+      "id": "params.g4.e1",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.demographics.age": "36_to_55"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 376,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:57.829Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49482",
+        "x-month-ratelimit-reset": "2590988.98",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g4.e2",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.demographics.gender": "female"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 375,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:58.460Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49481",
+        "x-month-ratelimit-reset": "2590988.36",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.38"
+      }
+    },
+    {
+      "id": "params.g4.e3",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "signal.location.query": "Mexico City, Mexico"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 364,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:59.024Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49480",
+        "x-month-ratelimit-reset": "2590987.73",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "params.g4.e4",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.popularity.min": 0.5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 227,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:59.454Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49479",
+        "x-month-ratelimit-reset": "2590987.16",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.43"
+      }
+    },
+    {
+      "id": "params.g4.e5",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 20,
+        "filter.location.query": "Mexico City, Mexico"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 261,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:29:59.918Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49478",
+        "x-month-ratelimit-reset": "2590986.73",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0"
+      }
+    },
+    {
+      "id": "locality.bare-panama-city",
+      "endpoint": "/search",
+      "params": {
+        "query": "Panama City",
+        "types": "urn:entity:locality",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 641,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:00.692Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49477",
+        "x-month-ratelimit-reset": "2590986.25",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "locality.san-salvador",
+      "endpoint": "/search",
+      "params": {
+        "query": "San Salvador, El Salvador",
+        "types": "urn:entity:locality",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1182,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:30:02.082Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49476",
+        "x-month-ratelimit-reset": "2590985.5",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.24"
+      }
+    },
+    {
+      "id": "locality.guatemala-city",
+      "endpoint": "/search",
+      "params": {
+        "query": "Guatemala City, Guatemala",
+        "types": "urn:entity:locality",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 723,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:30:01.949Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49475",
+        "x-month-ratelimit-reset": "2590985.5",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.24"
+      }
+    },
+    {
+      "id": "places.san-salvador.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 443,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:02.865Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49473",
+        "x-month-ratelimit-reset": "2590984.09",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.86"
+      }
+    },
+    {
+      "id": "places.guatemala-city.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 345,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:02.655Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49474",
+        "x-month-ratelimit-reset": "2590984.23",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.san-salvador.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "San Salvador, El Salvador",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 405,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:03.548Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49471",
+        "x-month-ratelimit-reset": "2590983.31",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.08"
+      }
+    },
+    {
+      "id": "places.guatemala-city.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Guatemala City, Guatemala",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 357,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:03.297Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49472",
+        "x-month-ratelimit-reset": "2590983.5",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.28"
+      }
+    },
+    {
+      "id": "places.san-salvador.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 225,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:04.042Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49469",
+        "x-month-ratelimit-reset": "2590982.64",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.77"
+      }
+    },
+    {
+      "id": "places.san-salvador.tag.bar",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "filter.tags": "urn:tag:genre:place:restaurant:bar",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 225,
+      "count": 42,
+      "fetchedAt": "2026-10-30T08:30:04.472Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49467",
+        "x-month-ratelimit-reset": "2590982.14",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.27"
+      }
+    },
+    {
+      "id": "places.guatemala-city.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 238,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:03.809Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49470",
+        "x-month-ratelimit-reset": "2590982.87",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.san-salvador.tag.hotel",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "filter.tags": "urn:tag:genre:place:hotel",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 238,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:04.910Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49465",
+        "x-month-ratelimit-reset": "2590981.71",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.san-salvador.tag.night-club",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "filter.tags": "urn:tag:category:place:night_club",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 193,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:05.234Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49463",
+        "x-month-ratelimit-reset": "2590981.27",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.56"
+      }
+    },
+    {
+      "id": "places.guatemala-city.tag.bar",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "filter.tags": "urn:tag:genre:place:restaurant:bar",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 218,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:04.296Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49468",
+        "x-month-ratelimit-reset": "2590982.38",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.51"
+      }
+    },
+    {
+      "id": "places.san-salvador.tag.concert-hall",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "filter.tags": "urn:tag:category:place:concert_hall",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 194,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:30:05.557Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49461",
+        "x-month-ratelimit-reset": "2590980.95",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.23"
+      }
+    },
+    {
+      "id": "places.san-salvador.tag.stadium",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "filter.tags": "urn:tag:category:place:stadium",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 190,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:30:05.870Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49459",
+        "x-month-ratelimit-reset": "2590980.63",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.guatemala-city.tag.hotel",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "filter.tags": "urn:tag:genre:place:hotel",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 227,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:04.731Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49466",
+        "x-month-ratelimit-reset": "2590981.88",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.01"
+      }
+    },
+    {
+      "id": "brands.san-salvador",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "signal.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 2958,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:09.030Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49457",
+        "x-month-ratelimit-reset": "2590980.32",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.68"
+      }
+    },
+    {
+      "id": "places.guatemala-city.tag.night-club",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "filter.tags": "urn:tag:category:place:night_club",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 202,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:30:05.062Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49464",
+        "x-month-ratelimit-reset": "2590981.46",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.75"
+      }
+    },
+    {
+      "id": "heatmap.san-salvador.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 272,
+      "count": 184,
+      "fetchedAt": "2026-10-30T08:30:09.433Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49450",
+        "x-month-ratelimit-reset": "2590977.15",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.guatemala-city.tag.concert-hall",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "filter.tags": "urn:tag:category:place:concert_hall",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 187,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:30:05.375Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49462",
+        "x-month-ratelimit-reset": "2590981.13",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.41"
+      }
+    },
+    {
+      "id": "heatmap.san-salvador.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "San Salvador, El Salvador",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 382,
+      "count": 184,
+      "fetchedAt": "2026-10-30T08:30:09.939Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49448",
+        "x-month-ratelimit-reset": "2590976.76",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.6"
+      }
+    },
+    {
+      "id": "places.guatemala-city.tag.stadium",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "filter.tags": "urn:tag:category:place:stadium",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 205,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:05.704Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49460",
+        "x-month-ratelimit-reset": "2590980.82",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "4",
+        "x-second-ratelimit-reset": "0.1"
+      }
+    },
+    {
+      "id": "heatmap.san-salvador.by-point",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "POINT(-89.2182 13.6929)",
+        "filter.location.radius": 25000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 266,
+      "count": 307,
+      "fetchedAt": "2026-10-30T08:30:10.331Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49446",
+        "x-month-ratelimit-reset": "2590976.25",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.09"
+      }
+    },
+    {
+      "id": "citytags.san-salvador",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:tag",
+        "signal.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "filter.parents.types": "urn:entity:artist",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 174,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:10.629Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49445",
+        "x-month-ratelimit-reset": "2590975.86",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "brands.guatemala-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "signal.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 324,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:06.222Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49458",
+        "x-month-ratelimit-reset": "2590980.48",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.84"
+      }
+    },
+    {
+      "id": "cityartists.san-salvador",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.location": "675E9E0E-E3A6-4581-AE73-ABFF7C4801DE",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 184,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:10.938Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49444",
+        "x-month-ratelimit-reset": "2590975.56",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.7"
+      }
+    },
+    {
+      "id": "heatmap.guatemala-city.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 362,
+      "count": 855,
+      "fetchedAt": "2026-10-30T08:30:06.712Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49456",
+        "x-month-ratelimit-reset": "2590979.97",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.33"
+      }
+    },
+    {
+      "id": "artist.san-salvador.alvaro-torres",
+      "endpoint": "/search",
+      "params": {
+        "query": "Álvaro Torres",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1441,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:12.503Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49443",
+        "x-month-ratelimit-reset": "2590975.25",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.39"
+      }
+    },
+    {
+      "id": "artist.san-salvador.adhesivo",
+      "endpoint": "/search",
+      "params": {
+        "query": "Adhesivo",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 482,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:30:13.108Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49440",
+        "x-month-ratelimit-reset": "2590973.69",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.75"
+      }
+    },
+    {
+      "id": "heatmap.guatemala-city.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Guatemala City, Guatemala",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 383,
+      "count": 855,
+      "fetchedAt": "2026-10-30T08:30:07.225Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49455",
+        "x-month-ratelimit-reset": "2590979.48",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.san-salvador.friguey",
+      "endpoint": "/search",
+      "params": {
+        "query": "Frigüey",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 246,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:30:13.476Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49439",
+        "x-month-ratelimit-reset": "2590972.99",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.06"
+      }
+    },
+    {
+      "id": "artist.san-salvador.los-hermanos-flores",
+      "endpoint": "/search",
+      "params": {
+        "query": "Los Hermanos Flores",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 267,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:13.867Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49437",
+        "x-month-ratelimit-reset": "2590972.72",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.81"
+      }
+    },
+    {
+      "id": "heatmap.guatemala-city.by-point",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "POINT(-90.5069 14.6349)",
+        "filter.location.radius": 25000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 273,
+      "count": 545,
+      "fetchedAt": "2026-10-30T08:30:07.622Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49454",
+        "x-month-ratelimit-reset": "2590978.97",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.48"
+      }
+    },
+    {
+      "id": "artist.san-salvador.shaka-y-dres",
+      "endpoint": "/search",
+      "params": {
+        "query": "Shaka y Dres",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 840,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:14.833Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49435",
+        "x-month-ratelimit-reset": "2590972.32",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.42"
+      }
+    },
+    {
+      "id": "similar.san-salvador",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "EDB73239-1DDE-4986-B144-B1A637B62CAC",
+        "take": 10,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 174,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:30:15.132Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49433",
+        "x-month-ratelimit-reset": "2590971.36",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "locality.panama-city",
+      "endpoint": "/search",
+      "params": {
+        "query": "Panama City, Panama",
+        "types": "urn:entity:locality",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 267,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:30:13.922Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49436",
+        "x-month-ratelimit-reset": "2590972.66",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.76"
+      }
+    },
+    {
+      "id": "citytags.guatemala-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:tag",
+        "signal.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "filter.parents.types": "urn:entity:artist",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 172,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:07.919Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49453",
+        "x-month-ratelimit-reset": "2590978.57",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.08"
+      }
+    },
+    {
+      "id": "locality.panama-city.alt1",
+      "endpoint": "/search",
+      "params": {
+        "query": "Distrito Panamá",
+        "types": "urn:entity:locality",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 940,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:30:15.070Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49434",
+        "x-month-ratelimit-reset": "2590972.26",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.36"
+      }
+    },
+    {
+      "id": "cityartists.guatemala-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.location": "3E843C82-ACFE-48BB-9C76-FC9A2781530D",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 461,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:08.504Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49452",
+        "x-month-ratelimit-reset": "2590978.28",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.panama-city.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 555,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:15.885Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49432",
+        "x-month-ratelimit-reset": "2590971.12",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.76"
+      }
+    },
+    {
+      "id": "artist.guatemala-city.ricardo-arjona",
+      "endpoint": "/search",
+      "params": {
+        "query": "Ricardo Arjona",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 775,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:09.407Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49451",
+        "x-month-ratelimit-reset": "2590977.69",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.4"
+      }
+    },
+    {
+      "id": "artist.guatemala-city.gaby-moreno",
+      "endpoint": "/search",
+      "params": {
+        "query": "Gaby Moreno",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 301,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:09.833Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49449",
+        "x-month-ratelimit-reset": "2590976.78",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.62"
+      }
+    },
+    {
+      "id": "artist.guatemala-city.alux-nahual",
+      "endpoint": "/search",
+      "params": {
+        "query": "Alux Nahual",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1290,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:30:11.246Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49447",
+        "x-month-ratelimit-reset": "2590976.36",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.2"
+      }
+    },
+    {
+      "id": "artist.guatemala-city.bohemia-suburbana",
+      "endpoint": "/search",
+      "params": {
+        "query": "Bohemia Suburbana",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 881,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:12.249Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49442",
+        "x-month-ratelimit-reset": "2590974.94",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.08"
+      }
+    },
+    {
+      "id": "artist.guatemala-city.viernes-verde",
+      "endpoint": "/search",
+      "params": {
+        "query": "Viernes Verde",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 921,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:13.293Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49441",
+        "x-month-ratelimit-reset": "2590973.94",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.panama-city.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Panama City, Panama",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 261,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:16.413Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49430",
+        "x-month-ratelimit-reset": "2590970.3",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "similar.guatemala-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "CA98034C-6AD8-44AA-898E-038495C4E116",
+        "take": 10,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 114,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:30:13.531Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49438",
+        "x-month-ratelimit-reset": "2590972.9",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "locality.santo-domingo",
+      "endpoint": "/search",
+      "params": {
+        "query": "Santo Domingo, Dominican Republic",
+        "types": "urn:entity:locality",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 633,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:30:16.004Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49431",
+        "x-month-ratelimit-reset": "2590971.05",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.69"
+      }
+    },
+    {
+      "id": "places.panama-city.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 241,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:16.862Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49428",
+        "x-month-ratelimit-reset": "2590969.77",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.46"
+      }
+    },
+    {
+      "id": "places.santo-domingo.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 363,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:16.623Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49429",
+        "x-month-ratelimit-reset": "2590970.18",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.88"
+      }
+    },
+    {
+      "id": "places.panama-city.tag.bar",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "filter.tags": "urn:tag:genre:place:restaurant:bar",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 258,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:17.325Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49426",
+        "x-month-ratelimit-reset": "2590969.33",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.02"
+      }
+    },
+    {
+      "id": "places.santo-domingo.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Santo Domingo, Dominican Republic",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 363,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:17.240Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49427",
+        "x-month-ratelimit-reset": "2590969.57",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.26"
+      }
+    },
+    {
+      "id": "places.panama-city.tag.hotel",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "filter.tags": "urn:tag:genre:place:hotel",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 243,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:17.820Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49424",
+        "x-month-ratelimit-reset": "2590968.86",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.91"
+      }
+    },
+    {
+      "id": "places.santo-domingo.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 248,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:17.689Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49425",
+        "x-month-ratelimit-reset": "2590968.94",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.panama-city.tag.night-club",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "filter.tags": "urn:tag:category:place:night_club",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 188,
+      "count": 2,
+      "fetchedAt": "2026-10-30T08:30:18.136Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49422",
+        "x-month-ratelimit-reset": "2590968.37",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.42"
+      }
+    },
+    {
+      "id": "places.panama-city.tag.concert-hall",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "filter.tags": "urn:tag:category:place:concert_hall",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 195,
+      "count": 2,
+      "fetchedAt": "2026-10-30T08:30:18.455Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49420",
+        "x-month-ratelimit-reset": "2590968.06",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "4",
+        "x-second-ratelimit-reset": "0.11"
+      }
+    },
+    {
+      "id": "places.panama-city.tag.stadium",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "filter.tags": "urn:tag:category:place:stadium",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 190,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:18.769Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49419",
+        "x-month-ratelimit-reset": "2590967.74",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.santo-domingo.tag.bar",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "filter.tags": "urn:tag:genre:place:restaurant:bar",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 233,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:18.118Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49423",
+        "x-month-ratelimit-reset": "2590968.5",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.55"
+      }
+    },
+    {
+      "id": "brands.panama-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "signal.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 3615,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:22.510Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49417",
+        "x-month-ratelimit-reset": "2590967.42",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.68"
+      }
+    },
+    {
+      "id": "heatmap.panama-city.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 340,
+      "count": 338,
+      "fetchedAt": "2026-10-30T08:30:22.981Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49407",
+        "x-month-ratelimit-reset": "2590963.68",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.santo-domingo.tag.hotel",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "filter.tags": "urn:tag:genre:place:hotel",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 234,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:18.556Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49421",
+        "x-month-ratelimit-reset": "2590968.07",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.12"
+      }
+    },
+    {
+      "id": "heatmap.panama-city.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Panama City, Panama",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 322,
+      "count": 77,
+      "fetchedAt": "2026-10-30T08:30:23.426Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49405",
+        "x-month-ratelimit-reset": "2590963.21",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.53"
+      }
+    },
+    {
+      "id": "places.santo-domingo.tag.night-club",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "filter.tags": "urn:tag:category:place:night_club",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 129,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:30:18.812Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49418",
+        "x-month-ratelimit-reset": "2590967.63",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.89"
+      }
+    },
+    {
+      "id": "heatmap.panama-city.by-point",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "POINT(-79.5199 8.9824)",
+        "filter.location.radius": 25000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 189,
+      "count": 491,
+      "fetchedAt": "2026-10-30T08:30:23.741Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49403",
+        "x-month-ratelimit-reset": "2590962.77",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.09"
+      }
+    },
+    {
+      "id": "places.santo-domingo.tag.concert-hall",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "filter.tags": "urn:tag:category:place:concert_hall",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 127,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:30:19.061Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49416",
+        "x-month-ratelimit-reset": "2590967.38",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.64"
+      }
+    },
+    {
+      "id": "places.santo-domingo.tag.stadium",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "filter.tags": "urn:tag:category:place:stadium",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 126,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:30:19.310Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49415",
+        "x-month-ratelimit-reset": "2590967.13",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.39"
+      }
+    },
+    {
+      "id": "citytags.panama-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:tag",
+        "signal.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "filter.parents.types": "urn:entity:artist",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1282,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:25.151Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49401",
+        "x-month-ratelimit-reset": "2590962.45",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.84"
+      }
+    },
+    {
+      "id": "cityartists.panama-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.location": "B41D2DC7-98B6-46CE-B5DF-7F455F3CC105",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1059,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:26.334Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49396",
+        "x-month-ratelimit-reset": "2590961.04",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.9"
+      }
+    },
+    {
+      "id": "brands.santo-domingo",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "signal.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 311,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:19.752Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49414",
+        "x-month-ratelimit-reset": "2590966.88",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "4",
+        "x-second-ratelimit-reset": "0.14"
+      }
+    },
+    {
+      "id": "artist.panama-city.ruben-blades",
+      "endpoint": "/search",
+      "params": {
+        "query": "Rubén Blades",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 886,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:27.343Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49393",
+        "x-month-ratelimit-reset": "2590959.86",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.72"
+      }
+    },
+    {
+      "id": "heatmap.santo-domingo.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 351,
+      "count": 451,
+      "fetchedAt": "2026-10-30T08:30:20.230Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49413",
+        "x-month-ratelimit-reset": "2590966.44",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.panama-city.sech",
+      "endpoint": "/search",
+      "params": {
+        "query": "Sech",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 315,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:27.781Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49390",
+        "x-month-ratelimit-reset": "2590958.85",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.panama-city.boza",
+      "endpoint": "/search",
+      "params": {
+        "query": "Boza",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 152,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:28.056Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49387",
+        "x-month-ratelimit-reset": "2590958.41",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.55"
+      }
+    },
+    {
+      "id": "heatmap.santo-domingo.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Santo Domingo, Dominican Republic",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 416,
+      "count": 451,
+      "fetchedAt": "2026-10-30T08:30:20.769Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49412",
+        "x-month-ratelimit-reset": "2590965.96",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.52"
+      }
+    },
+    {
+      "id": "artist.panama-city.joey-montana",
+      "endpoint": "/search",
+      "params": {
+        "query": "Joey Montana",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1394,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:29.575Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49385",
+        "x-month-ratelimit-reset": "2590958.13",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "4",
+        "x-second-ratelimit-reset": "0.28"
+      }
+    },
+    {
+      "id": "artist.panama-city.los-rabanes",
+      "endpoint": "/search",
+      "params": {
+        "query": "Los Rabanes",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 386,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:30.086Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49383",
+        "x-month-ratelimit-reset": "2590956.62",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "heatmap.santo-domingo.by-point",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "POINT(-69.9312 18.4861)",
+        "filter.location.radius": 25000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 194,
+      "count": 622,
+      "fetchedAt": "2026-10-30T08:30:21.088Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49411",
+        "x-month-ratelimit-reset": "2590965.42",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "similar.panama-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "6571A368-6BAB-47CD-A6F4-588FB61CA4F7",
+        "take": 10,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 115,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:30:30.325Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49382",
+        "x-month-ratelimit-reset": "2590956.1",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.48"
+      }
+    },
+    {
+      "id": "citytags.santo-domingo",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:tag",
+        "signal.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "filter.parents.types": "urn:entity:artist",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 155,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:21.367Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49410",
+        "x-month-ratelimit-reset": "2590965.11",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.68"
+      }
+    },
+    {
+      "id": "locality.managua",
+      "endpoint": "/search",
+      "params": {
+        "query": "Managua, Nicaragua",
+        "types": "urn:entity:locality",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 485,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:30:25.058Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49398",
+        "x-month-ratelimit-reset": "2590961.75",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.15"
+      }
+    },
+    {
+      "id": "cityartists.santo-domingo",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.location": "D25A3D1E-7CCC-457B-A823-F748F8577EBF",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 133,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:21.628Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49409",
+        "x-month-ratelimit-reset": "2590964.82",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.4"
+      }
+    },
+    {
+      "id": "artist.santo-domingo.juan-luis-guerra",
+      "endpoint": "/search",
+      "params": {
+        "query": "Juan Luis Guerra",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 831,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:22.594Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49408",
+        "x-month-ratelimit-reset": "2590964.55",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.13"
+      }
+    },
+    {
+      "id": "artist.santo-domingo.romeo-santos",
+      "endpoint": "/search",
+      "params": {
+        "query": "Romeo Santos",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 619,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:23.335Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49406",
+        "x-month-ratelimit-reset": "2590963.6",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.92"
+      }
+    },
+    {
+      "id": "artist.santo-domingo.natti-natasha",
+      "endpoint": "/search",
+      "params": {
+        "query": "Natti Natasha",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 134,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:23.592Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49404",
+        "x-month-ratelimit-reset": "2590962.86",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.18"
+      }
+    },
+    {
+      "id": "artist.santo-domingo.el-alfa",
+      "endpoint": "/search",
+      "params": {
+        "query": "El Alfa",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 206,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:23.922Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49402",
+        "x-month-ratelimit-reset": "2590962.6",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.managua.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 295,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:25.561Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49397",
+        "x-month-ratelimit-reset": "2590961.13",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.santo-domingo.aventura",
+      "endpoint": "/search",
+      "params": {
+        "query": "Aventura",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 145,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:24.194Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49400",
+        "x-month-ratelimit-reset": "2590962.26",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.65"
+      }
+    },
+    {
+      "id": "similar.santo-domingo",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "CE06DC03-AD08-4767-96EC-29D752216CC5",
+        "take": 10,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 122,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:30:24.440Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49399",
+        "x-month-ratelimit-reset": "2590962",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.39"
+      }
+    },
+    {
+      "id": "locality.mexico-city",
+      "endpoint": "/search",
+      "params": {
+        "query": "Mexico City, Mexico",
+        "types": "urn:entity:locality",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 535,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:30:31.126Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49381",
+        "x-month-ratelimit-reset": "2590955.85",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.23"
+      }
+    },
+    {
+      "id": "places.managua.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Managua, Nicaragua",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 296,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:26.059Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49395",
+        "x-month-ratelimit-reset": "2590960.63",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.49"
+      }
+    },
+    {
+      "id": "places.mexico-city.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1494,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:32.819Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49378",
+        "x-month-ratelimit-reset": "2590955.06",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.73"
+      }
+    },
+    {
+      "id": "places.managua.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 206,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:26.465Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49394",
+        "x-month-ratelimit-reset": "2590960.13",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.mexico-city.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1323,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:34.349Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49372",
+        "x-month-ratelimit-reset": "2590953.37",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.28"
+      }
+    },
+    {
+      "id": "places.managua.tag.bar",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "filter.tags": "urn:tag:genre:place:restaurant:bar",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 281,
+      "count": 46,
+      "fetchedAt": "2026-10-30T08:30:26.944Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49392",
+        "x-month-ratelimit-reset": "2590959.72",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.59"
+      }
+    },
+    {
+      "id": "places.mexico-city.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1197,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:35.753Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49369",
+        "x-month-ratelimit-reset": "2590951.84",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.04"
+      }
+    },
+    {
+      "id": "places.managua.tag.hotel",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "filter.tags": "urn:tag:genre:place:hotel",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 264,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:27.404Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49391",
+        "x-month-ratelimit-reset": "2590959.2",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.11"
+      }
+    },
+    {
+      "id": "places.managua.tag.night-club",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "filter.tags": "urn:tag:category:place:night_club",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 120,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:30:27.651Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49389",
+        "x-month-ratelimit-reset": "2590958.79",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.93"
+      }
+    },
+    {
+      "id": "places.managua.tag.concert-hall",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "filter.tags": "urn:tag:category:place:concert_hall",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 179,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:30:27.952Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49388",
+        "x-month-ratelimit-reset": "2590958.54",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.68"
+      }
+    },
+    {
+      "id": "places.managua.tag.stadium",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "filter.tags": "urn:tag:category:place:stadium",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 130,
+      "count": 0,
+      "fetchedAt": "2026-10-30T08:30:28.208Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49386",
+        "x-month-ratelimit-reset": "2590958.24",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.38"
+      }
+    },
+    {
+      "id": "places.mexico-city.tag.bar",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "filter.tags": "urn:tag:genre:place:restaurant:bar",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 290,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:36.242Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49367",
+        "x-month-ratelimit-reset": "2590950.43",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.98"
+      }
+    },
+    {
+      "id": "brands.managua",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "signal.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 2148,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:30.488Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49384",
+        "x-month-ratelimit-reset": "2590957.88",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "3",
+        "x-second-ratelimit-reset": "0.02"
+      }
+    },
+    {
+      "id": "heatmap.managua.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 239,
+      "count": 249,
+      "fetchedAt": "2026-10-30T08:30:30.858Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49380",
+        "x-month-ratelimit-reset": "2590955.7",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.08"
+      }
+    },
+    {
+      "id": "places.mexico-city.tag.hotel",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "filter.tags": "urn:tag:genre:place:hotel",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 296,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:36.739Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49366",
+        "x-month-ratelimit-reset": "2590949.94",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.49"
+      }
+    },
+    {
+      "id": "heatmap.managua.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Managua, Nicaragua",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 264,
+      "count": 249,
+      "fetchedAt": "2026-10-30T08:30:31.249Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49379",
+        "x-month-ratelimit-reset": "2590955.33",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "heatmap.managua.by-point",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "POINT(-86.2362 12.115)",
+        "filter.location.radius": 25000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 178,
+      "count": 265,
+      "fetchedAt": "2026-10-30T08:30:31.557Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49377",
+        "x-month-ratelimit-reset": "2590954.94",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.61"
+      }
+    },
+    {
+      "id": "citytags.managua",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:tag",
+        "signal.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "filter.parents.types": "urn:entity:artist",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 152,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:31.832Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49376",
+        "x-month-ratelimit-reset": "2590954.63",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.3"
+      }
+    },
+    {
+      "id": "cityartists.managua",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.location": "F7D38B6B-1512-417E-9BAD-6482FE9EBAF9",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 148,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:32.106Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49375",
+        "x-month-ratelimit-reset": "2590954.36",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.03"
+      }
+    },
+    {
+      "id": "places.mexico-city.tag.night-club",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "filter.tags": "urn:tag:category:place:night_club",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 215,
+      "count": 38,
+      "fetchedAt": "2026-10-30T08:30:37.102Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49365",
+        "x-month-ratelimit-reset": "2590949.45",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0"
+      }
+    },
+    {
+      "id": "artist.managua.luis-enrique",
+      "endpoint": "/search",
+      "params": {
+        "query": "Luis Enrique",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 165,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:32.396Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49374",
+        "x-month-ratelimit-reset": "2590954.09",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.managua.carlos-mejia-godoy",
+      "endpoint": "/search",
+      "params": {
+        "query": "Carlos Mejía Godoy",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 878,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:33.397Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49373",
+        "x-month-ratelimit-reset": "2590953.8",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.71"
+      }
+    },
+    {
+      "id": "artist.managua.perrozompopo",
+      "endpoint": "/search",
+      "params": {
+        "query": "Perrozompopo",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 742,
+      "count": 1,
+      "fetchedAt": "2026-10-30T08:30:34.261Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49371",
+        "x-month-ratelimit-reset": "2590952.79",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.mexico-city.tag.concert-hall",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "filter.tags": "urn:tag:category:place:concert_hall",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 212,
+      "count": 15,
+      "fetchedAt": "2026-10-30T08:30:37.447Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49364",
+        "x-month-ratelimit-reset": "2590949.08",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.managua.katia-cardenal",
+      "endpoint": "/search",
+      "params": {
+        "query": "Katia Cardenal",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1365,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:35.749Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49370",
+        "x-month-ratelimit-reset": "2590951.93",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.13"
+      }
+    },
+    {
+      "id": "artist.managua.dimension-costena",
+      "endpoint": "/search",
+      "params": {
+        "query": "Dimensión Costeña",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1524,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:37.397Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49368",
+        "x-month-ratelimit-reset": "2590950.45",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.mexico-city.tag.stadium",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "filter.tags": "urn:tag:category:place:stadium",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 198,
+      "count": 9,
+      "fetchedAt": "2026-10-30T08:30:37.770Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49362",
+        "x-month-ratelimit-reset": "2590948.75",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.66"
+      }
+    },
+    {
+      "id": "similar.managua",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "82E64972-BCB9-40E4-A4CE-4A33812F81DC",
+        "take": 10,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 112,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:30:37.632Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49363",
+        "x-month-ratelimit-reset": "2590948.8",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.71"
+      }
+    },
+    {
+      "id": "locality.miami",
+      "endpoint": "/search",
+      "params": {
+        "query": "Miami, Florida",
+        "types": "urn:entity:locality",
+        "take": 5
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1202,
+      "count": 5,
+      "fetchedAt": "2026-10-30T08:30:38.959Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49361",
+        "x-month-ratelimit-reset": "2590948.56",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.47"
+      }
+    },
+    {
+      "id": "brands.mexico-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "signal.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 1509,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:39.410Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49360",
+        "x-month-ratelimit-reset": "2590948.42",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.33"
+      }
+    },
+    {
+      "id": "places.miami.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 435,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:39.593Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49359",
+        "x-month-ratelimit-reset": "2590947.23",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "heatmap.mexico-city.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 360,
+      "count": 6436,
+      "fetchedAt": "2026-10-30T08:30:39.978Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49358",
+        "x-month-ratelimit-reset": "2590946.78",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.55"
+      }
+    },
+    {
+      "id": "heatmap.mexico-city.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Mexico City, Mexico",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 344,
+      "count": 1066,
+      "fetchedAt": "2026-10-30T08:30:40.455Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49356",
+        "x-month-ratelimit-reset": "2590946.21",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.miami.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location.query": "Miami, Florida",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 611,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:40.406Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49357",
+        "x-month-ratelimit-reset": "2590946.59",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.36"
+      }
+    },
+    {
+      "id": "heatmap.mexico-city.by-point",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "POINT(-99.1332 19.4326)",
+        "filter.location.radius": 25000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 233,
+      "count": 1759,
+      "fetchedAt": "2026-10-30T08:30:40.815Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49354",
+        "x-month-ratelimit-reset": "2590945.74",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.53"
+      }
+    },
+    {
+      "id": "citytags.mexico-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:tag",
+        "signal.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "filter.parents.types": "urn:entity:artist",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 826,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:41.767Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49353",
+        "x-month-ratelimit-reset": "2590945.38",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.17"
+      }
+    },
+    {
+      "id": "places.miami.baseline",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 290,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:40.909Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49355",
+        "x-month-ratelimit-reset": "2590945.78",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.57"
+      }
+    },
+    {
+      "id": "cityartists.mexico-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.location": "6A479AAF-1D8D-4EA2-AC1E-29B0906063AC",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 716,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:42.608Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49350",
+        "x-month-ratelimit-reset": "2590944.43",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.6"
+      }
+    },
+    {
+      "id": "artist.mexico-city.natalia-lafourcade",
+      "endpoint": "/search",
+      "params": {
+        "query": "Natalia Lafourcade",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 133,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:42.871Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49346",
+        "x-month-ratelimit-reset": "2590943.58",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.83"
+      }
+    },
+    {
+      "id": "artist.mexico-city.cafe-tacvba",
+      "endpoint": "/search",
+      "params": {
+        "query": "Café Tacvba",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 146,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:43.140Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49344",
+        "x-month-ratelimit-reset": "2590943.32",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.57"
+      }
+    },
+    {
+      "id": "artist.mexico-city.carin-leon",
+      "endpoint": "/search",
+      "params": {
+        "query": "Carín León",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 150,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:43.413Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49343",
+        "x-month-ratelimit-reset": "2590943.05",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.3"
+      }
+    },
+    {
+      "id": "artist.mexico-city.zoe",
+      "endpoint": "/search",
+      "params": {
+        "query": "Zoé",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 159,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:43.699Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49341",
+        "x-month-ratelimit-reset": "2590942.78",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "3",
+        "x-second-ratelimit-reset": "0.03"
+      }
+    },
+    {
+      "id": "places.miami.tag.bar",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "filter.tags": "urn:tag:genre:place:restaurant:bar",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 244,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:41.358Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49352",
+        "x-month-ratelimit-reset": "2590945.27",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.06"
+      }
+    },
+    {
+      "id": "artist.mexico-city.los-angeles-azules",
+      "endpoint": "/search",
+      "params": {
+        "query": "Los Ángeles Azules",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 131,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:43.953Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49339",
+        "x-month-ratelimit-reset": "2590942.5",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.97"
+      }
+    },
+    {
+      "id": "similar.mexico-city",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "7FDE68C0-E3AE-418B-8527-DBFA9F972971",
+        "take": 10,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 115,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:30:44.193Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49338",
+        "x-month-ratelimit-reset": "2590942.24",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.72"
+      }
+    },
+    {
+      "id": "places.miami.tag.hotel",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "filter.tags": "urn:tag:genre:place:hotel",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 261,
+      "count": 50,
+      "fetchedAt": "2026-10-30T08:30:41.773Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49351",
+        "x-month-ratelimit-reset": "2590944.83",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "places.miami.tag.night-club",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "filter.tags": "urn:tag:category:place:night_club",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 214,
+      "count": 28,
+      "fetchedAt": "2026-10-30T08:30:42.125Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49349",
+        "x-month-ratelimit-reset": "2590944.42",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.59"
+      }
+    },
+    {
+      "id": "places.miami.tag.concert-hall",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "filter.tags": "urn:tag:category:place:concert_hall",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 194,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:42.447Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49348",
+        "x-month-ratelimit-reset": "2590944.07",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.24"
+      }
+    },
+    {
+      "id": "places.miami.tag.stadium",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:place",
+        "filter.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "filter.tags": "urn:tag:category:place:stadium",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "take": 50
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 195,
+      "count": 2,
+      "fetchedAt": "2026-10-30T08:30:42.767Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49347",
+        "x-month-ratelimit-reset": "2590943.75",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "brands.miami",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:brand",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+        "signal.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 382,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:43.275Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49345",
+        "x-month-ratelimit-reset": "2590943.42",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.67"
+      }
+    },
+    {
+      "id": "heatmap.miami.by-id",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 276,
+      "count": 1418,
+      "fetchedAt": "2026-10-30T08:30:43.679Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49342",
+        "x-month-ratelimit-reset": "2590942.92",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "4",
+        "x-second-ratelimit-reset": "0.17"
+      }
+    },
+    {
+      "id": "heatmap.miami.by-query",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location.query": "Miami, Florida",
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 279,
+      "count": 1585,
+      "fetchedAt": "2026-10-30T08:30:44.087Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49340",
+        "x-month-ratelimit-reset": "2590942.52",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "heatmap.miami.by-point",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:heatmap",
+        "filter.location": "POINT(-80.1918 25.7617)",
+        "filter.location.radius": 25000,
+        "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 212,
+      "count": 1215,
+      "fetchedAt": "2026-10-30T08:30:44.426Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49337",
+        "x-month-ratelimit-reset": "2590942.11",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.58"
+      }
+    },
+    {
+      "id": "citytags.miami",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:tag",
+        "signal.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "filter.parents.types": "urn:entity:artist",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 282,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:44.832Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49336",
+        "x-month-ratelimit-reset": "2590941.77",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "5",
+        "x-second-ratelimit-reset": "0.25"
+      }
+    },
+    {
+      "id": "cityartists.miami",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.location": "548C4D6F-B7A6-4E24-BE32-63D04B889827",
+        "take": 20
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 881,
+      "count": 20,
+      "fetchedAt": "2026-10-30T08:30:45.838Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49335",
+        "x-month-ratelimit-reset": "2590941.36",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.miami.pitbull",
+      "endpoint": "/search",
+      "params": {
+        "query": "Pitbull",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 134,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:46.096Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49334",
+        "x-month-ratelimit-reset": "2590940.35",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "artist.miami.gloria-estefan",
+      "endpoint": "/search",
+      "params": {
+        "query": "Gloria Estefan",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 154,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:46.375Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49333",
+        "x-month-ratelimit-reset": "2590940.1",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.74"
+      }
+    },
+    {
+      "id": "artist.miami.camila-cabello",
+      "endpoint": "/search",
+      "params": {
+        "query": "Camila Cabello",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 122,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:46.620Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49332",
+        "x-month-ratelimit-reset": "2590939.82",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "7",
+        "x-second-ratelimit-reset": "0.46"
+      }
+    },
+    {
+      "id": "artist.miami.nicky-jam",
+      "endpoint": "/search",
+      "params": {
+        "query": "Nicky Jam",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 340,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:47.083Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49331",
+        "x-month-ratelimit-reset": "2590939.48",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "6",
+        "x-second-ratelimit-reset": "0.12"
+      }
+    },
+    {
+      "id": "artist.miami.marc-anthony",
+      "endpoint": "/search",
+      "params": {
+        "query": "Marc Anthony",
+        "types": "urn:entity:artist",
+        "take": 3
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 145,
+      "count": 3,
+      "fetchedAt": "2026-10-30T08:30:47.352Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49330",
+        "x-month-ratelimit-reset": "2590939.11",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "9",
+        "x-second-ratelimit-reset": "1"
+      }
+    },
+    {
+      "id": "similar.miami",
+      "endpoint": "/v2/insights",
+      "params": {
+        "filter.type": "urn:entity:artist",
+        "signal.interests.entities": "8223F4C7-4D91-4042-8A2B-F83C699B27E0",
+        "take": 10,
+        "feature.explainability": true
+      },
+      "base": "https://hackathon.api.qloo.com",
+      "status": 200,
+      "ms": 225,
+      "count": 10,
+      "fetchedAt": "2026-10-30T08:30:47.701Z",
+      "replayed": true,
+      "rateHeaders": {
+        "x-month-ratelimit-limit": "50000",
+        "x-month-ratelimit-remaining": "49329",
+        "x-month-ratelimit-reset": "2590938.84",
+        "x-second-ratelimit-limit": "10",
+        "x-second-ratelimit-remaining": "8",
+        "x-second-ratelimit-reset": "0.72"
+      }
+    }
+  ]
+}

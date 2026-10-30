@@ -1,0 +1,92 @@
+{
+  "note": "/v2/tags (music genre)",
+  "request": {
+    "endpoint": "/v2/tags",
+    "params": {
+      "filter.query": "reggaeton",
+      "filter.parents.types": "urn:entity:artist",
+      "take": 10
+    }
+  },
+  "status": 200,
+  "body": {
+    "duration": 93,
+    "success": true,
+    "results": {
+      "tags": [
+        {
+          "parents": [
+            {
+              "type": "urn:entity:artist"
+            },
+            {
+              "type": "urn:entity:album"
+            }
+          ],
+          "type": "urn:tag:genre:music",
+          "id": "urn:tag:genre:music:reggaeton",
+          "name": "Reggaeton",
+          "popularity": 0.99763495,
+          "properties": {
+            "description": "Reggaeton is a form of dance music which became popular with Latin American youth in the early 1990s and spread to North American, European and Asian audiences in the early 2000s. Reggaeton blends West-Indian music influences of reggae and dancehall with those of Latin America, such as bomba, plena,...",
+            "history": "Reggaeton emerged in the late 1990s, originating from reggae in Spanish, but has since its music incorporates elements of Latin American and Caribbean music.",
+            "melody": "Repetitive and catchy",
+            "performance": "Lively and dance-oriented performances",
+            "rhythm": "Rhythm is usually defined by dembow beat",
+            "tempo": "Moderate to high",
+            "vocals": "Mostly rapping and some harmonious vocals"
+          },
+          "tags": []
+        },
+        {
+          "parents": [
+            {
+              "type": "urn:entity:artist"
+            },
+            {
+              "type": "urn:entity:album"
+            }
+          ],
+          "type": "urn:tag:genre:music",
+          "id": "urn:tag:genre:music:reggaeton_romantica",
+          "name": "Reggaeton Romantica",
+          "popularity": 0.8952656,
+          "properties": {
+            "description": "Reggaeton Romántico is a subgenre of Reggaeton that downplays the genre's traditionally explicit lyrics and fast-paced rhythm, in favor of a softer, more melodic sound with romantic lyrics. The genre still maintains many of the hallmarks of Reggaeton, such as the use of synthetic instrumentation and...",
+            "history": "Reggaeton Romántico originated in the early 2000s and is a subgenre of Reggaeton music. This genre is characterized by its romantic lyrics and slow tempo, which contrasts with traditional Reggaeton's fast tempo and explicit lyrics.",
+            "melody": "Melodious with romantic undertones",
+            "performance": "Solo or duo performances are common",
+            "rhythm": "Often uses a 'Dem Bow' rhythm but at a slower pace",
+            "tempo": "Slow to medium",
+            "vocals": "Usually clear and emotionally expressive, with both male and female vocals common"
+          },
+          "tags": []
+        },
+        {
+          "parents": [
+            {
+              "type": "urn:entity:artist"
+            },
+            {
+              "type": "urn:entity:album"
+            }
+          ],
+          "type": "urn:tag:genre:music",
+          "id": "urn:tag:genre:music:reggaeton_colombiano",
+          "name": "Reggaeton Colombiano",
+          "popularity": 0.5291036,
+          "properties": {
+            "description": "Reggaeton Colombiano is characterized by its energetic rhythm, dynamic vocals, and vivid lyrics. It combines reggaeton's dembow rhythm with elements from rap, salsa, dancehall, and traditional Latin music.",
+            "history": "Reggaeton Colombiano, also known as Colombian Reggaeton, originated in the late 1990s and early 2000s. It's a variant of reggaeton that has gained popularity in Colombia, and features elements from various genres, including hip hop, Latin pop, and local rhythms.",
+            "melody": "Melodic and Harmonic",
+            "performance": "Often Performed with Dancing",
+            "rhythm": "Strong and Significant, often makes use of the Dembow rhythm",
+            "tempo": "Moderate to High",
+            "vocals": "Forceful and Energetic"
+          },
+          "tags": []
+        }
+      ]
+    }
+  }
+}

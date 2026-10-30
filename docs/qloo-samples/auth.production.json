@@ -1,0 +1,19 @@
+{
+  "note": "/search on the production base URL (expected rejection)",
+  "request": {
+    "endpoint": "/search",
+    "params": {
+      "query": "Bad Bunny",
+      "types": "urn:entity:artist",
+      "take": 2
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "reason": "Invalid API Key",
+      "message": "Unauthorized",
+      "code": 401
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "note": "/v2/insights heatmap, filter.location=POINT + radius (Guatemala City)",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:heatmap",
+      "filter.location": "POINT(-90.5069 14.6349)",
+      "filter.location.radius": 25000,
+      "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3"
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "heatmap": [
+        {
+          "location": {
+            "latitude": 14.570618,
+            "longitude": -90.66467,
+            "geohash": "9fxdbu"
+          },
+          "query": {
+            "affinity": 1,
+            "affinity_rank": 1,
+            "popularity": 0.22794117647058823,
+            "entity_artist_affinity_rank": 1,
+            "entity_artist_affinity": 1
+          }
+        },
+        {
+          "location": {
+            "latitude": 14.620056,
+            "longitude": -90.52185,
+            "geohash": "9fxehj"
+          },
+          "query": {
+            "affinity": 0.9981617647058824,
+            "affinity_rank": 0.999099,
+            "popularity": 1,
+            "entity_artist_affinity_rank": 0.999099,
+            "entity_artist_affinity": 0.9981617647058824
+          }
+        },
+        {
+          "location": {
+            "latitude": 14.642029,
+            "longitude": -90.510864,
+            "geohash": "9fxek3"
+          },
+          "query": {
+            "affinity": 0.9963235294117647,
+            "affinity_rank": 0.997443,
+            "popularity": 0.9981617647058824,
+            "entity_artist_affinity_rank": 0.997443,
+            "entity_artist_affinity": 0.9963235294117647
+          }
+        }
+      ]
+    }
+  }
+}

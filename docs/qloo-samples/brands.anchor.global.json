@@ -1,0 +1,851 @@
+{
+  "note": "/v2/insights artist -> brand with explainability",
+  "request": {
+    "endpoint": "/v2/insights",
+    "params": {
+      "filter.type": "urn:entity:brand",
+      "signal.interests.entities": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+      "take": 20,
+      "feature.explainability": true
+    }
+  },
+  "status": 200,
+  "body": {
+    "success": true,
+    "results": {
+      "entities": [
+        {
+          "name": "Adidas",
+          "entity_id": "FCEA7CA1-1D40-4680-B337-E74594D9BCF1",
+          "type": "urn:entity",
+          "subtype": "urn:entity:brand",
+          "properties": {
+            "akas": [
+              {
+                "value": "Адідас",
+                "languages": [
+                  "uk"
+                ]
+              },
+              {
+                "value": "אדידס",
+                "languages": [
+                  "he"
+                ]
+              },
+              {
+                "value": "അഡിഡാസ്",
+                "languages": [
+                  "ml"
+                ]
+              }
+            ],
+            "image": {
+              "url": "https://images.qloo.com/i/FCEA7CA1-1D40-4680-B337-E74594D9BCF1-420x-auto.jpg"
+            },
+            "sport": null,
+            "tagline": "Impossible Is Nothing",
+            "industry": null,
+            "keywords": [
+              "Sport",
+              "Performance",
+              "Streetwear"
+            ],
+            "owned_by": null,
+            "products": null,
+            "inception": null,
+            "lifestyle": [
+              "Active Living",
+              "Urban Commuting",
+              "Gym Training"
+            ],
+            "brand_type": [
+              "Corporate Brand"
+            ],
+            "industries": [
+              "Fashion & Apparel",
+              "Sports & Fitness",
+              "Footwear"
+            ],
+            "subsidiary": null,
+            "core_values": [
+              "Performance",
+              "Innovation",
+              "Inclusivity"
+            ],
+            "description": "Founded in Germany, this multinational corporation is a titan in the global sports industry, renowned for its athletic footwear, apparel, and equipment. The brand balances professional athletic performance with lifestyle appeal, maintaining a massive cultural presence through partnerships in sports ...",
+            "key_markets": [
+              "United States",
+              "Germany",
+              "China"
+            ],
+            "founded_year": 1924,
+            "manufacturer": null,
+            "subsidiaries": [
+              "Adidas Runtastic",
+              "TaylorMade Golf Company",
+              "Ashworth"
+            ],
+            "headquartered": null,
+            "official_site": null,
+            "target_gender": [
+              "Male",
+              "Female",
+              "Gender-Neutral"
+            ],
+            "ticker_symbol": null,
+            "business_model": [
+              "B2C",
+              "B2B"
+            ],
+            "emotional_tone": [
+              "Energetic",
+              "Bold",
+              "Confident"
+            ],
+            "personal_style": [
+              "sporty",
+              "minimalist",
+              "urban"
+            ],
+            "similar_brands": [
+              "Asics",
+              "Converse",
+              "Vans"
+            ],
+            "ultimate_parent": "Adidas AG",
+            "immediate_parent": "Adidas AG",
+            "target_age_group": [
+              "Teens",
+              "Young Adults",
+              "Adults"
+            ],
+            "audience_identity": "Active individuals, athletes, and streetwear enthusiasts who value the intersection of high-performance utility and bold, modern self-expression.",
+            "competitor_brands": [
+              "Nike",
+              "Puma",
+              "Under Armour"
+            ],
+            "customer_segments": [
+              "Competitive Athletes",
+              "Urban Millennials",
+              "Fitness Enthusiasts"
+            ],
+            "influencer_appeal": [
+              "Professional Athletes",
+              "Hip-Hop Artists",
+              "Fashion Designers"
+            ],
+            "products_services": [
+              "Footwear",
+              "Sportswear",
+              "Sports Equipment"
+            ],
+            "short_description": "Adidas is a global sportswear brand known for athletic footwear, apparel, and accessories, inspiring athletes worldwide through innovative performance products.",
+            "style_description": "Clean, functional design characterized by the recognizable triple-stripe branding, high-performance materials, and a commitment to modern, versatile silhouettes.",
+            "cultural_relevance": [
+              "Hip-Hop",
+              "Professional Sports",
+              "Youth Culture"
+            ],
+            "known_partnerships": [
+              "Kanye West",
+              "Pharrell Williams",
+              "FIFA"
+            ],
+            "market_positioning": "Premium global athletic brand offering performance and lifestyle products for both athletes and casual consumers.",
+            "short_descriptions": [
+              {
+                "value": "Leader mondial de vêtements, chaussures et équipements de sport, alliant technologie de performance et style urbain emblématique.",
+                "languages": [
+                  "fr"
+                ]
+              },
+              {
+                "value": "A global leader in athletic apparel, footwear, and equipment, blending performance technology with iconic street style.",
+                "languages": [
+                  "en"
+                ]
+              },
+              {
+                "value": "Líder global en ropa, calzado y equipamiento deportivo que combina tecnología de alto rendimiento con un estilo urbano icónico.",
+                "languages": [
+                  "es"
+                ]
+              }
+            ],
+            "is_regional_variant": false,
+            "parent_organization": null,
+            "price_range_usd_max": 300,
+            "price_range_usd_min": 25,
+            "target_income_level": [
+              "Low to Medium",
+              "Medium",
+              "Medium to High"
+            ],
+            "aesthetic_properties": [
+              "Minimalist Branding",
+              "Bold Graphic Elements",
+              "Three-Stripe Motif"
+            ],
+            "category_description": "A global multi-category sports and lifestyle brand that occupies a dominant position in performance footwear, apparel, and accessories.",
+            "headquarters_address": "Herzogenaurach, Germany",
+            "interest_adjacencies": [
+              "Streetwear Fashion",
+              "Professional Sports",
+              "Fitness Training"
+            ],
+            "situational_contexts": "Engaged with during intense athletic training, casual everyday wear, or moments of cultural celebration where comfort and style are both essential.",
+            "aspirational_lifestyle": [
+              "Professional Athletic Achievement",
+              "Global Travel",
+              "Creative Self-Expression"
+            ],
+            "sustainability_initiatives": [
+              "Plastic Waste Reduction",
+              "Recycled Materials",
+              "Reduced Carbon Emissions"
+            ],
+            "cultural_context_description": "The brand is deeply embedded in global sports, music, and urban fashion culture, frequently bridging the gap between professional athletic gear and lifestyle apparel.",
+            "target_demographics_description": "The brand targets a diverse global audience across all age groups and genders, spanning from budget-conscious everyday consumers to affluent sport enthusiasts."
+          },
+          "popularity": 0.9997457239239884,
+          "tags": [
+            {
+              "id": "urn:tag:genre:brand:fashion:footwear:sneakers",
+              "name": "Sneakers",
+              "type": "urn:tag:genre:brand"
+            },
+            {
+              "id": "urn:tag:genre:brand:fashion:footwear:sandals",
+              "name": "Sandals",
+              "type": "urn:tag:genre:brand"
+            },
+            {
+              "id": "urn:tag:genre:brand:fashion:footwear",
+              "name": "Footwear",
+              "type": "urn:tag:genre:brand"
+            }
+          ],
+          "query": {
+            "affinity": 0.9768361594769568,
+            "measurements": {
+              "audience_growth": 0
+            },
+            "explainability": {
+              "signal.interests.entities": [
+                {
+                  "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                  "score": 1
+                }
+              ]
+            }
+          },
+          "disambiguation": "",
+          "external": {
+            "twitter": [
+              {
+                "id": "adidascareers"
+              },
+              {
+                "id": "adidasar"
+              },
+              {
+                "id": "adidasza"
+              }
+            ],
+            "wikidata": [
+              {
+                "id": "Q3895"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "adidascareers"
+              },
+              {
+                "id": "adidassrbija"
+              },
+              {
+                "id": "adidasar"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Puma",
+          "entity_id": "E50919AC-B1FF-410A-9B0D-DFA914286C3C",
+          "type": "urn:entity",
+          "subtype": "urn:entity:brand",
+          "properties": {
+            "akas": [
+              {
+                "value": "प्यूमा एजी",
+                "languages": [
+                  "hi"
+                ]
+              },
+              {
+                "value": "彪马",
+                "languages": [
+                  "zh"
+                ]
+              },
+              {
+                "value": "Puma SE",
+                "languages": [
+                  "de",
+                  "es",
+                  "hr"
+                ]
+              }
+            ],
+            "image": {
+              "url": "https://images.qloo.com/i/E50919AC-B1FF-410A-9B0D-DFA914286C3C-420x-auto.jpg"
+            },
+            "sport": null,
+            "tagline": "Forever Faster",
+            "industry": [
+              "clothing"
+            ],
+            "keywords": [
+              "Speed",
+              "Sportswear",
+              "Footwear"
+            ],
+            "owned_by": null,
+            "products": [
+              "costume accessory",
+              "sports equipment",
+              "footwear"
+            ],
+            "inception": "1948-10-01",
+            "lifestyle": [
+              "Gym Sessions",
+              "Street Style",
+              "Travel"
+            ],
+            "brand_type": [
+              "Corporate Brand"
+            ],
+            "industries": [
+              "Fashion & Apparel",
+              "Sports & Fitness",
+              "Footwear"
+            ],
+            "subsidiary": [],
+            "core_values": [
+              "Performance",
+              "Innovation",
+              "Speed"
+            ],
+            "description": "Established in 1948, this German brand is a titan in the global sports industry, recognized for its commitment to innovation and high-performance engineering. It provides an extensive range of footwear, apparel, and accessories designed for professional athletes and everyday lifestyle use alike. By ...",
+            "key_markets": [
+              "Europe",
+              "North America",
+              "Asia-Pacific"
+            ],
+            "founded_year": 1948,
+            "manufacturer": null,
+            "subsidiaries": [
+              "Cobra Golf"
+            ],
+            "headquartered": "Herzogenaurach",
+            "official_site": "https://eu.puma.com/de/en/home",
+            "target_gender": [
+              "Male",
+              "Female",
+              "Gender-Neutral"
+            ],
+            "ticker_symbol": null,
+            "business_model": [
+              "B2C",
+              "B2B"
+            ],
+            "emotional_tone": [
+              "Energetic",
+              "Dynamic",
+              "Confident"
+            ],
+            "personal_style": [
+              "Sporty",
+              "Casual",
+              "Athleisure"
+            ],
+            "similar_brands": [
+              "Asics",
+              "Fila",
+              "Champion"
+            ],
+            "ultimate_parent": "Puma SE",
+            "immediate_parent": null,
+            "target_age_group": [
+              "Teens",
+              "Young Adults",
+              "Adults"
+            ],
+            "audience_identity": "Athletes, sports fans, and individuals with an active lifestyle who value performance technology blended with street-ready aesthetic appeal.",
+            "competitor_brands": [
+              "Nike",
+              "Adidas",
+              "Reebok"
+            ],
+            "customer_segments": [
+              "Urban Millennials",
+              "Performance Athletes",
+              "Football Fans"
+            ],
+            "influencer_appeal": [
+              "Professional Athletes",
+              "Hip-Hop Artists",
+              "Streetwear Designers"
+            ],
+            "products_services": [
+              "Running Shoes",
+              "Football Boots",
+              "Tracksuits"
+            ],
+            "short_description": "PUMA is a German multinational brand designing and manufacturing athletic and casual footwear, apparel, and accessories.",
+            "style_description": "An aesthetic characterized by a blend of athletic functionality, bold branding, and retro-inspired silhouettes updated for modern street contexts.",
+            "cultural_relevance": [
+              "Football Culture",
+              "Hip-Hop",
+              "Motorsport"
+            ],
+            "known_partnerships": [
+              "Scuderia Ferrari",
+              "Manchester City FC",
+              "A$AP Rocky"
+            ],
+            "market_positioning": "Mass-market performance and lifestyle sports brand competing on technical innovation and cultural collaborations.",
+            "short_descriptions": [
+              {
+                "value": "A global powerhouse blending high-performance sportswear with contemporary street style through innovative design and collaboration.",
+                "languages": [
+                  "en"
+                ]
+              },
+              {
+                "value": "Ein weltweit führendes Unternehmen, das Hochleistungs-Sportbekleidung mit zeitgemäßem Street-Style durch innovative Designs und Kooperationen verbindet.",
+                "languages": [
+                  "de"
+                ]
+              },
+              {
+                "value": "Una marca global que fusiona ropa deportiva de alto rendimiento con estilo urbano contemporáneo a través de diseños innovadores y colaboraciones.",
+                "languages": [
+                  "es"
+                ]
+              }
+            ],
+            "is_regional_variant": false,
+            "parent_organization": null,
+            "price_range_usd_max": 250,
+            "price_range_usd_min": 25,
+            "target_income_level": [
+              "Low to Medium",
+              "Medium",
+              "Medium to High"
+            ],
+            "aesthetic_properties": [
+              "Sleek",
+              "Athletic",
+              "Graphic-Heavy"
+            ],
+            "category_description": "A multi-category sports apparel and footwear company that provides performance gear and lifestyle collections for professional athletes and casual consumers.",
+            "headquarters_address": "Herzogenaurach, Germany",
+            "interest_adjacencies": [
+              "Streetwear",
+              "Fitness Training",
+              "Motorsport"
+            ],
+            "situational_contexts": "Engaging in athletic training, participating in competitive sports, attending live sporting events, or curating a relaxed everyday look.",
+            "aspirational_lifestyle": [
+              "Professional Athletics",
+              "Global Travel",
+              "Cultural Trendsetting"
+            ],
+            "sustainability_initiatives": [
+              "Forever Better",
+              "Circular Fashion",
+              "Cruelty-Free"
+            ],
+            "cultural_context_description": "Deeply embedded in global football, professional motorsport, and urban street culture through long-standing athletic partnerships and lifestyle collections.",
+            "target_demographics_description": "Broad appeal across teens and adults of all genders seeking a balance between functional athletic gear and accessible everyday fashion."
+          },
+          "popularity": 0.9990930819955587,
+          "tags": [
+            {
+              "id": "urn:tag:genre:brand:fashion:footwear",
+              "name": "Footwear",
+              "type": "urn:tag:genre:brand"
+            },
+            {
+              "id": "urn:tag:wikipedia_category:companies_listed_on_the_frankfurt_stock_exchange",
+              "name": "Companies listed on the Frankfurt Stock Exchange",
+              "type": "urn:tag:wikipedia_category"
+            },
+            {
+              "id": "urn:tag:wikipedia_category:shoe_companies_of_germany",
+              "name": "Shoe companies of Germany",
+              "type": "urn:tag:wikipedia_category"
+            }
+          ],
+          "query": {
+            "affinity": 0.9679726662683169,
+            "measurements": {
+              "audience_growth": 0
+            },
+            "explainability": {
+              "signal.interests.entities": [
+                {
+                  "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                  "score": 1
+                }
+              ]
+            }
+          },
+          "disambiguation": "",
+          "external": {
+            "twitter": [
+              {
+                "id": "PUMA"
+              },
+              {
+                "id": "puma"
+              }
+            ],
+            "facebook": [
+              {
+                "id": "PUMA"
+              }
+            ],
+            "wikidata": [
+              {
+                "id": "Q157064"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "puma"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Nike",
+          "entity_id": "C70CE2B8-0AD1-4150-BF18-5A6347F2E860",
+          "type": "urn:entity",
+          "subtype": "urn:entity:brand",
+          "properties": {
+            "akas": [
+              {
+                "value": "Найк",
+                "languages": [
+                  "ru",
+                  "bg",
+                  "uk"
+                ]
+              },
+              {
+                "value": "Nike, Inc.",
+                "languages": [
+                  "es",
+                  "es_ar"
+                ]
+              },
+              {
+                "value": "Најки",
+                "languages": [
+                  "sr"
+                ]
+              }
+            ],
+            "image": {
+              "url": "https://images.qloo.com/i/C70CE2B8-0AD1-4150-BF18-5A6347F2E860-420x-auto.jpg"
+            },
+            "sport": null,
+            "tagline": "Just Do It",
+            "industry": [
+              "industry",
+              "retail",
+              "clothing industry"
+            ],
+            "keywords": [
+              "Innovation",
+              "Sport",
+              "Performance"
+            ],
+            "owned_by": null,
+            "products": [
+              "sports equipment",
+              "footwear",
+              "clothing"
+            ],
+            "inception": "1964-01-25",
+            "lifestyle": [
+              "Active Living",
+              "Daily Training",
+              "Urban Commuting"
+            ],
+            "brand_type": [
+              "Corporate Brand"
+            ],
+            "industries": [
+              "Fashion & Apparel",
+              "Sports & Fitness",
+              "Retail"
+            ],
+            "subsidiary": [
+              "Hurley International",
+              "Air Jordan product line",
+              "Cole Haan"
+            ],
+            "core_values": [
+              "Innovation",
+              "Excellence",
+              "Inclusivity"
+            ],
+            "description": "Nike is a premier global powerhouse in athletic performance, renowned for its relentless commitment to technological innovation and design excellence. Established in 1964, the brand serves a vast, diverse audience ranging from world-class elite athletes to everyday fitness enthusiasts. It maintains ...",
+            "key_markets": [
+              "North America",
+              "Europe",
+              "Greater China"
+            ],
+            "founded_year": 1964,
+            "manufacturer": null,
+            "subsidiaries": [
+              "Jordan Brand",
+              "Converse"
+            ],
+            "headquartered": "Beaverton",
+            "official_site": "https://www.nike.com",
+            "target_gender": [
+              "Male",
+              "Female",
+              "Non-Binary"
+            ],
+            "ticker_symbol": null,
+            "business_model": [
+              "B2C",
+              "B2B"
+            ],
+            "emotional_tone": [
+              "Bold",
+              "Motivating",
+              "Energetic"
+            ],
+            "personal_style": [
+              "Sporty",
+              "Minimalist",
+              "Functional"
+            ],
+            "similar_brands": [
+              "Lululemon",
+              "Asics",
+              "Salomon"
+            ],
+            "ultimate_parent": "Nike, Inc.",
+            "immediate_parent": null,
+            "target_age_group": [
+              "Children",
+              "Teens",
+              "Young Adults"
+            ],
+            "audience_identity": "Driven individuals who view sport and physical movement as a fundamental vehicle for personal growth, community impact, and the pursuit of excellence.",
+            "competitor_brands": [
+              "Adidas",
+              "Puma",
+              "Under Armour"
+            ],
+            "customer_segments": [
+              "Professional Athletes",
+              "Fitness Enthusiasts",
+              "Urban Youth"
+            ],
+            "influencer_appeal": [
+              "Professional Athletes",
+              "Fitness Trainers",
+              "Cultural Icons"
+            ],
+            "products_services": [
+              "Running Shoes",
+              "Athletic Apparel",
+              "Training Equipment"
+            ],
+            "short_description": "Nike is a global brand specializing in athletic footwear, apparel, equipment, and accessories for men, women, and kids.",
+            "style_description": "A clean, high-tech aesthetic characterized by iconic minimalist branding, fluid lines, and functional design that bridges professional utility with street-ready style.",
+            "cultural_relevance": [
+              "Global Sports Culture",
+              "Hip-Hop",
+              "Streetwear Movement"
+            ],
+            "known_partnerships": [
+              "Kevin Durant",
+              "Colin Kaepernick",
+              "Anna Cockrell"
+            ],
+            "market_positioning": "Market-leading athletic brand providing high-performance gear across a wide range of price points for professional and amateur athletes.",
+            "short_descriptions": [
+              {
+                "value": "Ein weltweit führendes Unternehmen für sportliche Innovationen, das leistungsstarke Schuhe, Bekleidung und Ausrüstung für Sportler aller Niveaus anbietet.",
+                "languages": [
+                  "de"
+                ]
+              },
+              {
+                "value": "Un leader mondial de l'innovation athlétique proposant des chaussures, des vêtements et des équipements de performance pour les athlètes de tous niveaux.",
+                "languages": [
+                  "fr"
+                ]
+              },
+              {
+                "value": "Líder global en innovación atlética que ofrece calzado, ropa y equipamiento de alto rendimiento para deportistas de todos los niveles.",
+                "languages": [
+                  "es"
+                ]
+              }
+            ],
+            "is_regional_variant": false,
+            "parent_organization": null,
+            "price_range_usd_max": 300,
+            "price_range_usd_min": 25,
+            "target_income_level": [
+              "Low to Medium",
+              "Medium",
+              "Medium to High"
+            ],
+            "aesthetic_properties": [
+              "Minimalist Logo Design",
+              "Technological Aesthetics",
+              "Performance-Driven Silhouettes"
+            ],
+            "category_description": "A dominant force in the global sportswear market, providing integrated performance solutions that blend advanced technical innovation with mass-market appeal.",
+            "headquarters_address": "One Bowerman Drive, Beaverton, Oregon, USA",
+            "interest_adjacencies": [
+              "Professional Sports",
+              "Fitness Training",
+              "Street Culture"
+            ],
+            "situational_contexts": "Active training sessions, competitive sports arenas, casual everyday wear, and moments that call for high-performance functionality or athletic-inspired style.",
+            "aspirational_lifestyle": [
+              "Professional Athletic Achievement",
+              "Personal Peak Performance",
+              "Global Community Leadership"
+            ],
+            "sustainability_initiatives": [
+              "Move To Zero",
+              "Circular Design",
+              "Carbon Neutral"
+            ],
+            "cultural_context_description": "Deeply embedded in the fabric of global sports, street culture, and grassroots social movements focused on equity and well-being.",
+            "target_demographics_description": "Broad demographic reach encompassing all ages, genders, and income levels interested in sports, fitness, or active lifestyles."
+          },
+          "popularity": 0.9999915241307996,
+          "tags": [
+            {
+              "id": "urn:tag:wikipedia_category:nike",
+              "name": "Nike",
+              "type": "urn:tag:wikipedia_category"
+            },
+            {
+              "id": "urn:tag:genre:brand:fashion",
+              "name": "Fashion",
+              "type": "urn:tag:genre:brand"
+            },
+            {
+              "id": "urn:tag:wikipedia_category:1970s_fashion",
+              "name": "1970s fashion",
+              "type": "urn:tag:wikipedia_category"
+            }
+          ],
+          "query": {
+            "affinity": 0.9604215538008702,
+            "measurements": {
+              "audience_growth": 0
+            },
+            "explainability": {
+              "signal.interests.entities": [
+                {
+                  "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+                  "score": 1
+                }
+              ]
+            }
+          },
+          "disambiguation": "",
+          "external": {
+            "twitter": [
+              {
+                "id": "nikebasketball"
+              },
+              {
+                "id": "nikesportswear"
+              },
+              {
+                "id": "nikestore"
+              }
+            ],
+            "facebook": [
+              {
+                "id": "nike"
+              }
+            ],
+            "wikidata": [
+              {
+                "id": "Q26265300"
+              },
+              {
+                "id": "Q7034784"
+              },
+              {
+                "id": "Q483915"
+              }
+            ],
+            "instagram": [
+              {
+                "id": "nikebasketball"
+              },
+              {
+                "id": "nikesportswear"
+              },
+              {
+                "id": "nikehkg"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "query": {
+      "explainability": {
+        "signal.interests.entities": {
+          "effect_on_top3_recs": [
+            {
+              "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+              "avg_score": 1
+            }
+          ],
+          "effect_on_top5_recs": [
+            {
+              "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+              "avg_score": 1
+            }
+          ],
+          "effect_on_top10_recs": [
+            {
+              "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+              "avg_score": 1
+            }
+          ],
+          "effect_on_all_recs": [
+            {
+              "entity_id": "BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3",
+              "avg_score": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}
