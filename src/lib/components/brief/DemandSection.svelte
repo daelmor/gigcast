@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { theme, watchTheme, withAlpha } from '$lib/client/theme-colors.svelte';
 	import Label from '../ui/Label.svelte';
 	import EChart from './EChart.svelte';
 	import SectionHeader from './SectionHeader.svelte';
@@ -30,6 +32,9 @@
 		)
 	);
 
+	onMount(() => watchTheme());
+	const c = $derived(theme.colors);
+
 	const sparkOption = $derived({
 		grid: { left: 4, right: 4, top: 6, bottom: 4 },
 		xAxis: { type: 'category', show: false, data: trendPoints.map((p) => p.date) },
@@ -44,9 +49,9 @@
 				data: trendPoints.map((p) => p.percentile),
 				smooth: true,
 				symbolSize: 5,
-				lineStyle: { color: '#4f46e5', width: 2 },
-				itemStyle: { color: '#4f46e5' },
-				areaStyle: { color: 'rgba(79,70,229,0.08)' }
+				lineStyle: { color: c['chart-1'], width: 2 },
+				itemStyle: { color: c['chart-1'] },
+				areaStyle: { color: withAlpha(c['chart-1'], 0.1) }
 			}
 		]
 	});
@@ -72,7 +77,7 @@
 				data: entries.map(([k]) => title(k)),
 				axisLine: { show: false },
 				axisTick: { show: false },
-				axisLabel: { color: '#52525b', fontSize: 12 }
+				axisLabel: { color: c['ink-muted'], fontSize: 12, fontFamily: theme.fonts.sans }
 			},
 			series: [
 				{
@@ -81,13 +86,14 @@
 					label: {
 						show: true,
 						position: 'right',
-						color: '#52525b',
+						color: c['ink-muted'],
 						fontSize: 11,
+						fontFamily: theme.fonts.mono,
 						formatter: (p: { value: number }) => p.value.toFixed(2)
 					},
 					data: entries.map(([, v]) => ({
 						value: v,
-						itemStyle: { color: v < 0 ? '#a1a1aa' : '#4f46e5', borderRadius: 3 }
+						itemStyle: { color: v < 0 ? c['chart-muted'] : c['chart-1'], borderRadius: 3 }
 					}))
 				}
 			]

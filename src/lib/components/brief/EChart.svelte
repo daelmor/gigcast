@@ -5,6 +5,7 @@
 	 */
 	import { onMount } from 'svelte';
 	import type { EChartsCoreOption, ECharts } from 'echarts/core';
+	import { theme, watchTheme } from '$lib/client/theme-colors.svelte';
 
 	interface Props {
 		option: EChartsCoreOption;
@@ -19,7 +20,14 @@
 	let chart: ECharts | undefined;
 	let ready = $state(false);
 
+	/** Fonts and text colours from the tokens, applied under the caller's option. */
+	const themed = (o: EChartsCoreOption): EChartsCoreOption => ({
+		textStyle: { fontFamily: theme.fonts.sans, color: theme.colors['ink-muted'] },
+		...o
+	});
+
 	onMount(() => {
+		watchTheme();
 		let cancelled = false;
 		let observer: ResizeObserver | undefined;
 		(async () => {
@@ -39,7 +47,7 @@
 					renderers.SVGRenderer
 				]);
 				chart = core.init(el, undefined, { renderer: 'svg' });
-				chart.setOption(option);
+				chart.setOption(themed(option));
 				ready = true;
 				observer = new ResizeObserver(() => chart?.resize());
 				observer.observe(el);
@@ -57,14 +65,15 @@
 
 	$effect(() => {
 		const o = option;
-		if (chart) chart.setOption(o, true);
+		void theme.version;
+		if (chart) chart.setOption(themed(o), true);
 	});
 </script>
 
 <div class="relative {className}" role="img" aria-label={fallback}>
 	<div bind:this={el} class="h-full w-full"></div>
 	{#if !ready}
-		<p class="text-zinc-400 absolute inset-0 flex items-center justify-center text-xs">
+		<p class="absolute inset-0 flex items-center justify-center type-small text-ink-subtle">
 			{fallback}
 		</p>
 	{/if}

@@ -2,6 +2,7 @@
 	import { onDestroy } from 'svelte';
 	import type { Map as MaplibreMap, Marker } from 'maplibre-gl';
 	import BaseMap from '$lib/components/map/BaseMap.svelte';
+	import { theme } from '$lib/client/theme-colors.svelte';
 	import { localitySearchResponseSchema, type LocalitySearchResult } from '$lib/api/contracts';
 	import { FEATURED_MARKETS, KNOWN_MARKETS, findMarket, type KnownMarket } from '$lib/markets';
 	import { COUNTRIES, OTHER_COUNTRY, debounce, type FormState } from './form';
@@ -120,7 +121,7 @@
 		}
 		const maplibre = await import('maplibre-gl');
 		if (!map || !point) return;
-		marker = new maplibre.Marker({ color: '#4f46e5' }).setLngLat(point).addTo(map);
+		marker = new maplibre.Marker({ color: theme.colors.action }).setLngLat(point).addTo(map);
 	}
 
 	$effect(() => {
@@ -130,8 +131,19 @@
 
 	function onready(m: MaplibreMap) {
 		map = m;
+		marker?.remove();
+		marker = undefined;
 		ensureMarker();
 	}
+
+	// The marker is a DOM element with a baked-in colour; rebuild it when the theme changes.
+	$effect(() => {
+		void theme.version;
+		if (!map) return;
+		marker?.remove();
+		marker = undefined;
+		ensureMarker();
+	});
 
 	const chosenLabel = $derived(
 		form.localityName ? `${form.localityName}${form.country ? `, ${form.country}` : ''}` : ''
