@@ -7,6 +7,8 @@
 		createBriefResponseSchema
 	} from '$lib/api/contracts';
 	import { findMarket } from '$lib/markets';
+	import Button from '$lib/components/ui/Button.svelte';
+	import Card from '$lib/components/ui/Card.svelte';
 	import ArtistPicker from './ArtistPicker.svelte';
 	import MarketPicker from './MarketPicker.svelte';
 	import PromoterFields from './PromoterFields.svelte';
@@ -97,10 +99,10 @@
 	}
 
 	const dateInput =
-		'w-full rounded-lg border-0 px-3 py-2 ring-1 ring-zinc-300 focus:ring-2 focus:ring-indigo-600';
+		'mt-1 w-full rounded-sm border border-line-strong bg-surface-raised px-3 py-2 type-body text-ink';
 </script>
 
-<form onsubmit={submit} class="space-y-6" novalidate>
+<form onsubmit={submit} class="space-y-space-5" novalidate>
 	<MarketPicker
 		{form}
 		error={errors.market}
@@ -108,57 +110,55 @@
 	/>
 	<ArtistPicker {form} error={errors.artist} />
 
-	<fieldset class="bg-white ring-zinc-200 rounded-xl p-5 ring-1">
-		<legend class="px-1 text-base font-semibold">3. Date window</legend>
-		<div class="mt-2 grid gap-3 sm:grid-cols-2">
-			<label class="block">
-				<span class="text-sm font-medium">From</span>
-				<input type="date" class="{dateInput} mt-1" bind:value={form.dateFrom} />
-				{#if errors.dateFrom}<span class="text-rose-700 text-sm" role="alert"
-						>{errors.dateFrom}</span
-					>{/if}
-			</label>
-			<label class="block">
-				<span class="text-sm font-medium">To</span>
-				<input type="date" class="{dateInput} mt-1" bind:value={form.dateTo} />
-				{#if errors.dateTo}<span class="text-rose-700 text-sm" role="alert">{errors.dateTo}</span
-					>{/if}
-			</label>
-		</div>
-	</fieldset>
+	<Card>
+		<fieldset class="m-0 min-w-0 border-0 p-0">
+			<legend class="px-0 type-heading-3">3. Date window</legend>
+			<div class="mt-space-3 grid gap-space-3 sm:grid-cols-2">
+				<label class="block">
+					<span class="type-label text-ink-subtle">From</span>
+					<input type="date" class={dateInput} bind:value={form.dateFrom} />
+					{#if errors.dateFrom}<span class="block type-small text-critical" role="alert"
+							>{errors.dateFrom}</span
+						>{/if}
+				</label>
+				<label class="block">
+					<span class="type-label text-ink-subtle">To</span>
+					<input type="date" class={dateInput} bind:value={form.dateTo} />
+					{#if errors.dateTo}<span class="block type-small text-critical" role="alert"
+							>{errors.dateTo}</span
+						>{/if}
+				</label>
+			</div>
+		</fieldset>
+	</Card>
 
 	<PromoterFields {form} error={errors.promoter} />
 
 	{#if banner}
-		<div class="bg-rose-50 text-rose-800 ring-rose-200 rounded-xl p-4 text-sm ring-1" role="alert">
-			<p class="font-medium">{banner.message}</p>
+		<div
+			class="rounded-lg border border-critical bg-critical-soft p-space-4 type-small text-critical"
+			role="alert"
+		>
+			<p class="font-semibold">{banner.message}</p>
 			{#if banner.details?.length}
-				<ul class="mt-2 list-disc pl-5">
+				<ul class="mt-space-2 list-disc pl-5">
 					{#each banner.details as d, i (i)}<li>{d}</li>{/each}
 				</ul>
 			{/if}
 		</div>
 	{/if}
 
-	<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-		<button
-			type="submit"
-			disabled={submitting}
-			class="bg-indigo-600 text-white hover:bg-indigo-700 inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-medium shadow-sm disabled:cursor-not-allowed disabled:opacity-70"
-		>
+	<div class="flex flex-col gap-space-3 sm:flex-row sm:items-center">
+		<Button variant="primary" type="submit" disabled={submitting}>
 			{#if submitting}
-				<span
-					class="border-white/40 border-t-white size-4 animate-spin rounded-full border-2"
-					aria-hidden="true"
-				></span>
-				Starting the agent…
+				Starting…
 			{:else if banner?.retry}
 				Try again
 			{:else}
 				Generate brief
 			{/if}
-		</button>
-		<p class="text-zinc-500 text-sm">
+		</Button>
+		<p class="type-small text-ink-muted">
 			A brief takes about five minutes. You can watch the agent work.
 		</p>
 	</div>

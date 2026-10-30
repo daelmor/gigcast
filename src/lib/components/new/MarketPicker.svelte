@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import type { Map as MaplibreMap, Marker } from 'maplibre-gl';
+	import Card from '$lib/components/ui/Card.svelte';
+	import Chip from '$lib/components/ui/Chip.svelte';
 	import BaseMap from '$lib/components/map/BaseMap.svelte';
 	import { theme } from '$lib/client/theme-colors.svelte';
 	import { localitySearchResponseSchema, type LocalitySearchResult } from '$lib/api/contracts';
@@ -10,6 +12,8 @@
 	let { form, error, onpicked }: { form: FormState; error?: string; onpicked?: () => void } =
 		$props();
 
+	const field =
+		'rounded-sm border border-line-strong bg-surface-raised px-3 py-2 type-body text-ink placeholder:text-ink-subtle';
 	const others = KNOWN_MARKETS.filter((m) => !m.featured);
 
 	let query = $state('');
@@ -150,131 +154,137 @@
 	);
 </script>
 
-<fieldset class="bg-white ring-zinc-200 rounded-xl p-5 ring-1">
-	<legend class="px-1 text-base font-semibold">1. Market</legend>
+<Card>
+	<fieldset class="m-0 min-w-0 border-0 p-0">
+		<legend class="px-0 type-heading-3">1. Market</legend>
 
-	<div class="mt-2 grid gap-3 sm:grid-cols-3">
-		{#each FEATURED_MARKETS as m (m.id)}
-			<button
-				type="button"
-				onclick={() => selectMarket(m)}
-				aria-pressed={form.marketId === m.id}
-				class="rounded-xl p-3 text-left ring-1 transition {form.marketId === m.id
-					? 'bg-indigo-50 ring-indigo-600 ring-2'
-					: 'bg-white ring-zinc-200 hover:ring-indigo-400'}"
-			>
-				<span class="block font-medium">{m.name}</span>
-				<span class="text-zinc-500 block text-sm">{m.countryName}</span>
-			</button>
-		{/each}
-	</div>
-	<div class="mt-3 flex flex-wrap gap-2">
-		{#each others as m (m.id)}
-			<button
-				type="button"
-				onclick={() => selectMarket(m)}
-				aria-pressed={form.marketId === m.id}
-				class="rounded-full px-3 py-1 text-sm ring-1 {form.marketId === m.id
-					? 'bg-indigo-600 text-white ring-indigo-600'
-					: 'bg-white text-zinc-700 ring-zinc-300 hover:ring-indigo-400'}">{m.name}</button
-			>
-		{/each}
-	</div>
-
-	<div class="border-zinc-100 mt-5 border-t pt-4">
-		<p class="text-zinc-800 text-sm font-medium">Other city</p>
-		<div class="mt-2 grid gap-2 sm:grid-cols-[1fr_12rem]">
-			<input
-				type="text"
-				bind:value={query}
-				oninput={onInput}
-				onkeydown={(e) => e.key === 'Escape' && closeResults()}
-				placeholder="Search a city"
-				aria-label="City name"
-				autocomplete="off"
-				class="ring-zinc-300 focus:ring-indigo-600 w-full rounded-lg border-0 px-3 py-2 ring-1 focus:ring-2"
-			/>
-			<select
-				bind:value={countrySelect}
-				onchange={onInput}
-				aria-label="Country"
-				class="bg-white ring-zinc-300 focus:ring-indigo-600 w-full rounded-lg border-0 px-3 py-2 ring-1 focus:ring-2"
-			>
-				<option value="" disabled>Country</option>
-				{#each COUNTRIES as c (c.code)}
-					<option value={c.code}>{c.name} ({c.code})</option>
-				{/each}
-				<option value={OTHER_COUNTRY}>Other</option>
-			</select>
+		<div class="mt-space-3 grid gap-space-3 sm:grid-cols-3">
+			{#each FEATURED_MARKETS as m (m.id)}
+				<Card
+					interactive
+					padded={false}
+					class={form.marketId === m.id ? 'bg-signal-soft ring-1 ring-signal' : ''}
+				>
+					<button
+						type="button"
+						onclick={() => selectMarket(m)}
+						aria-pressed={form.marketId === m.id}
+						class="block w-full rounded-lg p-space-3 text-left"
+					>
+						<span class="block type-body font-semibold text-ink">{m.name}</span>
+						<span class="block type-small text-ink-muted">{m.countryName}</span>
+					</button>
+				</Card>
+			{/each}
 		</div>
-		{#if countrySelect === OTHER_COUNTRY}
-			<input
-				type="text"
-				bind:value={customCountry}
-				oninput={onInput}
-				placeholder="ISO code or country name"
-				aria-label="Other country code"
-				class="ring-zinc-300 focus:ring-indigo-600 mt-2 w-full rounded-lg border-0 px-3 py-2 ring-1 focus:ring-2 sm:w-64"
-			/>
-		{/if}
+		<div class="mt-space-3 flex flex-wrap gap-space-2">
+			{#each others as m (m.id)}
+				<Chip pressed={form.marketId === m.id} onclick={() => selectMarket(m)}>{m.name}</Chip>
+			{/each}
+		</div>
 
-		<div class="mt-2 text-sm" aria-live="polite">
-			{#if query.trim().length >= 2 && !country}
-				<p class="text-zinc-500">Choose a country to search.</p>
-			{:else if status === 'loading'}
-				<p class="text-zinc-500 flex items-center gap-2">
-					<span
-						class="border-zinc-300 border-t-indigo-600 size-3.5 animate-spin rounded-full border-2"
-					></span>
-					Searching…
-				</p>
-			{:else if status === 'error'}
-				<p class="text-rose-700">
-					City search is unavailable right now. Pick a market above or retry.
-				</p>
-			{:else if status === 'done' && results.length === 0}
-				<p class="text-zinc-500">No match. Try another spelling or the local name of the city.</p>
+		<div class="mt-space-5 border-t border-line pt-space-4">
+			<p class="type-label text-ink-subtle">Other city</p>
+			<div class="mt-2 grid gap-2 sm:grid-cols-[1fr_12rem]">
+				<input
+					type="text"
+					bind:value={query}
+					oninput={onInput}
+					onkeydown={(e) => e.key === 'Escape' && closeResults()}
+					placeholder="Search a city"
+					aria-label="City name"
+					autocomplete="off"
+					class="{field} w-full"
+				/>
+				<select
+					bind:value={countrySelect}
+					onchange={onInput}
+					aria-label="Country"
+					class="{field} w-full"
+				>
+					<option value="" disabled>Country</option>
+					{#each COUNTRIES as c (c.code)}
+						<option value={c.code}>{c.name} ({c.code})</option>
+					{/each}
+					<option value={OTHER_COUNTRY}>Other</option>
+				</select>
+			</div>
+			{#if countrySelect === OTHER_COUNTRY}
+				<input
+					type="text"
+					bind:value={customCountry}
+					oninput={onInput}
+					placeholder="ISO code or country name"
+					aria-label="Other country code"
+					class="{field} mt-2 w-full sm:w-64"
+				/>
+			{/if}
+
+			<div class="mt-2 type-small" aria-live="polite">
+				{#if query.trim().length >= 2 && !country}
+					<p class="text-ink-subtle">Choose a country to search.</p>
+				{:else if status === 'loading'}
+					<p class="flex items-center gap-2 text-ink-subtle">
+						<span class="size-2 animate-pulse-live rounded-full bg-beam" aria-hidden="true"></span>
+						Searching…
+					</p>
+				{:else if status === 'error'}
+					<p class="text-critical">
+						City search is unavailable right now. Pick a market above or retry.
+					</p>
+				{:else if status === 'done' && results.length === 0}
+					<p class="text-ink-subtle">
+						No match. Try another spelling or the local name of the city.
+					</p>
+				{/if}
+			</div>
+
+			{#if results.length > 0}
+				<ul
+					class="mt-2 divide-y divide-line overflow-hidden rounded-md border border-line bg-surface-raised"
+				>
+					{#each results as r, i (i)}
+						<li>
+							<button
+								type="button"
+								onclick={() => selectLocality(r)}
+								class="flex w-full items-center justify-between gap-3 px-3 py-2 text-left transition-colors duration-[120ms] hover:bg-surface-sunken {form.localityEntityId ===
+								r.entityId
+									? 'bg-signal-soft'
+									: ''}"
+							>
+								<span class="min-w-0">
+									<span
+										class="block truncate type-body font-medium {r.acceptable
+											? 'text-ink'
+											: 'text-ink-muted'}">{r.name}</span
+									>
+									{#if r.disambiguation}
+										<span class="block truncate type-small text-ink-muted">{r.disambiguation}</span>
+									{/if}
+								</span>
+								{#if !r.acceptable}
+									<span class="shrink-0 type-small text-ink-subtle">different country</span>
+								{/if}
+							</button>
+						</li>
+					{/each}
+				</ul>
 			{/if}
 		</div>
 
-		{#if results.length > 0}
-			<ul class="divide-zinc-100 ring-zinc-200 mt-2 divide-y rounded-lg ring-1">
-				{#each results as r, i (i)}
-					<li>
-						<button
-							type="button"
-							onclick={() => selectLocality(r)}
-							class="hover:bg-zinc-50 flex w-full items-center justify-between gap-3 px-3 py-2 text-left {r.acceptable
-								? ''
-								: 'opacity-55'} {form.localityEntityId === r.entityId ? 'bg-indigo-50' : ''}"
-						>
-							<span class="min-w-0">
-								<span class="block truncate font-medium">{r.name}</span>
-								{#if r.disambiguation}
-									<span class="text-zinc-500 block truncate text-sm">{r.disambiguation}</span>
-								{/if}
-							</span>
-							{#if !r.acceptable}
-								<span class="text-zinc-500 shrink-0 text-xs">different country</span>
-							{/if}
-						</button>
-					</li>
-				{/each}
-			</ul>
-		{/if}
-	</div>
+		<p class="mt-space-4 type-small {chosenLabel ? 'text-ink' : 'text-ink-muted'}">
+			{chosenLabel ? `Selected: ${chosenLabel}` : 'No market selected yet.'}
+		</p>
+		{#if error}<p class="mt-space-1 type-small text-critical" role="alert">{error}</p>{/if}
 
-	<p class="mt-4 text-sm {chosenLabel ? 'text-zinc-700' : 'text-zinc-500'}">
-		{chosenLabel ? `Selected: ${chosenLabel}` : 'No market selected yet.'}
-	</p>
-	{#if error}<p class="text-rose-700 mt-1 text-sm" role="alert">{error}</p>{/if}
-
-	<BaseMap
-		class="mt-3 h-[220px]"
-		center={point ?? [-85, 15]}
-		zoom={point ? 10 : 3.2}
-		interactive={false}
-		{onready}
-		label={chosenLabel ? `Map centred on ${chosenLabel}` : 'Map of the Americas'}
-	/>
-</fieldset>
+		<BaseMap
+			class="mt-3 h-[220px]"
+			center={point ?? [-85, 15]}
+			zoom={point ? 10 : 3.2}
+			interactive={false}
+			{onready}
+			label={chosenLabel ? `Map centred on ${chosenLabel}` : 'Map of the Americas'}
+		/>
+	</fieldset>
+</Card>
