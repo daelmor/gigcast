@@ -1,5 +1,7 @@
 <script lang="ts">
-	import Label from '../ui/Label.svelte';
+	import Card from '../ui/Card.svelte';
+	import Chip from '../ui/Chip.svelte';
+	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
 	import HeatmapMap, { type Dimension, type MapPoint } from './HeatmapMap.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
@@ -49,25 +51,23 @@
 </script>
 
 <section aria-labelledby="audience">
-	<SectionHeader id="audience" title="Audience map" note={audience.note} />
+	<SectionHeader
+		id="audience"
+		kicker="Section 1 · Audience"
+		title="Audience map"
+		note={audience.note}
+	/>
 
 	{#if hasMap && heatmap}
-		<div class="bg-white ring-zinc-200 rounded-xl p-3 ring-1">
+		<Card padded={false} class="break-inside-avoid p-space-3">
 			{#if heatmap.hasDimensions}
 				<div
-					class="bg-zinc-100 mb-3 inline-flex flex-wrap gap-1 rounded-lg p-1"
+					class="mb-space-3 flex flex-wrap gap-space-2 print:hidden"
 					role="group"
 					aria-label="Map dimension"
 				>
 					{#each DIMENSIONS as d (d.id)}
-						<button
-							type="button"
-							onclick={() => (dimension = d.id)}
-							aria-pressed={dimension === d.id}
-							class="rounded-md px-3 py-1 text-sm font-medium {dimension === d.id
-								? 'bg-white text-indigo-700 shadow-sm'
-								: 'text-zinc-600 hover:text-zinc-900'}">{d.title}</button
-						>
+						<Chip pressed={dimension === d.id} onclick={() => (dimension = d.id)}>{d.title}</Chip>
 					{/each}
 				</div>
 			{/if}
@@ -78,15 +78,20 @@
 				venues={venuePoints}
 				{center}
 			/>
-			<p class="text-zinc-500 mt-2 text-xs">
-				{heatmap.cells.length} heatmap cells <SourceMarks sources={[heatmap.source.toolCallId]} />.
-				Cells are coarse geohashes, not venue-level data.
-			</p>
-		</div>
+			<div class="mt-space-3 flex items-baseline gap-space-3 px-space-1">
+				<span class="type-numeral text-ink tabular-nums">{heatmap.cells.length}</span>
+				<p class="type-small text-ink-subtle">
+					heatmap cells <SourceMarks sources={[heatmap.source.toolCallId]} />. Cells are coarse
+					geohashes, not venue-level data.
+				</p>
+			</div>
+		</Card>
 	{:else}
-		<div class="border-zinc-300 bg-zinc-50 rounded-xl border border-dashed p-6 text-center">
+		<div
+			class="rounded-lg border border-dashed border-line-strong bg-surface-sunken p-space-5 text-center"
+		>
 			<svg
-				class="text-zinc-400 mx-auto size-8"
+				class="mx-auto size-8 text-ink-subtle"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -99,66 +104,70 @@
 					d="M9 6.75V15m6-6v8.25m.5 3.5-6.5-3-5.5 2.5V6l5.5-2.5 6.5 3 5.5-2.5v11.75l-5.5 2.5Z"
 				/>
 			</svg>
-			<p class="text-zinc-900 mt-3 flex flex-wrap items-center justify-center gap-2 font-medium">
-				No heatmap for this market <Label label="no_coverage" />
+			<p
+				class="mt-space-3 flex flex-wrap items-center justify-center gap-space-2 type-body font-semibold text-ink"
+			>
+				No heatmap for this market <EvidenceLabel label="no_coverage" />
 			</p>
-			<p class="text-zinc-600 mx-auto mt-1 max-w-xl text-sm">
+			<p class="mx-auto mt-space-1 max-w-xl type-small text-ink-muted">
 				Qloo returned no audience cells for this artist and locality, so there is nothing to map.
 			</p>
-			<p class="text-zinc-500 mx-auto mt-2 max-w-xl text-xs">{audience.note.summary}</p>
+			<p class="mx-auto mt-space-2 max-w-xl type-small text-ink-subtle">{audience.note.summary}</p>
 		</div>
 	{/if}
 
-	<div class="mt-5 grid gap-5 md:grid-cols-2">
+	<div class="mt-space-5 grid gap-space-5 md:grid-cols-2">
 		<div>
-			<h3 class="text-zinc-900 mb-2 text-sm font-semibold">Hotspots</h3>
+			<h3 class="mb-space-2 type-heading-3 text-ink">Hotspots</h3>
 			{#if audience.hotspots.length === 0}
-				<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
+				<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 					No hotspots were identified.
 				</p>
 			{:else}
-				<ul class="space-y-3">
+				<ul class="space-y-space-3">
 					{#each audience.hotspots as h, i (i)}
-						<li class="bg-white ring-zinc-200 rounded-xl p-3 ring-1">
-							<p class="text-zinc-900 font-medium">{h.name}</p>
-							<p class="text-zinc-700 mt-1 text-sm">{h.why}</p>
-							<div class="mt-2 flex flex-wrap items-center gap-2">
-								<Label label={h.label} />
+						<Card as="li" class="break-inside-avoid">
+							<p class="type-heading-3 text-ink">{h.name}</p>
+							<p class="mt-space-1 type-body text-ink-muted">{h.why}</p>
+							<div class="mt-space-3 flex flex-wrap items-center gap-space-2">
+								<EvidenceLabel label={h.label} />
 								<SourceMarks sources={h.sources} />
 							</div>
-						</li>
+						</Card>
 					{/each}
 				</ul>
 			{/if}
 		</div>
 		<div>
-			<h3 class="text-zinc-900 mb-2 text-sm font-semibold">Top neighbourhoods</h3>
+			<h3 class="mb-space-2 type-heading-3 text-ink">Top neighbourhoods</h3>
 			{#if hoods.length === 0}
-				<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
+				<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 					No neighbourhood ranking was available.
 				</p>
 			{:else}
-				<ul class="bg-white ring-zinc-200 space-y-2 rounded-xl p-3 ring-1">
-					{#each hoods as h (h.entityId)}
-						<li>
-							<div class="flex justify-between gap-2 text-sm">
-								<span class="text-zinc-800 truncate">{h.name}</span>
-								<span class="text-zinc-500 tabular-nums">{pct(h.affinity)}</span>
-							</div>
-							<div class="bg-zinc-100 mt-0.5 h-2 overflow-hidden rounded-full">
-								<div
-									class="bg-indigo-500 h-full rounded-full"
-									style:width="{(h.affinity / hoodMax) * 100}%"
-								></div>
-							</div>
-						</li>
-					{/each}
-				</ul>
-				{#if brief.artifacts.neighbourhoods}
-					<p class="text-zinc-500 mt-1 text-xs">
-						<SourceMarks sources={[brief.artifacts.neighbourhoods.source.toolCallId]} />
-					</p>
-				{/if}
+				<Card class="break-inside-avoid">
+					<ul class="space-y-space-3">
+						{#each hoods as h (h.entityId)}
+							<li>
+								<div class="flex justify-between gap-space-2 type-small">
+									<span class="truncate text-ink">{h.name}</span>
+									<span class="text-ink-muted tabular-nums">{pct(h.affinity)}</span>
+								</div>
+								<div class="mt-1 h-2 overflow-hidden rounded-pill bg-surface-sunken">
+									<div
+										class="h-full rounded-pill bg-chart-1"
+										style:width="{(h.affinity / hoodMax) * 100}%"
+									></div>
+								</div>
+							</li>
+						{/each}
+					</ul>
+					{#if brief.artifacts.neighbourhoods}
+						<p class="mt-space-3 type-small text-ink-subtle">
+							<SourceMarks sources={[brief.artifacts.neighbourhoods.source.toolCallId]} />
+						</p>
+					{/if}
+				</Card>
 			{/if}
 		</div>
 	</div>

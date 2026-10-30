@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import Button from '$lib/components/ui/Button.svelte';
 	import DraftsView from '$lib/components/brief/DraftsView.svelte';
 	import type { PageData } from './$types';
 
@@ -14,20 +15,17 @@
 {#if data.brief}
 	<DraftsView brief={data.brief} />
 {:else}
-	<div class="bg-amber-50 ring-amber-200 mx-auto max-w-2xl rounded-xl p-6 ring-1">
-		<h1 class="text-amber-900 text-xl font-semibold">
+	<div class="mx-auto max-w-2xl rounded-lg bg-caution-soft p-space-5">
+		<h1 class="type-heading-2 text-caution">
 			{data.status === 'failed' ? 'This brief has no drafts' : 'The brief is still being built'}
 		</h1>
-		<p class="text-amber-900 mt-2 text-sm">
+		<p class="mt-space-2 type-body text-caution">
 			{data.status === 'failed'
 				? 'The run failed before any sponsor drafts were written.'
 				: 'Outreach drafts appear once the run finishes, which takes about five minutes.'}
 		</p>
-		<a
-			href={resolve('/brief/[id]', { id: data.id })}
-			class="bg-indigo-600 text-white hover:bg-indigo-500 mt-4 inline-flex rounded-lg px-3 py-1.5 text-sm font-medium"
-		>
+		<Button variant="primary" href={resolve('/brief/[id]', { id: data.id })} class="mt-space-4">
 			Back to the brief
-		</a>
+		</Button>
 	</div>
 {/if}

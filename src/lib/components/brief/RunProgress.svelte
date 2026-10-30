@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '../ui/Card.svelte';
 	import { BRIEF_SECTIONS } from '$lib/brief/schema';
 	import type { AgentEvent } from '$lib/brief/events';
 	import { formatDuration } from './format';
@@ -31,42 +32,47 @@
 	});
 </script>
 
-<div class="bg-white ring-zinc-200 rounded-xl p-4 ring-1" aria-live="polite">
-	<div class="mb-3 flex items-center justify-between gap-3">
-		<h3 class="text-zinc-900 text-sm font-semibold">
-			{#if status === 'queued'}Queued{:else if status === 'running'}Building the brief{:else if status === 'failed'}Run
-				failed{:else if status === 'partial'}Brief finished with gaps{:else}Brief ready{/if}
-		</h3>
-		<span class="text-zinc-500 text-xs tabular-nums">{formatDuration(elapsed)}</span>
+<Card>
+	<div aria-live="polite">
+		<div class="mb-space-3 flex items-center justify-between gap-space-3">
+			<h3 class="type-heading-3 text-ink">
+				{#if status === 'queued'}Queued{:else if status === 'running'}Building the brief{:else if status === 'failed'}Run
+					failed{:else if status === 'partial'}Brief finished with gaps{:else}Brief ready{/if}
+			</h3>
+			<span class="type-small text-ink-subtle tabular-nums">{formatDuration(elapsed)}</span>
+		</div>
+		<ol class="flex flex-wrap gap-space-2">
+			{#each BRIEF_SECTIONS as s (s)}
+				{@const st = states[s]}
+				<li
+					class="inline-flex h-7 items-center gap-1.5 rounded-pill border border-line bg-surface-sunken px-3 text-[13px] leading-5 font-medium {st ===
+					'pending'
+						? 'text-ink-subtle'
+						: 'text-ink'}"
+				>
+					{#if st === 'ready'}
+						<svg
+							class="size-3.5 shrink-0 text-grounded"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							aria-hidden="true"
+							><path
+								fill-rule="evenodd"
+								d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.8 3.8 6.8-6.8a1 1 0 0 1 1.4 0Z"
+								clip-rule="evenodd"
+							/></svg
+						>
+					{:else if st === 'in_progress'}
+						<span class="size-2 shrink-0 animate-pulse-live rounded-full bg-beam" aria-hidden="true"
+						></span>
+					{:else}
+						<span class="size-2 shrink-0 rounded-full border border-ink-subtle" aria-hidden="true"
+						></span>
+					{/if}
+					<span class="whitespace-nowrap">{SECTION_LABELS[s]}</span>
+					<span class="sr-only">{st.replace('_', ' ')}</span>
+				</li>
+			{/each}
+		</ol>
 	</div>
-	<ol class="flex flex-wrap gap-2">
-		{#each BRIEF_SECTIONS as s (s)}
-			{@const st = states[s]}
-			<li
-				class="flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-medium ring-1 ring-inset {st ===
-				'ready'
-					? 'bg-emerald-50 text-emerald-800 ring-emerald-600/20'
-					: st === 'in_progress'
-						? 'bg-indigo-50 text-indigo-700 ring-indigo-600/20'
-						: 'bg-zinc-50 text-zinc-500 ring-zinc-200'}"
-			>
-				{#if st === 'ready'}
-					<svg class="size-3.5 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-						><path
-							fill-rule="evenodd"
-							d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.8 3.8 6.8-6.8a1 1 0 0 1 1.4 0Z"
-							clip-rule="evenodd"
-						/></svg
-					>
-				{:else if st === 'in_progress'}
-					<span class="bg-indigo-500 size-2 shrink-0 animate-pulse rounded-full" aria-hidden="true"
-					></span>
-				{:else}
-					<span class="bg-zinc-300 size-2 shrink-0 rounded-full" aria-hidden="true"></span>
-				{/if}
-				<span class="whitespace-nowrap">{SECTION_LABELS[s]}</span>
-				<span class="sr-only">{st.replace('_', ' ')}</span>
-			</li>
-		{/each}
-	</ol>
-</div>
+</Card>
