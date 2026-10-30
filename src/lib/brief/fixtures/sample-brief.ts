@@ -364,11 +364,53 @@ const rawBrief: Brief = {
 		},
 		risks: {
 			note: {
-				label: 'no_coverage',
-				summary: 'M1 has no risk layer; no news or advisory sources were queried.',
-				caveats: []
+				label: 'inferred',
+				summary:
+					'Three items matter for 20 to 22 November: heavy rain forecast for the weekend, road works near the main access, and a second Arjona date announced in the city. Security news is elevated but not specific to the venue.',
+				caveats: [
+					'Risk classification is the model reading local news; it is not a safety assessment.'
+				]
 			},
-			items: []
+			items: [
+				{
+					category: 'weather_climate',
+					severity: 4,
+					title: 'Conred alerta por lluvias intensas y posible depresión tropical en el Pacífico',
+					soWhat:
+						'Heavy rain is forecast for the show weekend; an open-air stadium needs a weather contingency and flexible gates.',
+					sourceName: 'Prensa Libre',
+					sourceUrl:
+						'https://www.prensalibre.com/guatemala/comunitario/conred-alerta-lluvias-intensas-depresion-tropical/',
+					publishedAt: '2026-10-29T15:00:00.000Z',
+					timeHorizon: 'in_window',
+					label: 'inferred'
+				},
+				{
+					category: 'transport',
+					severity: 3,
+					title: 'Cierre parcial de la Calzada Roosevelt por obras durante dos semanas',
+					soWhat:
+						'A main access road is reduced to one lane; publish alternate routes and add rideshare drop zones.',
+					sourceName: 'Prensa Libre',
+					sourceUrl:
+						'https://www.prensalibre.com/guatemala/comunitario/cierre-calzada-roosevelt-obras/',
+					publishedAt: '2026-10-26T12:00:00.000Z',
+					timeHorizon: 'in_window',
+					label: 'inferred'
+				},
+				{
+					category: 'competing_events',
+					severity: 3,
+					title: 'Anuncian gira de Ricardo Arjona: dos fechas confirmadas en el Domo Polideportivo',
+					soWhat:
+						'A second announced date in the same market can split demand and sponsor attention.',
+					sourceName: 'Soy502',
+					sourceUrl: 'https://www.soy502.com/articulo/arjona-gira-fechas-domo-polideportivo',
+					publishedAt: '2026-10-24T18:30:00.000Z',
+					timeHorizon: 'in_window',
+					label: 'inferred'
+				}
+			]
 		},
 		openQuestions: [
 			'Is the date window one show or a multi-night run?',
@@ -377,6 +419,99 @@ const rawBrief: Brief = {
 	},
 	artifacts: {
 		calls: [],
+		riskFeed: {
+			marketId: 'guatemala-city',
+			country: 'GT',
+			city: 'Guatemala City',
+			from: '2026-08-31',
+			to: '2026-10-30',
+			items: [
+				{
+					id: 'news_001',
+					title: 'Conred alerta por lluvias intensas y posible depresión tropical en el Pacífico',
+					url: 'https://www.prensalibre.com/guatemala/comunitario/conred-alerta-lluvias-intensas-depresion-tropical/',
+					source: 'Prensa Libre',
+					publishedAt: '2026-10-29T15:00:00.000Z',
+					snippet: null,
+					category: 'weather_climate',
+					severity: 4,
+					timeHorizon: 'in_window',
+					confidence: 0.8,
+					soWhat: 'Heavy rain is forecast for the show weekend.',
+					affectedEntities: [],
+					weight: 0.95,
+					mentionsSubject: false
+				},
+				{
+					id: 'news_002',
+					title: 'Estado de prevención en tres municipios por extorsiones a transportistas',
+					url: 'https://www.prensalibre.com/guatemala/justicia/estado-de-prevencion-municipios-extorsiones/',
+					source: 'Prensa Libre',
+					publishedAt: '2026-10-28T10:00:00.000Z',
+					snippet: null,
+					category: 'security',
+					severity: 4,
+					timeHorizon: 'ongoing',
+					confidence: 0.7,
+					soWhat: 'Checkpoints can slow crowd arrival.',
+					affectedEntities: [],
+					weight: 0.9,
+					mentionsSubject: false
+				}
+			],
+			advisories: [
+				{
+					source: 'US State Department',
+					title: 'Guatemala Travel Advisory (Level 3: Reconsider Travel)',
+					url: 'https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/guatemala-travel-advisory.html',
+					publishedAt: '2026-07-02T00:00:00.000Z',
+					level: 3,
+					summary: 'Reconsider travel because of crime.'
+				}
+			],
+			score: {
+				value: 47,
+				byCategory: { security: 78, weather_climate: 66, transport: 33, competing_events: 38 },
+				itemCount: 12,
+				recentCount: 5
+			},
+			ingestedAt: '2026-10-30T13:00:00.000Z',
+			storedItems: 187,
+			source: ref('risk_feed', 'toolu_01J', 'market=guatemala-city')
+		},
+		marketCalendar: {
+			country: 'GT',
+			from: '2026-11-20',
+			to: '2026-11-22',
+			holidays: [
+				{
+					date: '2026-11-01',
+					localName: 'Día de Todos los Santos',
+					name: "All Saints' Day",
+					inWindow: false,
+					weekday: 'Sunday'
+				},
+				{
+					date: '2026-12-08',
+					localName: 'Inmaculada Concepción',
+					name: 'Immaculate Conception',
+					inWindow: false,
+					weekday: 'Tuesday'
+				}
+			],
+			longWeekends: [],
+			climate: {
+				years: [2021, 2022, 2023, 2024, 2025],
+				tmaxMean: 25.7,
+				tminMean: 15.0,
+				precipMean: 9.6,
+				rainDayShare: 0.2,
+				precipMaxDay: 24.8,
+				note: 'Late November is the start of the dry season.'
+			},
+			climateMonths: [],
+			source: ref('market_calendar', 'toolu_01K', 'country=GT&from=2026-11-20&to=2026-11-22')
+		},
 		heatmap: {
 			cells: [
 				{
@@ -577,7 +712,7 @@ const rawBrief: Brief = {
 		qlooCalls: 12,
 		qlooCacheHits: 3,
 		stopReason: 'end_turn',
-		missingSections: ['risks']
+		missingSections: []
 	},
 	counterfactual: {
 		status: 'complete',
