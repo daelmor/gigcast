@@ -29,7 +29,7 @@
 	{:else}
 		<Card padded={false} class="overflow-x-auto">
 			<table class="w-full min-w-[34rem] text-left type-small">
-				<thead class="border-b border-line bg-surface-sunken type-label text-ink-subtle">
+				<thead class="border-b border-line bg-surface-sunken type-label text-ink-muted">
 					<tr>
 						<th class="px-space-4 py-space-2 font-semibold">Tier</th>
 						<th class="px-space-4 py-space-2 font-semibold">Price</th>

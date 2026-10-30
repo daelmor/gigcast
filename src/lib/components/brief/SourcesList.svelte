@@ -32,7 +32,7 @@
 						<span class="rounded-pill bg-surface-raised px-2 py-0.5 type-data-sm text-ink-muted"
 							>{ref.cacheHit ? 'cache hit' : 'live'}</span
 						>
-						<span class="text-ink-subtle">{formatDateTime(ref.fetchedAt)}</span>
+						<span class="text-ink-muted">{formatDateTime(ref.fetchedAt)}</span>
 					</div>
 					<code class="mt-space-1 block break-all text-ink-muted">{ref.requestKey}</code>
 				</li>

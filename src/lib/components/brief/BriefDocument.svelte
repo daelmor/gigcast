@@ -99,7 +99,7 @@
 						>
 							<span class="block">{item.title}</span>
 							{#if item.label}
-								<EvidenceLabel label={item.label} bare class="mt-0.5 opacity-90" />
+								<EvidenceLabel label={item.label} bare class="mt-0.5" />
 							{/if}
 						</a>
 					</li>

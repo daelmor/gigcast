@@ -30,7 +30,7 @@
 					<a
 						href={link.href}
 						aria-current={current(link.match)}
-						class="rounded-md px-3 py-1.5 type-button font-medium text-ink-muted transition-colors duration-[120ms] hover:bg-surface-sunken hover:text-ink aria-[current=page]:bg-signal-soft aria-[current=page]:text-signal"
+						class="rounded-md px-2 py-1.5 type-button font-medium whitespace-nowrap text-ink-muted transition-colors duration-[120ms] hover:bg-surface-sunken hover:text-ink aria-[current=page]:bg-signal-soft aria-[current=page]:text-signal sm:px-3"
 						>{link.label}</a
 					>
 				{/each}

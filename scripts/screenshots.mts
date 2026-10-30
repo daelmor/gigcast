@@ -39,7 +39,7 @@ for (const theme of themes) {
 				console.log(`skip ${route} (${res ? res.status() : 'no response'})`);
 				continue;
 			}
-			await page.waitForTimeout(1500);
+			await page.waitForTimeout(3000);
 			const file = path.join(outDir, `${name}.${theme}.${width}.png`);
 			await page.screenshot({ path: file, fullPage: true });
 			console.log('saved', file);

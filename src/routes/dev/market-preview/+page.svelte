@@ -5,9 +5,9 @@
 
 <svelte:head><title>Market dashboard preview (dev)</title></svelte:head>
 
-<main class="min-h-screen bg-surface text-ink">
+<div class="min-h-screen bg-surface text-ink">
 	<p class="mx-auto max-w-6xl px-4 pt-6 type-small text-ink-subtle sm:px-6">
 		Dev preview with fixtures. Not available in production.
 	</p>
 	<MarketDashboardView dashboard={sampleDashboard} />
-</main>
+</div>
