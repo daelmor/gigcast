@@ -384,6 +384,70 @@ export const verificationSchema = z.object({
 });
 export type Verification = z.infer<typeof verificationSchema>;
 
+// ---------------------------------------------------------------------------
+// Counterfactual: the same question answered with the Qloo tools removed
+// ---------------------------------------------------------------------------
+
+export const confidenceSchema = z.enum(['low', 'medium', 'high']);
+export type Confidence = z.infer<typeof confidenceSchema>;
+
+/** A pick made from the model's own knowledge, without any tool. */
+export const counterfactualPickSchema = z.object({
+	name: z.string().min(1).max(200),
+	/** Lineup picks only. */
+	role: z.enum(['co_headliner', 'opener', 'support']).optional(),
+	/** Sponsor picks only. */
+	category: z.string().max(120).optional(),
+	why: z.string().max(800),
+	confidence: confidenceSchema
+});
+export type CounterfactualPick = z.infer<typeof counterfactualPickSchema>;
+
+export const counterfactualDraftSchema = z.object({
+	lineup: z.array(counterfactualPickSchema).max(8).default([]),
+	sponsors: z.array(counterfactualPickSchema).max(8).default([]),
+	/** What the model says it could not know without data. */
+	caveats: z.array(z.string().max(600)).max(8).default([])
+});
+export type CounterfactualDraft = z.infer<typeof counterfactualDraftSchema>;
+
+/** Server-side check of one LLM-only pick against what Qloo returned in the main run. */
+export const counterfactualMatchSchema = z.object({
+	/** Qloo candidate whose name matches the pick, if any. */
+	entityId: z.string().optional(),
+	qlooName: z.string().optional(),
+	affinity: z.number().optional(),
+	/** The grounded run also picked it. */
+	pickedByGroundedRun: z.boolean()
+});
+export type CounterfactualMatch = z.infer<typeof counterfactualMatchSchema>;
+
+export const counterfactualPanelSchema = z.object({
+	status: z.enum(['complete', 'failed', 'skipped']),
+	model: z.string(),
+	run: runSummarySchema.optional(),
+	draft: counterfactualDraftSchema.optional(),
+	/** Parallel to draft.lineup and draft.sponsors. */
+	matches: z
+		.object({
+			lineup: z.array(counterfactualMatchSchema),
+			sponsors: z.array(counterfactualMatchSchema)
+		})
+		.optional(),
+	summary: z
+		.object({
+			lineupTotal: z.number().int().nonnegative(),
+			lineupInQloo: z.number().int().nonnegative(),
+			lineupOverlap: z.number().int().nonnegative(),
+			sponsorsTotal: z.number().int().nonnegative(),
+			sponsorsInQloo: z.number().int().nonnegative(),
+			sponsorsOverlap: z.number().int().nonnegative()
+		})
+		.optional(),
+	error: z.string().optional()
+});
+export type CounterfactualPanel = z.infer<typeof counterfactualPanelSchema>;
+
 export const briefSchema = z.object({
 	version: z.literal(1),
 	id: z.string(),
@@ -393,7 +457,9 @@ export const briefSchema = z.object({
 	draft: briefDraftSchema,
 	artifacts: briefArtifactsSchema,
 	verification: verificationSchema,
-	run: runSummarySchema
+	run: runSummarySchema,
+	/** Added in M3; briefs stored before then have none. */
+	counterfactual: counterfactualPanelSchema.optional()
 });
 export type Brief = z.infer<typeof briefSchema>;
 
