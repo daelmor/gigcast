@@ -101,7 +101,11 @@
 </script>
 
 <form onsubmit={submit} class="space-y-6" novalidate>
-	<MarketPicker {form} error={errors.market} />
+	<MarketPicker
+		{form}
+		error={errors.market}
+		onpicked={() => document.getElementById('artist-input')?.focus()}
+	/>
 	<ArtistPicker {form} error={errors.artist} />
 
 	<fieldset class="rounded-xl bg-white p-5 ring-1 ring-zinc-200">

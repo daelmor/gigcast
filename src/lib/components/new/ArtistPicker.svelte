@@ -18,10 +18,13 @@
 
 	const search = debounce(async (q: string) => {
 		controller?.abort();
-		controller = new AbortController();
+		const own = new AbortController();
+		controller = own;
+		// A search that never answers must not leave the spinner forever.
+		const timer = setTimeout(() => own.abort(new DOMException('timeout', 'TimeoutError')), 12_000);
 		try {
 			const res = await fetch(`/api/search/artists?q=${encodeURIComponent(q)}`, {
-				signal: controller.signal
+				signal: own.signal
 			});
 			if (!res.ok) throw new Error(String(res.status));
 			results = artistSearchResponseSchema.parse(await res.json()).results;
@@ -30,6 +33,8 @@
 			if (e instanceof DOMException && e.name === 'AbortError') return;
 			results = [];
 			status = 'error';
+		} finally {
+			clearTimeout(timer);
 		}
 	}, 300);
 
@@ -68,10 +73,13 @@
 	<legend class="px-1 text-base font-semibold">2. Artist</legend>
 	<div class="relative mt-2">
 		<input
+			id="artist-input"
 			type="text"
 			bind:value={form.artist}
 			oninput={onInput}
 			onfocus={() => (open = results.length > 0 || status === 'loading')}
+			onblur={() => (open = false)}
+			onkeydown={(e) => e.key === 'Escape' && (open = false)}
 			{placeholder}
 			aria-label="Artist"
 			autocomplete="off"
@@ -99,10 +107,11 @@
 					</p>
 				{:else}
 					<ul>
-						{#each results as a (a.entityId)}
+						{#each results as a, i (i)}
 							<li>
 								<button
 									type="button"
+									onpointerdown={(e) => e.preventDefault()}
 									onclick={() => pick(a)}
 									class="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-zinc-50"
 								>
