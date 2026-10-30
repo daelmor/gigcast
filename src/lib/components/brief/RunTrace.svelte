@@ -80,6 +80,7 @@
 			Waiting for the agent to start
 		</div>
 	{:else}
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 		<ol
 			bind:this={scroller}
 			class="grid max-h-[32rem] gap-1.5 overflow-y-auto bg-surface-sunken px-4 py-3 type-data"
