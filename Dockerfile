@@ -15,6 +15,8 @@ ENV NODE_ENV=production \
 COPY --from=build /app/build ./build
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
+# Drizzle migrations, applied on start when MIGRATE_ON_START=true.
+COPY --from=build /app/drizzle ./drizzle
 USER node
 EXPOSE 3000
 # Set ORIGIN at deploy time (for example https://gigcast.example.com); adapter-node reads it.

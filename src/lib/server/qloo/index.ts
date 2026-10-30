@@ -44,3 +44,15 @@ export function createQlooClient(options: CreateQlooClientOptions = {}): QlooCli
 		store: options.store ?? createCacheStore(options.backend)
 	});
 }
+
+let shared: QlooClient | undefined;
+
+/**
+ * One client per process for request handlers, so the rate limiter and the
+ * retry budget are shared across concurrent requests. Scripts and tests
+ * should keep building their own with createQlooClient.
+ */
+export function getSharedQlooClient(): QlooClient {
+	if (!shared) shared = createQlooClient();
+	return shared;
+}

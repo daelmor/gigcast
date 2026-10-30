@@ -58,7 +58,12 @@ export const briefInputSchema = z.object({
 	country: z.string().min(2),
 	dateFrom: isoDate,
 	dateTo: isoDate,
-	promoter: promoterInputsSchema.optional()
+	promoter: promoterInputsSchema.optional(),
+	/** Set when the promoter confirmed the artist in the UI; the agent still verifies it. */
+	artistEntityId: z.string().min(1).optional(),
+	/** Set when the promoter confirmed the Qloo locality in the UI (defeats the free-text traps). */
+	localityEntityId: z.string().min(1).optional(),
+	localityName: z.string().min(1).optional()
 });
 export type BriefInput = z.infer<typeof briefInputSchema>;
 
@@ -72,17 +77,17 @@ const sources = z.array(z.string()).default([]);
 export const sectionNoteSchema = z.object({
 	label: labelSchema,
 	/** Two to five sentences a promoter can read on its own. */
-	summary: z.string().min(1).max(1500),
-	caveats: z.array(z.string().max(300)).max(6).default([])
+	summary: z.string().min(1).max(3000),
+	caveats: z.array(z.string().max(600)).max(10).default([])
 });
 export type SectionNote = z.infer<typeof sectionNoteSchema>;
 
 export const hotspotSchema = z.object({
-	name: z.string().max(120),
+	name: z.string().max(200),
 	lat: z.number(),
 	lon: z.number(),
 	geohash: z.string().optional(),
-	why: z.string().max(400),
+	why: z.string().max(800),
 	label: labelSchema,
 	sources
 });
@@ -92,7 +97,7 @@ export const artistPickSchema = z.object({
 	name: z.string(),
 	role: z.enum(['co_headliner', 'opener', 'support']),
 	affinity: z.number().min(0).max(1).optional(),
-	why: z.string().max(600),
+	why: z.string().max(1200),
 	label: labelSchema,
 	sources
 });
@@ -102,9 +107,9 @@ export const sponsorPickSchema = z.object({
 	entityId: z.string(),
 	name: z.string(),
 	affinity: z.number().min(0).max(1).optional(),
-	category: z.string().max(80).optional(),
-	why: z.string().max(800),
-	outreachDraft: z.object({ subject: z.string().max(160), body: z.string().max(2500) }),
+	category: z.string().max(120).optional(),
+	why: z.string().max(1600),
+	outreachDraft: z.object({ subject: z.string().max(300), body: z.string().max(5000) }),
 	label: labelSchema,
 	sources
 });
@@ -114,23 +119,23 @@ export const placePickSchema = z.object({
 	entityId: z.string(),
 	name: z.string(),
 	kind: z.enum(['venue', 'pre_party', 'hospitality', 'bundle_partner', 'after_party']),
-	address: z.string().max(300).optional(),
+	address: z.string().max(500).optional(),
 	lat: z.number().optional(),
 	lon: z.number().optional(),
 	priceLevel: z.number().int().min(1).max(4).optional(),
 	rating: z.number().min(0).max(5).optional(),
-	why: z.string().max(500),
+	why: z.string().max(1000),
 	label: labelSchema,
 	sources
 });
 export type PlacePick = z.infer<typeof placePickSchema>;
 
 export const priceTierSchema = z.object({
-	name: z.string().max(60),
+	name: z.string().max(120),
 	price: z.number().nonnegative(),
 	/** Suggested share of capacity, 0 to 1. */
 	share: z.number().min(0).max(1),
-	rationale: z.string().max(400)
+	rationale: z.string().max(800)
 });
 
 export const RISK_CATEGORIES = [
@@ -151,8 +156,8 @@ export const riskCategorySchema = z.enum(RISK_CATEGORIES);
 export const riskItemSchema = z.object({
 	category: riskCategorySchema,
 	severity: z.number().int().min(1).max(5),
-	title: z.string().max(200),
-	soWhat: z.string().max(400),
+	title: z.string().max(300),
+	soWhat: z.string().max(800),
 	sourceName: z.string().max(120),
 	sourceUrl: z.string().url(),
 	publishedAt: z.string().optional(),
@@ -161,12 +166,12 @@ export const riskItemSchema = z.object({
 export type RiskItem = z.infer<typeof riskItemSchema>;
 
 export const briefDraftSchema = z.object({
-	headline: z.string().min(1).max(200),
+	headline: z.string().min(1).max(300),
 	verdict: z.enum(['promising', 'mixed', 'weak', 'insufficient_data']),
-	keyPoints: z.array(z.string().max(300)).min(1).max(6),
+	keyPoints: z.array(z.string().max(600)).min(1).max(10),
 	audience: z.object({
 		note: sectionNoteSchema,
-		hotspots: z.array(hotspotSchema).max(8).default([])
+		hotspots: z.array(hotspotSchema).max(12).default([])
 	}),
 	demandAndFit: z.object({
 		note: sectionNoteSchema,
@@ -174,13 +179,13 @@ export const briefDraftSchema = z.object({
 		trend: z
 			.object({
 				direction: z.enum(['rising', 'flat', 'falling', 'unknown']),
-				detail: z.string().max(400),
+				detail: z.string().max(800),
 				label: labelSchema
 			})
 			.optional(),
 		demographics: z
 			.object({
-				topAgeBuckets: z.array(z.string()).max(3),
+				topAgeBuckets: z.array(z.string()).max(6),
 				genderSkew: z.enum(['male', 'female', 'balanced', 'unknown']),
 				label: labelSchema
 			})
@@ -188,34 +193,34 @@ export const briefDraftSchema = z.object({
 		tasteMatch: z
 			.object({
 				score: z.number().min(0).max(1).optional(),
-				sharedTags: z.array(z.string()).max(12),
-				detail: z.string().max(600),
+				sharedTags: z.array(z.string()).max(24),
+				detail: z.string().max(1200),
 				label: labelSchema
 			})
 			.optional()
 	}),
 	lineup: z.object({
 		note: sectionNoteSchema,
-		picks: z.array(artistPickSchema).max(8).default([])
+		picks: z.array(artistPickSchema).max(12).default([])
 	}),
 	sponsors: z.object({
 		note: sectionNoteSchema,
-		picks: z.array(sponsorPickSchema).max(8).default([])
+		picks: z.array(sponsorPickSchema).max(12).default([])
 	}),
 	venuesAndPartners: z.object({
 		note: sectionNoteSchema,
-		picks: z.array(placePickSchema).max(12).default([])
+		picks: z.array(placePickSchema).max(20).default([])
 	}),
 	pricing: z.object({
 		note: sectionNoteSchema,
 		currency: z.string().length(3),
-		tiers: z.array(priceTierSchema).max(4).default([]),
-		assumptions: z.array(z.string().max(300)).max(6).default([])
+		tiers: z.array(priceTierSchema).max(6).default([]),
+		assumptions: z.array(z.string().max(600)).max(10).default([])
 	}),
 	risks: z
-		.object({ note: sectionNoteSchema, items: z.array(riskItemSchema).max(20).default([]) })
+		.object({ note: sectionNoteSchema, items: z.array(riskItemSchema).max(30).default([]) })
 		.optional(),
-	openQuestions: z.array(z.string().max(300)).max(8).default([])
+	openQuestions: z.array(z.string().max(600)).max(12).default([])
 });
 export type BriefDraft = z.infer<typeof briefDraftSchema>;
 

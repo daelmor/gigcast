@@ -17,7 +17,16 @@ const schema = z.object({
 	// Required only by the ingest job endpoint, which checks it at request time.
 	INGEST_JOB_SECRET: z.string().min(1).optional(),
 	PUBLIC_MAP_STYLE_URL: z.string().url().optional(),
-	APP_BASE_URL: z.string().url().optional()
+	APP_BASE_URL: z.string().url().optional(),
+	// Briefs running at the same time in one instance; more are refused with 429.
+	MAX_CONCURRENT_RUNS: z.coerce.number().int().positive().default(2),
+	// vertex (default) runs the real agent; fake replays a canned trace for end-to-end tests.
+	AGENT_RUNNER: z.enum(['vertex', 'fake']).default('vertex'),
+	// Apply pending Drizzle migrations when the server starts (Cloud Run has no shell step).
+	MIGRATE_ON_START: z
+		.enum(['true', 'false', '1', '0'])
+		.default('false')
+		.transform((v) => v === 'true' || v === '1')
 });
 
 export type Env = z.infer<typeof schema>;
