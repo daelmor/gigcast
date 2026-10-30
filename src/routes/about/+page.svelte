@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import Label from '$lib/components/ui/Label.svelte';
+	import { Button, Card, Chip, EvidenceLabel } from '$lib/components/ui';
 	import ExternalLink from '$lib/components/risk/ExternalLink.svelte';
 	import Architecture from '$lib/components/about/Architecture.svelte';
 	import { LABEL_HELP, type Label as LabelKind } from '$lib/brief/schema';
@@ -103,37 +103,64 @@
 		'Briefs are public read-only links. Anyone with the link can read the brief.'
 	];
 
-	const card = 'rounded-xl bg-white p-6 ring-1 ring-zinc-200';
+	let active = $state(toc[0].id);
+
+	$effect(() => {
+		if (typeof IntersectionObserver === 'undefined') return;
+		let visible: string[] = [];
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const e of entries) {
+					if (e.isIntersecting) visible = [...visible, e.target.id];
+					else visible = visible.filter((id) => id !== e.target.id);
+				}
+				// The topmost visible section in document order is the active one.
+				const first = toc.find((t) => visible.includes(t.id));
+				if (first) active = first.id;
+			},
+			{ rootMargin: '-10% 0px -70% 0px' }
+		);
+		for (const t of toc) {
+			const el = document.getElementById(t.id);
+			if (el) observer.observe(el);
+		}
+		return () => observer.disconnect();
+	});
 </script>
 
 <svelte:head><title>About gigcast</title></svelte:head>
 
-<div class="lg:grid lg:grid-cols-[12rem_1fr] lg:gap-10">
+<div class="lg:grid lg:grid-cols-[12rem_1fr] lg:gap-space-7">
 	<nav class="hidden lg:block" aria-label="On this page">
-		<ol class="sticky top-6 space-y-1 text-sm">
+		<ol class="sticky top-24 space-y-space-1 type-small">
 			{#each toc as t (t.id)}
 				<li>
 					<a
 						href="#{t.id}"
-						class="text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 block rounded-lg px-3 py-1.5"
-						>{t.title}</a
+						aria-current={active === t.id ? 'location' : undefined}
+						class="block rounded-sm px-space-3 py-1.5 no-underline transition-colors duration-[120ms] hover:bg-surface-sunken {active ===
+						t.id
+							? 'font-semibold text-signal'
+							: 'text-ink-muted hover:text-ink'}">{t.title}</a
 					>
 				</li>
 			{/each}
 		</ol>
 	</nav>
 
-	<article class="min-w-0 space-y-12">
+	<article class="min-w-0 space-y-space-7">
 		<header>
-			<h1 class="text-zinc-900 text-4xl font-semibold tracking-tight">About gigcast</h1>
-			<p class="text-zinc-600 mt-3 max-w-2xl text-lg">
+			<p class="type-label text-ink-subtle">About</p>
+			<h1 class="mt-space-2 type-heading-1 sm:type-display">About gigcast</h1>
+			<p class="mt-space-3 max-w-2xl type-body-lg text-ink-muted">
 				What a Booking Brief is, how Qloo grounds it, and where it stops being reliable.
 			</p>
 		</header>
 
-		<section id="what" class="scroll-mt-6">
-			<h2 class="text-xl font-semibold">What it is</h2>
-			<div class="{card} text-zinc-700 mt-4 space-y-3">
+		<section id="what" class="scroll-mt-24">
+			<p class="type-label text-ink-subtle">Overview</p>
+			<h2 class="mt-space-1 type-heading-1">What it is</h2>
+			<Card class="mt-space-4 space-y-space-3 type-body">
 				<p>
 					Concert promoters often decide on gut feel: which city, which support act, which sponsor,
 					which price. The data that would help is spread across ticket history, social numbers and
@@ -145,127 +172,141 @@
 					It is for promoters, talent buyers and venue bookers who need a first read on a market
 					before they commit money, and want to see what each claim rests on.
 				</p>
-				<ul class="flex flex-wrap gap-2 pt-1">
+				<ul class="flex flex-wrap gap-space-2 pt-space-1">
 					{#each parts as p (p)}
-						<li class="bg-zinc-100 text-zinc-700 rounded-full px-2.5 py-1 text-xs">{p}</li>
+						<li><Chip>{p}</Chip></li>
 					{/each}
 				</ul>
-			</div>
+			</Card>
 		</section>
 
-		<section id="qloo" class="scroll-mt-6">
-			<h2 class="text-xl font-semibold">Why Qloo is load-bearing</h2>
-			<div class="{card} text-zinc-700 mt-4 space-y-4">
+		<section id="qloo" class="scroll-mt-24">
+			<p class="type-label text-ink-subtle">Data</p>
+			<h2 class="mt-space-1 type-heading-1">Why Qloo is load-bearing</h2>
+			<Card class="mt-space-4 space-y-space-4 type-body">
 				<p>
 					Qloo's Taste AI is one affinity graph across artists, brands, places, localities and
 					demographics. One graph means a brief can answer "who likes this artist, where do they
 					live, what do they buy, where do they go" with results that connect to each other. These
 					are the endpoints the agent uses.
 				</p>
-				<dl class="divide-zinc-200 ring-zinc-200 divide-y rounded-lg ring-1">
+				<dl class="divide-y divide-line overflow-hidden rounded-md border border-line">
 					{#each endpoints as e (e.name)}
-						<div class="grid gap-1 px-4 py-3 sm:grid-cols-[18rem_1fr] sm:gap-4">
-							<dt class="text-zinc-900 font-mono text-sm break-words">{e.name}</dt>
-							<dd class="text-zinc-600 text-sm">{e.gives}</dd>
+						<div class="grid sm:grid-cols-[18rem_1fr]">
+							<dt class="bg-surface-sunken px-space-4 py-space-3 type-data break-words text-ink">
+								{e.name}
+							</dt>
+							<dd class="px-space-4 py-space-3 type-small text-ink-muted">{e.gives}</dd>
 						</div>
 					{/each}
 				</dl>
-				<h3 class="text-zinc-900 pt-2 font-semibold">The counterfactual</h3>
+				<h3 class="pt-space-2 type-heading-3">The counterfactual</h3>
 				<p>
 					Ask the same question without tools and a model returns plausible names that nobody can
 					verify. The brief shows both columns side by side: the tool-backed answer and the LLM-only
 					answer. Every name in the LLM-only column is checked against what Qloo returned in the
 					tool-backed run, so the reader sees which names the graph supports and which it does not.
 				</p>
-			</div>
+			</Card>
 		</section>
 
-		<section id="labels" class="scroll-mt-6">
-			<h2 class="text-xl font-semibold">The three labels</h2>
-			<ul class="mt-4 grid gap-4 md:grid-cols-3">
+		<section id="labels" class="scroll-mt-24">
+			<p class="type-label text-ink-subtle">Evidence</p>
+			<h2 class="mt-space-1 type-heading-1">The three labels</h2>
+			<ul class="mt-space-4 grid gap-space-5 md:grid-cols-3">
 				{#each labels as l (l)}
-					<li class={card}>
-						<Label label={l} size="md" />
-						<p class="text-zinc-600 mt-3 text-sm">{LABEL_HELP[l]}</p>
-					</li>
+					<Card as="li">
+						<EvidenceLabel label={l} />
+						<p class="mt-space-3 type-small text-ink-muted">{LABEL_HELP[l]}</p>
+					</Card>
 				{/each}
 			</ul>
-			<p class="text-zinc-700 mt-4 max-w-3xl">
+			<p class="mt-space-4 max-w-3xl type-body">
 				The server checks grounded picks. An entity id must appear in a tool result of the same run,
 				and a risk item must cite a url that the risk feed returned. A pick that fails the check is
 				not shown as grounded.
 			</p>
 		</section>
 
-		<section id="architecture" class="scroll-mt-6">
-			<h2 class="text-xl font-semibold">Architecture</h2>
-			<div class="{card} mt-4">
+		<section id="architecture" class="scroll-mt-24">
+			<p class="type-label text-ink-subtle">System</p>
+			<h2 class="mt-space-1 type-heading-1">Architecture</h2>
+			<Card class="mt-space-4">
 				<Architecture />
-			</div>
+			</Card>
 		</section>
 
-		<section id="sources" class="scroll-mt-6">
-			<h2 class="text-xl font-semibold">Data sources</h2>
-			<div class="bg-white ring-zinc-200 mt-4 overflow-x-auto rounded-xl ring-1">
-				<table class="w-full min-w-[32rem] text-left text-sm">
-					<thead class="border-zinc-200 text-zinc-500 border-b">
+		<section id="sources" class="scroll-mt-24">
+			<p class="type-label text-ink-subtle">Provenance</p>
+			<h2 class="mt-space-1 type-heading-1">Data sources</h2>
+			<div class="mt-space-4 overflow-x-auto rounded-lg border border-line bg-surface-raised">
+				<table class="w-full min-w-[32rem] text-left type-small">
+					<thead>
 						<tr>
-							<th class="px-4 py-3 font-medium">Source</th>
-							<th class="px-4 py-3 font-medium">What we take</th>
-							<th class="px-4 py-3 font-medium">Terms note</th>
+							<th class="bg-surface-sunken px-space-4 py-space-3 type-label text-ink-muted"
+								>Source</th
+							>
+							<th class="bg-surface-sunken px-space-4 py-space-3 type-label text-ink-muted"
+								>What we take</th
+							>
+							<th class="bg-surface-sunken px-space-4 py-space-3 type-label text-ink-muted"
+								>Terms note</th
+							>
 						</tr>
 					</thead>
-					<tbody class="divide-zinc-200 text-zinc-700 divide-y">
+					<tbody class="divide-y divide-line text-ink-muted">
 						{#each sources as s (s.source)}
 							<tr>
-								<td class="text-zinc-900 px-4 py-3 font-medium">{s.source}</td>
-								<td class="px-4 py-3">{s.take}</td>
-								<td class="px-4 py-3">{s.terms}</td>
+								<td class="px-space-4 py-space-3 font-semibold text-ink">{s.source}</td>
+								<td class="px-space-4 py-space-3">{s.take}</td>
+								<td class="px-space-4 py-space-3">{s.terms}</td>
 							</tr>
 						{/each}
 					</tbody>
 				</table>
 			</div>
-			<p class="text-zinc-600 mt-3 text-sm">
+			<p class="mt-space-3 type-small text-ink-muted">
 				We store headlines and links, never article bodies. Nothing is sent to sponsors.
 			</p>
 		</section>
 
-		<section id="honesty" class="scroll-mt-6">
-			<h2 class="text-xl font-semibold">Honesty notes</h2>
-			<ul class="{card} text-zinc-700 mt-4 list-disc space-y-2 pl-10">
-				{#each honesty as h (h)}
-					<li>{h}</li>
-				{/each}
-			</ul>
+		<section id="honesty" class="scroll-mt-24">
+			<p class="type-label text-ink-subtle">Limits</p>
+			<h2 class="mt-space-1 type-heading-1">Honesty notes</h2>
+			<Card class="mt-space-4">
+				<ul class="list-disc space-y-space-2 pl-space-5 type-body">
+					{#each honesty as h (h)}
+						<li>{h}</li>
+					{/each}
+				</ul>
+			</Card>
 		</section>
 
-		<section id="links" class="scroll-mt-6">
-			<h2 class="text-xl font-semibold">Links</h2>
-			<ul class="{card} text-indigo-600 mt-4 space-y-2">
-				<li>
-					<ExternalLink href="https://github.com/daelmor/gigcast" class="hover:underline"
-						>Repository</ExternalLink
-					>
-				</li>
-				<li>
-					<ExternalLink
-						href="https://github.com/daelmor/gigcast/blob/main/STATUS.md"
-						class="hover:underline">STATUS.md</ExternalLink
-					>
-				</li>
-				<li>
-					<ExternalLink
-						href="https://github.com/daelmor/gigcast/blob/main/docs/decisions.md"
-						class="hover:underline">docs/decisions.md</ExternalLink
-					>
-				</li>
-			</ul>
-			<a
-				href={resolve('/new')}
-				class="bg-indigo-600 text-white hover:bg-indigo-700 mt-6 inline-block rounded-lg px-5 py-2.5 font-medium shadow-sm"
-				>Start a brief</a
-			>
+		<section id="links" class="scroll-mt-24">
+			<p class="type-label text-ink-subtle">Elsewhere</p>
+			<h2 class="mt-space-1 type-heading-1">Links</h2>
+			<Card class="mt-space-4">
+				<ul class="space-y-space-2 type-body text-signal">
+					<li>
+						<ExternalLink href="https://github.com/daelmor/gigcast" class="hover:underline"
+							>Repository</ExternalLink
+						>
+					</li>
+					<li>
+						<ExternalLink
+							href="https://github.com/daelmor/gigcast/blob/main/STATUS.md"
+							class="hover:underline">STATUS.md</ExternalLink
+						>
+					</li>
+					<li>
+						<ExternalLink
+							href="https://github.com/daelmor/gigcast/blob/main/docs/decisions.md"
+							class="hover:underline">docs/decisions.md</ExternalLink
+						>
+					</li>
+				</ul>
+			</Card>
+			<Button variant="primary" href={resolve('/new')} class="mt-space-5">Start a brief</Button>
 		</section>
 	</article>
 </div>
