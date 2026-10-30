@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import Label from '../ui/Label.svelte';
+	import Button from '../ui/Button.svelte';
+	import Card from '../ui/Card.svelte';
+	import Chip from '../ui/Chip.svelte';
+	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
 	import { pct } from './format';
 	import type { Brief } from '$lib/brief/schema';
 
@@ -28,73 +31,67 @@
 <div class="mx-auto max-w-3xl">
 	<a
 		href={resolve('/brief/[id]', { id: brief.id })}
-		class="text-indigo-600 hover:text-indigo-800 text-sm font-medium print:hidden"
+		class="type-small font-semibold text-signal hover:underline print:hidden"
 	>
 		← Back to the brief
 	</a>
-	<h1 class="text-zinc-900 mt-2 text-2xl font-semibold tracking-tight">Sponsor outreach drafts</h1>
-	<p class="text-zinc-600 mt-1 text-sm">{brief.draft.headline}</p>
+	<p class="mt-space-4 type-label text-ink-subtle">Booking Brief</p>
+	<h1 class="mt-space-1 type-heading-1 text-ink">Sponsor outreach drafts</h1>
+	<p class="mt-space-2 type-body-lg text-ink-muted">{brief.draft.headline}</p>
 
-	<div class="bg-amber-50 text-amber-900 ring-amber-200 mt-5 rounded-xl p-4 text-sm ring-1">
+	<div class="mt-space-5 rounded-lg bg-caution-soft p-space-4 type-small text-caution">
 		These are drafts written by the model from Qloo affinity signals. Review and edit them before
 		use. gigcast never sends anything: the email link only opens your own email app.
 	</div>
 
 	{#if picks.length === 0}
-		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 mt-6 rounded-xl p-4 text-sm ring-1">
+		<p class="mt-space-5 rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			No sponsor suggestions in this brief, so there are no drafts.
 		</p>
 	{:else}
-		<ul class="mt-6 space-y-6">
+		<ul class="mt-space-5 space-y-space-5">
 			{#each picks as pick (pick.entityId)}
 				{@const text = `Subject: ${pick.outreachDraft.subject}\n\n${pick.outreachDraft.body}`}
-				<li class="bg-white ring-zinc-200 rounded-xl p-5 ring-1 print:break-inside-avoid">
-					<div class="flex items-start justify-between gap-3">
-						<div>
-							<h2 class="text-zinc-900 text-lg font-semibold">{pick.name}</h2>
-							{#if pick.category}<p class="text-zinc-500 text-xs">{pick.category}</p>{/if}
+				<Card as="li" class="print:break-inside-avoid">
+					<div class="flex flex-wrap items-start justify-between gap-space-3">
+						<div class="min-w-0">
+							<h2 class="type-heading-3 text-ink">{pick.name}</h2>
+							{#if pick.category}<Chip class="mt-space-2">{pick.category}</Chip>{/if}
 						</div>
-						<div class="flex items-center gap-3">
-							<Label label={pick.label} />
+						<div class="flex items-center gap-space-3">
+							<EvidenceLabel label={pick.label} />
 							{#if pick.affinity !== undefined}
 								<div class="text-right">
-									<p class="text-zinc-900 text-2xl font-semibold tabular-nums">
-										{pct(pick.affinity)}
-									</p>
-									<p class="text-zinc-500 text-xs">affinity</p>
+									<p class="type-heading-3 text-ink tabular-nums">{pct(pick.affinity)}</p>
+									<p class="type-small text-ink-subtle">affinity</p>
 								</div>
 							{/if}
 						</div>
 					</div>
-					<p class="text-zinc-700 mt-3 text-sm leading-relaxed">{pick.why}</p>
+					<p class="mt-space-3 type-body text-ink-muted">{pick.why}</p>
 
-					<p class="text-zinc-500 mt-4 text-xs font-medium uppercase">Subject</p>
-					<p class="text-zinc-900 text-sm font-medium">{pick.outreachDraft.subject}</p>
-					<p class="text-zinc-500 mt-3 text-xs font-medium uppercase">Body</p>
+					<p class="mt-space-4 type-label text-ink-subtle">Subject</p>
+					<p class="mt-space-1 type-body font-semibold text-ink">{pick.outreachDraft.subject}</p>
+					<p class="mt-space-3 type-label text-ink-subtle">Body</p>
 					<div
-						class="bg-zinc-50 text-zinc-800 ring-zinc-200 mt-1 rounded-lg p-4 text-sm leading-relaxed whitespace-pre-wrap ring-1"
+						class="mt-space-1 rounded-sm bg-surface-sunken p-space-4 type-body whitespace-pre-wrap text-ink"
 					>
 						{pick.outreachDraft.body}
 					</div>
 
-					<div class="mt-3 flex flex-wrap gap-2 print:hidden">
-						<button
-							type="button"
-							onclick={() => copy(pick.entityId, text)}
-							class="bg-white text-indigo-600 ring-zinc-300 hover:bg-zinc-50 rounded-lg px-3 py-1.5 text-sm font-medium ring-1"
-						>
+					<div class="mt-space-4 flex flex-wrap gap-space-2 print:hidden">
+						<Button size="sm" onclick={() => copy(pick.entityId, text)}>
 							{copied === pick.entityId ? 'Copied' : 'Copy'}
-						</button>
-						<!-- eslint-disable svelte/no-navigation-without-resolve -- mailto: is not an app route -->
-						<a
+						</Button>
+						<Button
+							variant="primary"
+							size="sm"
 							href={mailto(pick.outreachDraft.subject, pick.outreachDraft.body)}
-							class="bg-indigo-600 text-white hover:bg-indigo-500 rounded-lg px-3 py-1.5 text-sm font-medium"
 						>
 							Open in your email app
-						</a>
-						<!-- eslint-enable svelte/no-navigation-without-resolve -->
+						</Button>
 					</div>
-				</li>
+				</Card>
 			{/each}
 		</ul>
 	{/if}

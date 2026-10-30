@@ -10,34 +10,31 @@
 </script>
 
 <section aria-labelledby="sources">
-	<h2 id="sources" class="text-zinc-900 mb-4 scroll-mt-24 text-xl font-semibold">Sources</h2>
+	<header class="mb-space-5 border-b border-line pb-space-4">
+		<p class="mb-space-1 type-label text-ink-subtle">Section 11 · Sources</p>
+		<h2 id="sources" class="scroll-mt-24 type-heading-1 text-ink">Sources</h2>
+	</header>
 	{#if order.length === 0}
-		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
+		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			No Qloo requests were recorded for this brief, so nothing in it is grounded.
 		</p>
 	{:else}
-		<ol class="space-y-2">
+		<ol class="space-y-space-2">
 			{#each order as ref, i (ref.toolCallId)}
 				<li
 					id="source-{i + 1}"
-					class="bg-white ring-zinc-200 target:ring-indigo-500 scroll-mt-24 rounded-xl p-3 text-sm ring-1 target:ring-2"
+					class="scroll-mt-24 break-inside-avoid rounded-sm bg-surface-sunken p-space-3 type-data target:ring-2 target:ring-signal"
 				>
-					<div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-						<span class="text-indigo-600 font-semibold">[S{i + 1}]</span>
-						<span class="text-zinc-900 font-medium">{ref.tool}</span>
-						<span class="text-zinc-500">{ref.endpoint}</span>
-						<span
-							class="rounded-full px-2 py-0.5 text-xs ring-1 ring-inset {ref.cacheHit
-								? 'bg-sky-50 text-sky-700 ring-sky-600/20'
-								: 'bg-zinc-50 text-zinc-600 ring-zinc-500/20'}"
+					<div class="flex flex-wrap items-center gap-x-space-2 gap-y-space-1">
+						<span class="font-semibold text-signal">[S{i + 1}]</span>
+						<span class="font-semibold text-ink">{ref.tool}</span>
+						<span class="text-ink-muted">{ref.endpoint}</span>
+						<span class="rounded-pill bg-surface-raised px-2 py-0.5 type-data-sm text-ink-muted"
 							>{ref.cacheHit ? 'cache hit' : 'live'}</span
 						>
-						<span class="text-zinc-500 text-xs">{formatDateTime(ref.fetchedAt)}</span>
+						<span class="text-ink-subtle">{formatDateTime(ref.fetchedAt)}</span>
 					</div>
-					<code
-						class="bg-zinc-50 text-zinc-600 mt-1.5 block rounded px-2 py-1 font-mono text-xs break-all"
-						>{ref.requestKey}</code
-					>
+					<code class="mt-space-1 block break-all text-ink-muted">{ref.requestKey}</code>
 				</li>
 			{/each}
 		</ol>

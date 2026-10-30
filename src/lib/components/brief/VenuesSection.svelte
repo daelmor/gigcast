@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Label from '../ui/Label.svelte';
+	import Card from '../ui/Card.svelte';
+	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
 	import { num } from './format';
@@ -25,31 +26,35 @@
 </script>
 
 <section aria-labelledby="venues">
-	<SectionHeader id="venues" title="Venues and partners" note={venues.note} />
+	<SectionHeader
+		id="venues"
+		kicker="Section 6 · Venues"
+		title="Venues and partners"
+		note={venues.note}
+	/>
 	{#if groups.length === 0}
-		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
+		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			No venues or partners in this brief.
 		</p>
 	{:else}
-		<div class="space-y-6">
+		<div class="space-y-space-5">
 			{#each groups as group (group.kind)}
 				<div>
-					<h3 class="text-zinc-500 mb-2 text-sm font-semibold tracking-wide uppercase">
-						{group.title}
-					</h3>
-					<ul class="grid gap-3 md:grid-cols-2">
+					<h3 class="mb-space-2 type-label text-ink-subtle">{group.title}</h3>
+					<ul class="grid gap-space-3 md:grid-cols-2">
 						{#each group.picks as p (p.entityId)}
-							<li class="bg-white ring-zinc-200 rounded-xl p-4 ring-1">
-								<div class="flex items-start justify-between gap-2">
+							<Card as="li" class="break-inside-avoid">
+								<div class="flex items-start justify-between gap-space-2">
 									<div class="min-w-0">
-										<h4 class="text-zinc-900 font-semibold">{p.name}</h4>
-										{#if p.address}<p class="text-zinc-500 text-xs">{p.address}</p>{/if}
+										<h4 class="type-heading-3 text-ink">{p.name}</h4>
+										{#if p.address}<p class="type-small text-ink-subtle">{p.address}</p>{/if}
 									</div>
-									<div class="text-zinc-600 shrink-0 text-right text-xs">
+									<div class="shrink-0 text-right type-small text-ink-muted tabular-nums">
 										{#if p.priceLevel !== undefined}
 											<p aria-label="Price level {p.priceLevel} of 4">
-												<span class="text-zinc-900 font-semibold">{'$'.repeat(p.priceLevel)}</span
-												><span class="text-zinc-300">{'$'.repeat(4 - p.priceLevel)}</span>
+												<span class="font-semibold text-ink">{'$'.repeat(p.priceLevel)}</span><span
+													class="text-line-strong">{'$'.repeat(4 - p.priceLevel)}</span
+												>
 											</p>
 										{/if}
 										{#if p.rating !== undefined}
@@ -57,12 +62,12 @@
 										{/if}
 									</div>
 								</div>
-								<p class="text-zinc-700 mt-2 text-sm leading-relaxed">{p.why}</p>
-								<div class="mt-3 flex flex-wrap items-center gap-2">
-									<Label label={p.label} />
+								<p class="mt-space-2 type-body text-ink-muted">{p.why}</p>
+								<div class="mt-space-3 flex flex-wrap items-center gap-space-2">
+									<EvidenceLabel label={p.label} />
 									<SourceMarks sources={p.sources} />
 								</div>
-							</li>
+							</Card>
 						{/each}
 					</ul>
 				</div>

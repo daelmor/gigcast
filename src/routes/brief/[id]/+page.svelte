@@ -4,6 +4,9 @@
 	import { onMount } from 'svelte';
 	import { BriefStream } from '$lib/client/brief-stream.svelte';
 	import { BriefDocument, RunProgress, RunTrace } from '$lib/components/brief';
+	import Badge from '$lib/components/ui/Badge.svelte';
+	import Button from '$lib/components/ui/Button.svelte';
+	import Card from '$lib/components/ui/Card.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -146,162 +149,143 @@
 	/>
 </svelte:head>
 
-<div class="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+<div class="mx-auto max-w-6xl px-4 py-space-6 sm:px-6">
 	{#if record.brief}
 		{#if record.status === 'partial'}
 			<div
-				class="bg-amber-50 ring-amber-200 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl p-4 ring-1 print:hidden"
+				class="mb-space-4 flex flex-wrap items-center justify-between gap-space-3 rounded-lg bg-caution-soft p-space-4 print:hidden"
 			>
-				<p class="text-amber-900 text-sm">
+				<p class="type-small text-caution">
 					This brief is incomplete{lastError ? `: ${lastError}` : '.'} You can run it again with the same
 					inputs.
 				</p>
-				<button
-					type="button"
-					onclick={retry}
-					disabled={retrying}
-					class="bg-amber-700 text-white hover:bg-amber-600 rounded-lg px-3 py-1.5 text-sm font-medium disabled:opacity-60"
-				>
+				<Button size="sm" onclick={retry} disabled={retrying}>
 					{retrying ? 'Starting…' : 'Run this brief again'}
-				</button>
-				{#if retryError}<p class="text-rose-700 w-full text-sm" role="alert">{retryError}</p>{/if}
+				</Button>
+				{#if retryError}<p class="w-full type-small font-semibold text-critical" role="alert">
+						{retryError}
+					</p>{/if}
 			</div>
 		{/if}
-		<div class="mb-6 flex flex-wrap items-center justify-between gap-3 print:hidden">
-			<p class="text-zinc-500 text-sm">
+		<div class="mb-space-5 flex flex-wrap items-center justify-between gap-space-3 print:hidden">
+			<p class="type-small text-ink-subtle">
 				Public read-only link. Anyone with the address can read this brief.
 			</p>
-			<div class="flex flex-wrap gap-2">
-				<button
-					type="button"
-					onclick={copyLink}
-					class="bg-white text-zinc-700 ring-zinc-200 hover:bg-zinc-50 rounded-lg px-3 py-1.5 text-sm font-medium ring-1"
-				>
+			<div class="flex flex-wrap items-center gap-space-2">
+				<Button variant="ghost" size="sm" onclick={copyLink}>
 					{copied ? 'Link copied' : 'Copy link'}
-				</button>
-				<a
+				</Button>
+				<Button
+					variant="ghost"
+					size="sm"
 					href="{resolve('/brief/[id]/markdown', { id: record.id })}?download"
-					class="bg-white text-zinc-700 ring-zinc-200 hover:bg-zinc-50 rounded-lg px-3 py-1.5 text-sm font-medium ring-1"
 				>
 					Markdown
-				</a>
-				<a
-					href={resolve('/brief/[id]/drafts', { id: record.id })}
-					class="bg-white text-zinc-700 ring-zinc-200 hover:bg-zinc-50 rounded-lg px-3 py-1.5 text-sm font-medium ring-1"
-				>
+				</Button>
+				<Button variant="ghost" size="sm" href={resolve('/brief/[id]/drafts', { id: record.id })}>
 					Drafts
-				</a>
-				<button
-					type="button"
-					onclick={() => window.print()}
-					class="bg-white text-zinc-700 ring-zinc-200 hover:bg-zinc-50 rounded-lg px-3 py-1.5 text-sm font-medium ring-1"
-				>
-					Print
-				</button>
-				<a
-					href={resolve('/new')}
-					class="bg-indigo-600 text-white hover:bg-indigo-500 rounded-lg px-3 py-1.5 text-sm font-medium"
-				>
-					New brief
-				</a>
+				</Button>
+				<Button variant="ghost" size="sm" onclick={() => window.print()}>Print</Button>
+				<Button variant="primary" size="sm" href={resolve('/new')}>New brief</Button>
 			</div>
 		</div>
 
 		<BriefDocument brief={record.brief} />
 
-		<section class="mt-12 print:hidden" aria-labelledby="trace-heading">
-			<details class="group bg-white ring-zinc-200 rounded-xl ring-1">
-				<summary
-					class="text-zinc-800 flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-sm font-semibold select-none"
-				>
-					<span id="trace-heading">Agent trace · {mainEvents.length} events</span>
-					<span class="text-zinc-500 text-xs font-normal group-open:hidden">Show</span>
-					<span class="text-zinc-500 hidden text-xs font-normal group-open:inline">Hide</span>
-				</summary>
-				<div class="border-zinc-100 border-t px-5 py-4">
-					<RunTrace events={mainEvents} status={record.status} />
-				</div>
-			</details>
+		<section class="mt-space-7 print:hidden" aria-labelledby="trace-heading">
+			<Card padded={false}>
+				<details class="group">
+					<summary
+						class="flex cursor-pointer items-center justify-between gap-space-3 px-space-5 py-space-4 type-small font-semibold text-ink select-none"
+					>
+						<span id="trace-heading">Agent trace · {mainEvents.length} events</span>
+						<span class="type-small font-normal text-ink-subtle group-open:hidden">Show</span>
+						<span class="hidden type-small font-normal text-ink-subtle group-open:inline">Hide</span
+						>
+					</summary>
+					<div class="border-t border-line px-space-5 py-space-4">
+						<RunTrace events={mainEvents} status={record.status} />
+					</div>
+				</details>
+			</Card>
 		</section>
 	{:else if record.status === 'failed'}
-		<div class="bg-rose-50 ring-rose-200 rounded-xl p-6 ring-1">
-			<h1 class="text-rose-900 text-xl font-semibold">This brief could not be finished</h1>
-			<p class="text-rose-800 mt-2 text-sm">
+		<div class="rounded-lg bg-critical-soft p-space-5">
+			<h1 class="type-heading-1 text-critical">This brief could not be finished</h1>
+			<p class="mt-space-2 type-body text-critical">
 				{record.input.artist} in {record.input.city}, {record.input.country} · {dateWindow}
 			</p>
 			{#if lastError}
-				<p class="bg-white/70 text-rose-900 mt-3 rounded-lg p-3 font-mono text-xs break-words">
+				<p class="mt-space-3 rounded-sm bg-surface-raised p-space-3 type-data break-words text-ink">
 					{lastError}
 				</p>
 			{/if}
-			<div class="mt-4 flex flex-wrap items-center gap-3">
-				<button
-					type="button"
-					onclick={retry}
-					disabled={retrying}
-					class="bg-rose-700 text-white hover:bg-rose-600 inline-flex rounded-lg px-3 py-1.5 text-sm font-medium disabled:opacity-60"
-				>
+			<div class="mt-space-4 flex flex-wrap items-center gap-space-3">
+				<Button variant="primary" onclick={retry} disabled={retrying}>
 					{retrying ? 'Starting…' : 'Run this brief again'}
-				</button>
-				<a href={resolve('/new')} class="text-rose-800 text-sm font-medium hover:underline">
-					Start a different brief
-				</a>
+				</Button>
+				<Button variant="ghost" href={resolve('/new')}>Start a different brief</Button>
 			</div>
-			{#if retryError}<p class="text-rose-700 mt-2 text-sm" role="alert">{retryError}</p>{/if}
+			{#if retryError}<p class="mt-space-2 type-small font-semibold text-critical" role="alert">
+					{retryError}
+				</p>{/if}
 		</div>
 		{#if events.length}
-			<div class="mt-8">
+			<div class="mt-space-6">
 				<RunTrace events={mainEvents} status="failed" />
 			</div>
 		{/if}
 	{:else}
-		<header class="mb-8">
-			<p class="text-indigo-600 text-sm font-medium">Building the Booking Brief</p>
-			<h1 class="text-zinc-900 mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
+		<header class="mb-space-6">
+			<div class="flex flex-wrap items-center gap-space-3">
+				<p class="type-label text-ink-subtle">Building the Booking Brief</p>
+				{#if status === 'running'}<Badge tone="live">Running</Badge>{/if}
+			</div>
+			<h1 class="mt-space-2 type-heading-1 text-ink sm:type-display">
 				{record.input.artist} in {record.input.city}, {record.input.country}
 			</h1>
-			<p class="text-zinc-600 mt-2 max-w-2xl text-sm">
+			<p class="mt-space-3 max-w-2xl type-body text-ink-muted">
 				Date window {dateWindow}. The agent is calling Qloo and composing the document; a brief
 				takes about five minutes. You can keep this page open or come back to this link later.
 			</p>
 			{#if stream && !stream.connected && !stream.done}
-				<p class="text-amber-700 mt-2 text-xs">
+				<p class="mt-space-2 type-small text-caution">
 					{stream.error ?? 'Connecting to the live trace.'}
 				</p>
 			{/if}
 			{#if refreshing}
-				<p class="text-zinc-500 mt-2 text-xs">Loading the finished brief.</p>
+				<p class="mt-space-2 type-small text-ink-subtle">Loading the finished brief.</p>
 			{/if}
 		</header>
 
-		<div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+		<div class="grid gap-space-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
 			<div>
 				<RunProgress events={mainEvents} {status} />
-				<div class="bg-white ring-zinc-200 mt-4 rounded-xl p-4 ring-1">
-					<div class="flex items-center justify-between gap-3">
-						<h3 class="text-zinc-900 text-sm font-semibold">LLM only vs. Qloo</h3>
+				<Card class="mt-space-4">
+					<div class="flex items-center justify-between gap-space-3">
+						<h3 class="type-heading-3 text-ink">LLM only vs. Qloo</h3>
 						<span
-							class="inline-flex items-center gap-1.5 text-xs font-medium {cfState === 'done'
-								? 'text-emerald-700'
+							class="inline-flex items-center gap-1.5 type-small font-semibold {cfState === 'done'
+								? 'text-grounded'
 								: cfState === 'failed'
-									? 'text-rose-700'
-									: 'text-indigo-700'}"
+									? 'text-critical'
+									: 'text-ink-muted'}"
 						>
 							<span
 								class="size-2 rounded-full {cfState === 'done'
-									? 'bg-emerald-500'
+									? 'bg-grounded'
 									: cfState === 'failed'
-										? 'bg-rose-500'
+										? 'bg-critical'
 										: cfState === 'running'
-											? 'bg-indigo-500 animate-pulse'
-											: 'bg-zinc-300'}"
+											? 'animate-pulse-live bg-beam'
+											: 'border border-ink-subtle'}"
 								aria-hidden="true"
 							></span>
 							{cfState === 'pending' ? 'pending' : cfState}
 						</span>
 					</div>
-					<p class="text-zinc-600 mt-1 text-xs">{cfText[cfState]}</p>
-				</div>
+					<p class="mt-space-1 type-small text-ink-muted">{cfText[cfState]}</p>
+				</Card>
 			</div>
 			<div>
 				<RunTrace events={mainEvents} live {status} />

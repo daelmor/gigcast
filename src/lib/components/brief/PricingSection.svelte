@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '../ui/Card.svelte';
 	import PriceLevelChart from './PriceLevelChart.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 	import { pct } from './format';
@@ -11,46 +12,52 @@
 </script>
 
 <section aria-labelledby="pricing">
-	<SectionHeader id="pricing" title="Pricing guidance" note={pricing.note} />
-	<p class="text-zinc-500 mb-3 text-xs">
+	<SectionHeader
+		id="pricing"
+		kicker="Section 7 · Pricing"
+		title="Pricing guidance"
+		note={pricing.note}
+	/>
+	<p class="mb-space-3 type-small text-ink-subtle">
 		A heuristic built on audience signals, not a Qloo price. Treat it as a starting point for your
 		own numbers.
 	</p>
 	{#if pricing.tiers.length === 0}
-		<p class="bg-zinc-50 text-zinc-600 ring-zinc-200 rounded-xl p-4 text-sm ring-1">
+		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			No price tiers were suggested.
 		</p>
 	{:else}
-		<div class="bg-white ring-zinc-200 overflow-x-auto rounded-xl ring-1">
-			<table class="w-full min-w-[34rem] text-left text-sm">
-				<thead class="border-zinc-200 bg-zinc-50 text-zinc-500 border-b text-xs uppercase">
+		<Card padded={false} class="overflow-x-auto">
+			<table class="w-full min-w-[34rem] text-left type-small">
+				<thead class="border-b border-line bg-surface-sunken type-label text-ink-subtle">
 					<tr>
-						<th class="px-4 py-2 font-medium">Tier</th>
-						<th class="px-4 py-2 font-medium">Price</th>
-						<th class="px-4 py-2 font-medium">Share of capacity</th>
-						<th class="px-4 py-2 font-medium">Rationale</th>
+						<th class="px-space-4 py-space-2 font-semibold">Tier</th>
+						<th class="px-space-4 py-space-2 font-semibold">Price</th>
+						<th class="px-space-4 py-space-2 font-semibold">Share of capacity</th>
+						<th class="px-space-4 py-space-2 font-semibold">Rationale</th>
 					</tr>
 				</thead>
-				<tbody class="divide-zinc-100 divide-y">
+				<tbody class="divide-y divide-line">
 					{#each pricing.tiers as tier, i (i)}
 						<tr class="align-top">
-							<td class="text-zinc-900 px-4 py-3 font-medium">{tier.name}</td>
-							<td class="text-zinc-800 px-4 py-3 whitespace-nowrap tabular-nums"
-								>{fmt(tier.price)} {pricing.currency}</td
+							<td class="px-space-4 py-space-3 font-semibold text-ink">{tier.name}</td>
+							<td class="px-space-4 py-space-3 whitespace-nowrap text-ink tabular-nums"
+								><span class="type-numeral">{fmt(tier.price)}</span>
+								<span class="text-ink-muted">{pricing.currency}</span></td
 							>
-							<td class="text-zinc-800 px-4 py-3 tabular-nums">{pct(tier.share)}</td>
-							<td class="text-zinc-600 px-4 py-3">{tier.rationale}</td>
+							<td class="px-space-4 py-space-3 text-ink tabular-nums">{pct(tier.share)}</td>
+							<td class="px-space-4 py-space-3 text-ink-muted">{tier.rationale}</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
-		</div>
+		</Card>
 	{/if}
 	<PriceLevelChart {brief} />
 	{#if pricing.assumptions.length > 0}
-		<div class="mt-4">
-			<h3 class="text-zinc-900 text-sm font-semibold">Assumptions</h3>
-			<ul class="text-zinc-600 mt-1 list-disc space-y-0.5 pl-5 text-sm">
+		<div class="mt-space-4">
+			<h3 class="type-heading-3 text-ink">Assumptions</h3>
+			<ul class="mt-space-1 list-disc space-y-0.5 pl-5 type-small text-ink-muted">
 				{#each pricing.assumptions as a, i (i)}<li>{a}</li>{/each}
 			</ul>
 		</div>
