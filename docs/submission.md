@@ -64,5 +64,5 @@ TypeScript, SvelteKit, Svelte 5, Tailwind CSS, Zod, Drizzle ORM, PostgreSQL (Neo
 
 ## Links
 
-- Live demo: https://gigcast.gentlegrass-9cbc951b.eastus.azurecontainerapps.io
+- Live demo: https://gigcast.ai
 - Repository: https://github.com/daelmor/gigcast (MIT)
