@@ -396,6 +396,7 @@ const raw: MarketDashboard = {
 	recentBriefs: [
 		{
 			id: 'brief_01JBRIEFSAMPLE0001',
+			marketId: 'guatemala-city',
 			status: 'complete',
 			artistName: 'Ricardo Arjona',
 			city: 'Guatemala City',
@@ -409,6 +410,7 @@ const raw: MarketDashboard = {
 		},
 		{
 			id: 'brief_01JBRIEFSAMPLE0002',
+			marketId: 'guatemala-city',
 			status: 'complete',
 			artistName: 'Gaby Moreno',
 			city: 'Guatemala City',
