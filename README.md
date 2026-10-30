@@ -76,7 +76,7 @@ The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample br
 
 ## Deploy
 
-One Docker image on Cloud Run in the Vertex project, Postgres hosted separately, secrets in Secret Manager: `deploy/cloud-run.sh` does the Google Cloud steps and [docs/deploy.md](docs/deploy.md) explains them.
+One Docker image on Azure Container Apps, Postgres on Neon, Claude on Vertex AI: `deploy/azure-container-apps.sh` creates the resource group, registry, environment, secrets and app, and [docs/deploy.md](docs/deploy.md) explains every setting. A Google Cloud Run script is kept as the alternative.
 
 ## Repository layout
 
