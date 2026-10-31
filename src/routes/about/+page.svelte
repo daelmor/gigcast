@@ -9,6 +9,7 @@
 		{ id: 'what', title: 'What it is' },
 		{ id: 'data', title: 'Where the data comes from' },
 		{ id: 'labels', title: 'The three labels' },
+		{ id: 'compare', title: 'What the taste graph changes' },
 		{ id: 'architecture', title: 'Architecture' },
 		{ id: 'sources', title: 'Data sources' },
 		{ id: 'honesty', title: 'Honesty notes' },
@@ -95,9 +96,10 @@
 	];
 
 	const honesty = [
-		'Affinity is an audience-overlap signal. It is not a ticket forecast.',
+		'Cultural affinity is not ticket demand. It is overlap between the artist and the market, not a forecast of ticket buyers, attendance, fees or sponsor interest.',
 		'Demographics are affinities relative to the general population, not headcounts.',
 		'Pricing is a heuristic, not a quote or a revenue forecast.',
+		'Sponsor picks are outreach prospects from audience affinity, not confirmed sponsors or budgets.',
 		'Risk classification is a model reading headlines. It is not a safety assessment.',
 		'Briefs are public read-only links. Anyone with the link can read the brief.'
 	];
@@ -218,6 +220,20 @@
 				and a risk item must cite a url that the risk feed returned. A pick that fails the check is
 				not shown as grounded.
 			</p>
+		</section>
+
+		<section id="compare" class="scroll-mt-24">
+			<p class="type-label text-ink-subtle">Comparison</p>
+			<h2 class="mt-space-1 type-heading-1">What the taste graph changes</h2>
+			<Card class="mt-space-4 type-body">
+				<p>
+					The same lineup and sponsor question was asked twice for one brief on 2026-10-30: once
+					with every tool removed and once with the taste graph. The comparison page shows both
+					answers side by side and checks each model-alone name against what the taste graph
+					returned. It is a dated snapshot, not a per-brief feature.
+				</p>
+			</Card>
+			<Button href={resolve('/compare')} class="mt-space-5">Open the comparison</Button>
 		</section>
 
 		<section id="architecture" class="scroll-mt-24">

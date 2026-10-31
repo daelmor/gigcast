@@ -8,7 +8,7 @@ import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 const [base = 'http://localhost:5173', ...pageArgs] = process.argv.slice(2);
-const pages = pageArgs.length ? pageArgs : ['/', '/new', '/about', '/dev/preview', '/dev/market-preview', '/dev/ui'];
+const pages = pageArgs.length ? pageArgs : ['/', '/new', '/about', '/compare', '/dev/preview', '/dev/market-preview', '/dev/ui'];
 const themes = ['light', 'dark'] as const;
 
 let violations = 0;

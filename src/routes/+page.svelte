@@ -50,6 +50,15 @@
 		over-index on and which venues sit in the heat, with the data behind every claim. Everything
 		else is reasoning on top of those results, and it is labeled as such.
 	</p>
+	<p class="mt-space-4 type-small text-ink-muted">
+		A dated, side-by-side comparison: the model alone versus the agent with cultural-affinity
+		evidence.
+	</p>
+	<a
+		href={resolve('/compare')}
+		class="mt-space-4 inline-flex items-center gap-space-2 type-small font-semibold text-signal hover:underline"
+		>See what the taste graph changes <span aria-hidden="true">→</span></a
+	>
 </section>
 
 <ExampleBriefs briefs={data.examples} />
