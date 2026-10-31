@@ -14,7 +14,7 @@ function stripEmptyStrings(body: unknown): unknown {
 	);
 }
 
-/** Start a brief run. Returns 201 with the id; the run continues in the background. */
+/** Start a brief run. Returns 201 with the id; the run continues (or waits its turn) in the background. */
 export const POST: RequestHandler = async ({ request, locals }) => {
 	let body: unknown;
 	try {
@@ -36,17 +36,27 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	try {
 		const result = await startBriefRun(parsed.data);
 		locals.log.info(
-			{ briefId: result.id, artist: parsed.data.artist, city: parsed.data.city },
-			'brief started'
+			{
+				briefId: result.id,
+				artist: parsed.data.artist,
+				city: parsed.data.city,
+				status: result.status,
+				position: result.position
+			},
+			result.status === 'queued' ? 'brief queued' : 'brief started'
 		);
 		return json(result, { status: 201, headers: { location: `/brief/${result.id}` } });
 	} catch (err) {
 		if (err instanceof BriefBusyError) {
+			locals.log.warn(
+				{ running: err.running, queued: err.queued, artist: parsed.data.artist },
+				'brief refused: at capacity'
+			);
 			return json(
 				{
-					error: 'The agent is busy with other briefs right now. Try again in a few minutes.'
+					error: `The agent is at capacity: ${err.running} briefs are running and ${err.queued} are waiting. Try again in a few minutes.`
 				} satisfies ApiError,
-				{ status: 429, headers: { 'retry-after': '120' } }
+				{ status: 429, headers: { 'retry-after': '180' } }
 			);
 		}
 		throw err;

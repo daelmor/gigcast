@@ -9,9 +9,11 @@
 	interface Props {
 		events: AgentEvent[];
 		status: 'queued' | 'running' | 'complete' | 'partial' | 'failed';
+		/** Place in the queue while waiting; 1 is next. */
+		position?: number;
 	}
 
-	let { events, status }: Props = $props();
+	let { events, status, position }: Props = $props();
 
 	const states = $derived(sectionStates(events));
 	const running = $derived(status === 'running' || status === 'queued');
@@ -36,7 +38,9 @@
 	<div aria-live="polite">
 		<div class="mb-space-3 flex items-center justify-between gap-space-3">
 			<h3 class="type-heading-3 text-ink">
-				{#if status === 'queued'}Queued{:else if status === 'running'}Building the brief{:else if status === 'failed'}Run
+				{#if status === 'queued'}Queued{#if position === 1}
+						· next in line{:else if position}
+						· {position - 1} ahead{/if}{:else if status === 'running'}Building the brief{:else if status === 'failed'}Run
 					failed{:else if status === 'partial'}Brief finished with gaps{:else}Brief ready{/if}
 			</h3>
 			<span class="type-small text-ink-subtle tabular-nums">{formatDuration(elapsed)}</span>

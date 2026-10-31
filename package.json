@@ -21,7 +21,8 @@
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
 		"probe": "tsx scripts/qloo-probe.ts",
-		"brief": "tsx scripts/brief.ts"
+		"brief": "tsx scripts/brief.ts",
+		"briefs:dedupe": "tsx scripts/dedupe-briefs.ts"
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "^4.14.0",

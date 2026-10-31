@@ -10,6 +10,8 @@ import { agentEventSchema, type AgentEvent } from '$lib/brief/events';
 export class BriefStream {
 	events = $state<AgentEvent[]>([]);
 	status = $state<BriefStatus>('running');
+	/** Place in the queue while the brief waits for a slot; 1 is next. */
+	position = $state<number | undefined>(undefined);
 	connected = $state(false);
 	done = $state(false);
 	error = $state<string | undefined>(undefined);
@@ -63,13 +65,17 @@ export class BriefStream {
 		});
 		source.addEventListener('status', (message) => {
 			const parsed = sseStatusDataSchema.safeParse(JSON.parse((message as MessageEvent).data));
-			if (parsed.success) this.status = parsed.data.status;
+			if (parsed.success) {
+				this.status = parsed.data.status;
+				this.position = parsed.data.status === 'queued' ? parsed.data.position : undefined;
+			}
 		});
 		source.addEventListener('done', (message) => {
 			const parsed = briefStatusSchema.safeParse(
 				JSON.parse((message as MessageEvent).data)?.status
 			);
 			if (parsed.success) this.status = parsed.data;
+			this.position = undefined;
 			this.done = true;
 			this.connected = false;
 			source.close();

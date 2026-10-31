@@ -53,9 +53,12 @@ export interface RunBriefResult {
 export function createVertexClient(): AgentClient {
 	const env = getEnv();
 	// Same runtime API as the first-party client; the Vertex type declares its own resource classes.
+	// Several briefs run at once, so a 429 or an overloaded answer from Vertex is retried a little
+	// longer than the SDK default (2) before the run fails.
 	return new AnthropicVertex({
 		projectId: env.GOOGLE_CLOUD_PROJECT,
-		region: env.ANTHROPIC_VERTEX_REGION
+		region: env.ANTHROPIC_VERTEX_REGION,
+		maxRetries: 4
 	}) as unknown as AgentClient;
 }
 
@@ -169,7 +172,11 @@ export async function runBrief(options: RunBriefOptions): Promise<RunBriefResult
 		],
 		max_iterations: maxIterations,
 		thread: false as const,
-		stream: true as const
+		stream: true as const,
+		// Start each tool call as soon as its input has streamed instead of after the whole reply:
+		// a turn that asks for three Qloo queries overlaps them with the model's remaining output.
+		// Every tool is a read or an idempotent emit, so running one early is safe.
+		runToolsEagerly: true
 	};
 
 	let runner = anthropic.beta.messages.toolRunner(params, { signal: options.signal });

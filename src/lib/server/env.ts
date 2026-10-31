@@ -19,8 +19,13 @@ const schema = z.object({
 	PUBLIC_MAP_STYLE_URL: z.string().url().optional(),
 	PUBLIC_MAP_STYLE_URL_DARK: z.string().url().optional(),
 	APP_BASE_URL: z.string().url().optional(),
-	// Briefs running at the same time in one instance; more are refused with 429.
+	// Briefs running at the same time in one instance; the next MAX_QUEUED_RUNS wait in a
+	// first-in, first-out queue, and more than that are refused with 429.
 	MAX_CONCURRENT_RUNS: z.coerce.number().int().positive().default(2),
+	MAX_QUEUED_RUNS: z.coerce.number().int().nonnegative().default(6),
+	// on also runs the tool-less counterfactual next to every brief (the document no longer shows
+	// it); off saves one model call per brief.
+	COUNTERFACTUAL_RUN: z.enum(['on', 'off']).default('off'),
 	// vertex (default) runs the real agent; fake replays a canned trace for end-to-end tests.
 	AGENT_RUNNER: z.enum(['vertex', 'fake']).default('vertex'),
 	// Apply pending Drizzle migrations when the server starts (Cloud Run has no shell step).

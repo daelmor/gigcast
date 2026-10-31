@@ -8,6 +8,13 @@ Last updated: 2026-10-30 (end of M4 and M5).
 - Deploy with `./deploy/azure-container-apps.sh` after loading the local env file; `docs/deploy.md` explains every setting.
 - Demo mode: the landing's "See a finished brief" cards open the newest complete brief of each featured market; every Qloo response behind them is cached in Postgres, so a rerun of the same inputs is fast even if the hackathon key slows down (`QLOO_MODE=replay` serves the cache only if the key dies).
 
+## Capacity and queue — done (2026-10-31)
+
+- Four briefs run at once on Azure (`MAX_CONCURRENT_RUNS=4`) and eight more wait in a queue (`MAX_QUEUED_RUNS=8`); a waiting brief's page says "Queued · next in line" or "N ahead" and starts on its own. Only a full queue gets 429.
+- Tool calls start while the model's reply is still streaming (`runToolsEagerly`), and the Vertex client retries overloads four times.
+- The tool-less counterfactual run is off (`COUNTERFACTUAL_RUN=off`); `on` restores it.
+- `pnpm briefs:dedupe` removes repeated artist-and-locality briefs, keeping the most complete; four were removed on 2026-10-31 (backup in `.cache/backups`).
+
 ## Product refresh after the design pass — done (2026-10-30)
 
 - Featured markets: Mexico City, São Paulo, Buenos Aires; New York City, Los Angeles, Tampa. Locality ids, heatmap sizes, sample artists and local outlets verified live (see `docs/qloo-findings.md`, "Markets added 2026-10-30").

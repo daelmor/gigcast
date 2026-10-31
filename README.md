@@ -104,7 +104,8 @@ The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample br
 | `CLAUDE_PLANNER_MODEL` / `CLAUDE_CLASSIFIER_MODEL` | no | Defaults `claude-opus-4-6` and `claude-haiku-4-5`. |
 | `QLOO_MODE` | no | `live` (cache first, API on miss), `replay` (cache only), `refresh`. |
 | `QLOO_CACHE_BACKEND` / `QLOO_CACHE_DIR` | no | `postgres` (default) or `file` for offline work and tests. |
-| `MAX_CONCURRENT_RUNS` | no | Briefs running at once per instance, default 2; extra requests get 429. |
+| `MAX_CONCURRENT_RUNS` / `MAX_QUEUED_RUNS` | no | Briefs running at once per instance (default 2) and how many more wait in a queue (default 6); beyond that requests get 429. |
+| `COUNTERFACTUAL_RUN` | no | `on` runs the tool-less counterfactual next to every brief; `off` (default) saves the call. |
 | `AGENT_RUNNER` | no | `vertex` (default) or `fake` for tests. |
 | `MIGRATE_ON_START` | no | `true` applies Drizzle migrations on boot (Cloud Run). |
 | `PUBLIC_MAP_STYLE_URL` | no | MapLibre style; OpenFreeMap Positron by default. |
