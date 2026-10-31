@@ -58,11 +58,45 @@ export const markets = pgTable('markets', {
 export type Market = typeof markets.$inferSelect;
 export type NewMarket = typeof markets.$inferInsert;
 
+// Accounts (Google sign-in) and their sessions. Reading briefs needs no account; creating one
+// does when AUTH_MODE=required. The session id is the SHA-256 of the cookie token.
+export const users = pgTable(
+	'users',
+	{
+		id: text('id').primaryKey(),
+		email: text('email').notNull(),
+		name: text('name'),
+		picture: text('picture'),
+		googleSub: text('google_sub'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+		lastLoginAt: timestamp('last_login_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(t) => [
+		uniqueIndex('users_email_idx').on(t.email),
+		uniqueIndex('users_google_sub_idx').on(t.googleSub)
+	]
+);
+
+export const sessions = pgTable(
+	'sessions',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => users.id, { onDelete: 'cascade' }),
+		expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(t) => [index('sessions_user_id_idx').on(t.userId)]
+);
+
 export const briefs = pgTable(
 	'briefs',
 	{
 		id: text('id').primaryKey(),
 		marketId: text('market_id').references(() => markets.id, { onDelete: 'set null' }),
+		// Who asked for the brief, when authentication is on; null for briefs created without it.
+		userId: text('user_id').references(() => users.id, { onDelete: 'set null' }),
 		artistName: text('artist_name').notNull(),
 		city: text('city'),
 		country: text('country'),
@@ -89,6 +123,7 @@ export const briefs = pgTable(
 	},
 	(t) => [
 		index('briefs_market_id_idx').on(t.marketId),
+		index('briefs_user_id_idx').on(t.userId),
 		index('briefs_created_at_idx').on(t.createdAt),
 		check(
 			'briefs_status_check',

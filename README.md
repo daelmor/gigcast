@@ -105,6 +105,10 @@ The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample br
 | `QLOO_MODE` | no | `live` (cache first, API on miss), `replay` (cache only), `refresh`. |
 | `QLOO_CACHE_BACKEND` / `QLOO_CACHE_DIR` | no | `postgres` (default) or `file` for offline work and tests. |
 | `MAX_CONCURRENT_RUNS` | no | Briefs running at once per instance, default 2; extra requests get 429. |
+| `AUTH_MODE` | `off` (default) or `required`: Google sign-in to create briefs; reading stays public (docs/auth.md) |  |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | OAuth client (Web application) with `<APP_BASE_URL>/auth/google/callback` as redirect URI |  |
+| `AUTH_ALLOWED_EMAILS` | Optional comma-separated emails or `@domains` allowed to sign in |  |
+| `BRIEFS_PER_USER_PER_DAY` | Briefs one account may start per rolling 24 hours (default 10) |  |
 | `AGENT_RUNNER` | no | `vertex` (default) or `fake` for tests. |
 | `MIGRATE_ON_START` | no | `true` applies Drizzle migrations on boot (Cloud Run). |
 | `PUBLIC_MAP_STYLE_URL` | no | MapLibre style; OpenFreeMap Positron by default. |

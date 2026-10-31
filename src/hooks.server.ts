@@ -6,8 +6,15 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { building, dev } from '$app/environment';
-import type { Handle, HandleServerError, ServerInit } from '@sveltejs/kit';
+import type { Handle, HandleServerError, RequestEvent, ServerInit } from '@sveltejs/kit';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
+import {
+	SESSION_COOKIE,
+	deleteSessionCookie,
+	setSessionCookie,
+	validateSessionToken,
+	type AuthUser
+} from '$lib/server/auth';
 import { activeRunCount } from '$lib/server/briefs/manager';
 import { failOrphanedRuns, upsertKnownMarkets } from '$lib/server/briefs/store';
 import { getDb } from '$lib/server/db';
@@ -54,6 +61,24 @@ function canonicalHost(): string | undefined {
 	}
 }
 
+/** The account behind the session cookie, if any; a bad or expired cookie is cleared. */
+async function resolveUser(event: RequestEvent): Promise<AuthUser | null> {
+	const token = event.cookies.get(SESSION_COOKIE);
+	if (!token) return null;
+	try {
+		const result = await validateSessionToken(token);
+		if (!result) {
+			deleteSessionCookie(event.cookies);
+			return null;
+		}
+		if (result.renewed) setSessionCookie(event.cookies, token, result.session.expiresAt);
+		return result.user;
+	} catch (err) {
+		event.locals.log.error({ err }, 'session lookup failed');
+		return null;
+	}
+}
+
 export const handle: Handle = async ({ event, resolve }) => {
 	// One public address: requests for any other host the app answers on (the platform's own
 	// hostname, www) are redirected to the canonical origin. API paths are left alone so the
@@ -70,6 +95,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		crypto.randomUUID();
 	event.locals.requestId = requestId;
 	event.locals.log = logger.child({ requestId });
+	event.locals.user = await resolveUser(event);
 	const started = performance.now();
 	const response = await resolve(event);
 	response.headers.set('x-request-id', requestId);

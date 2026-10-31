@@ -16,7 +16,8 @@
 # The GCP credentials and the two secrets are stored as Container Apps secrets; the JSON is
 # mounted as a file so the Google SDK reads it through GOOGLE_APPLICATION_CREDENTIALS.
 #
-# Overrides: RG, LOCATION, APP, ENV_NAME, ACR, MIN_REPLICAS, MAX_REPLICAS, JOB_NAME, INGEST_CRON, INGEST_JOB_SECRET.
+# Overrides: RG, LOCATION, APP, ENV_NAME, ACR, MIN_REPLICAS, MAX_REPLICAS, JOB_NAME, INGEST_CRON, INGEST_JOB_SECRET,
+# PUBLIC_ORIGIN, AUTH_MODE, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, AUTH_ALLOWED_EMAILS, BRIEFS_PER_USER_PER_DAY.
 set -euo pipefail
 
 RG="${RG:-rg-gigcast}"
@@ -31,6 +32,17 @@ MAX_REPLICAS="${MAX_REPLICAS:-1}"
 INGEST_JOB_SECRET="${INGEST_JOB_SECRET:-}"
 JOB_NAME="${JOB_NAME:-gigcast-ingest}"
 INGEST_CRON="${INGEST_CRON:-0 */6 * * *}"
+
+# Sign-in for creating briefs (docs/auth.md): off, or required with a Google OAuth client.
+AUTH_MODE="${AUTH_MODE:-off}"
+GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID:-}"
+GOOGLE_CLIENT_SECRET="${GOOGLE_CLIENT_SECRET:-}"
+AUTH_ALLOWED_EMAILS="${AUTH_ALLOWED_EMAILS:-}"
+BRIEFS_PER_USER_PER_DAY="${BRIEFS_PER_USER_PER_DAY:-10}"
+if [ "${AUTH_MODE}" = "required" ] && { [ -z "${GOOGLE_CLIENT_ID}" ] || [ -z "${GOOGLE_CLIENT_SECRET}" ]; }; then
+  echo "AUTH_MODE=required needs GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET" >&2
+  exit 1
+fi
 
 : "${QLOO_API_KEY:?QLOO_API_KEY is required}"
 : "${DATABASE_URL:?DATABASE_URL is required}"
@@ -86,12 +98,27 @@ ENV_VARS=(
   "QLOO_API_KEY=secretref:qloo-api-key"
   "DATABASE_URL=secretref:database-url"
   "INGEST_JOB_SECRET=secretref:ingest-job-secret"
+  "AUTH_MODE=${AUTH_MODE}"
+  "BRIEFS_PER_USER_PER_DAY=${BRIEFS_PER_USER_PER_DAY}"
 )
+SECRETS=(
+  "qloo-api-key=${QLOO_API_KEY}"
+  "database-url=${DATABASE_URL}"
+  "gcp-sa-json=${SA_JSON}"
+  "ingest-job-secret=${INGEST_JOB_SECRET}"
+)
+if [ -n "${GOOGLE_CLIENT_ID}" ] && [ -n "${GOOGLE_CLIENT_SECRET}" ]; then
+  ENV_VARS+=("GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" "GOOGLE_CLIENT_SECRET=secretref:google-client-secret")
+  SECRETS+=("google-client-secret=${GOOGLE_CLIENT_SECRET}")
+fi
+if [ -n "${AUTH_ALLOWED_EMAILS}" ]; then
+  ENV_VARS+=("AUTH_ALLOWED_EMAILS=${AUTH_ALLOWED_EMAILS}")
+fi
 
 if az containerapp show -n "${APP}" -g "${RG}" -o none 2>/dev/null; then
   say "Updating secrets and the running app"
   az containerapp secret set -n "${APP}" -g "${RG}" -o none \
-    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}"
+    --secrets "${SECRETS[@]}"
   az containerapp registry set -n "${APP}" -g "${RG}" --server "${ACR}.azurecr.io" --identity system -o none
   az containerapp update -n "${APP}" -g "${RG}" -o none \
     --image "${IMAGE}" \
@@ -112,7 +139,7 @@ else
     --min-replicas "${MIN_REPLICAS}" --max-replicas "${MAX_REPLICAS}" \
     --termination-grace-period 600 \
     --cpu 1.0 --memory 2.0Gi \
-    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}" \
+    --secrets "${SECRETS[@]}" \
     --secret-volume-mount /mnt/secrets \
     --env-vars "${ENV_VARS[@]}"
 fi

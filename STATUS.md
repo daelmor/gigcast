@@ -8,6 +8,12 @@ Last updated: 2026-10-30 (end of M4 and M5).
 - Deploy with `./deploy/azure-container-apps.sh` after loading the local env file; `docs/deploy.md` explains every setting.
 - Demo mode: the landing's "See a finished brief" cards open the newest complete brief of each featured market; every Qloo response behind them is cached in Postgres, so a rerun of the same inputs is fast even if the hackathon key slows down (`QLOO_MODE=replay` serves the cache only if the key dies).
 
+## Authentication — built, off until configured (2026-10-30)
+
+- Google sign-in gates brief creation when `AUTH_MODE=required` (docs/auth.md): sessions table, accounts table, `briefs.user_id`, a per-account daily limit, an optional allow list, sign-in card on `/new`, account controls in the header. Reading briefs stays public.
+- Needs from David: an OAuth client in the Google Cloud console (redirect URIs `https://gigcast.ai/auth/google/callback` and `http://localhost:5173/auth/google/callback`), then `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` and `AUTH_MODE=required` in the env file before the next deploy.
+- Verified without Google credentials: the gate (401, 429 at the daily limit, 303 to `/new?auth=unconfigured`), the session cookie path with a database-seeded session, and that `AUTH_MODE=off` leaves the product unchanged (all e2e tests pass). The Google round trip itself needs the client above.
+
 ## Product refresh after the design pass — done (2026-10-30)
 
 - Featured markets: Mexico City, São Paulo, Buenos Aires; New York City, Los Angeles, Tampa. Locality ids, heatmap sizes, sample artists and local outlets verified live (see `docs/qloo-findings.md`, "Markets added 2026-10-30").

@@ -118,6 +118,8 @@ function defaultRunners(): { main: BriefRunner; counterfactual: CounterfactualRu
 }
 
 export interface StartOptions {
+	/** Signed-in account that asked for the brief, when authentication is on. */
+	userId?: string | null;
 	runner?: BriefRunner;
 	counterfactualRunner?: CounterfactualRunner;
 	id?: string;
@@ -164,7 +166,13 @@ export async function startBriefRun(
 	const runMain = options.runner ?? defaults.main;
 	const runCf = options.counterfactualRunner ?? defaults.counterfactual;
 
-	await createBriefRecord({ id: briefId, input, marketId: market?.id ?? null, status: 'running' });
+	await createBriefRecord({
+		id: briefId,
+		input,
+		marketId: market?.id ?? null,
+		userId: options.userId ?? null,
+		status: 'running'
+	});
 
 	const run: ActiveRun = {
 		briefId,

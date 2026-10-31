@@ -1,7 +1,9 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { createBriefRequestSchema, type ApiError } from '$lib/api/contracts';
+import { creationGate } from '$lib/server/auth';
 import { BriefBusyError, startBriefRun } from '$lib/server/briefs/manager';
-import { listRecentBriefs } from '$lib/server/briefs/store';
+import { countBriefsByUserSince, listRecentBriefs } from '$lib/server/briefs/store';
+import { getEnv } from '$lib/server/env';
 
 const bad = (status: number, error: string, details?: string[]) =>
 	json({ error, details } satisfies ApiError, { status });
@@ -33,8 +35,23 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	if (parsed.data.dateTo < parsed.data.dateFrom) {
 		return bad(400, 'Invalid brief request.', ['dateTo: must not be before dateFrom']);
 	}
+	// Reading briefs is public; creating one needs an account when AUTH_MODE=required, with a
+	// rolling 24-hour limit per account so one sign-in cannot run up the agent budget.
+	const env = getEnv();
+	const user = locals.user;
+	const briefsToday =
+		env.AUTH_MODE === 'required' && user
+			? await countBriefsByUserSince(user.id, new Date(Date.now() - 24 * 60 * 60 * 1000))
+			: 0;
+	const gate = creationGate({
+		authMode: env.AUTH_MODE,
+		signedIn: Boolean(user),
+		briefsToday,
+		dailyLimit: env.BRIEFS_PER_USER_PER_DAY
+	});
+	if (gate) return bad(gate.status, gate.error);
 	try {
-		const result = await startBriefRun(parsed.data);
+		const result = await startBriefRun(parsed.data, { userId: user?.id ?? null });
 		locals.log.info(
 			{ briefId: result.id, artist: parsed.data.artist, city: parsed.data.city },
 			'brief started'
