@@ -213,3 +213,31 @@ export const weatherCache = pgTable('weather_cache', {
 
 export type WeatherCacheRow = typeof weatherCache.$inferSelect;
 export type NewWeatherCacheRow = typeof weatherCache.$inferInsert;
+
+/**
+ * One row per page or API request (assets and the health check excluded), for the activity
+ * statistics. No raw address: `visitor` is a daily-rotating hash of address, user agent and
+ * ACTIVITY_SALT. Paths are stored without their query string.
+ */
+export const requestLog = pgTable(
+	'request_log',
+	{
+		id: bigserial('id', { mode: 'number' }).primaryKey(),
+		at: timestamp('at', { withTimezone: true }).notNull().defaultNow(),
+		method: text('method').notNull(),
+		path: text('path').notNull(),
+		status: integer('status').notNull(),
+		durationMs: integer('duration_ms').notNull(),
+		visitor: text('visitor'),
+		userAgent: text('user_agent'),
+		referrerHost: text('referrer_host'),
+		bot: boolean('bot').notNull().default(false),
+		// Not a foreign key: the history of a deleted brief stays.
+		briefId: text('brief_id'),
+		requestId: text('request_id')
+	},
+	(t) => [index('request_log_at_idx').on(t.at), index('request_log_path_idx').on(t.path)]
+);
+
+export type RequestLogRow = typeof requestLog.$inferSelect;
+export type NewRequestLogRow = typeof requestLog.$inferInsert;

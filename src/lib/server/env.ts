@@ -26,6 +26,10 @@ const schema = z.object({
 	// on also runs the tool-less counterfactual next to every brief (the document no longer shows
 	// it); off saves one model call per brief.
 	COUNTERFACTUAL_RUN: z.enum(['on', 'off']).default('off'),
+	// Secret salt for the activity log's daily visitor hash; unset means a random salt per process.
+	ACTIVITY_SALT: z.string().min(1).optional(),
+	// Opens /admin (statistics) with `/admin?token=<value>` once; unset hides the page.
+	ADMIN_TOKEN: z.string().min(16).optional(),
 	// vertex (default) runs the real agent; fake replays a canned trace for end-to-end tests.
 	AGENT_RUNNER: z.enum(['vertex', 'fake']).default('vertex'),
 	// Apply pending Drizzle migrations when the server starts (Cloud Run has no shell step).

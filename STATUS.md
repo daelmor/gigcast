@@ -8,6 +8,11 @@ Last updated: 2026-10-30 (end of M4 and M5).
 - Deploy with `./deploy/azure-container-apps.sh` after loading the local env file; `docs/deploy.md` explains every setting.
 - Demo mode: the landing's "See a finished brief" cards open the newest complete brief of each featured market; every Qloo response behind them is cached in Postgres, so a rerun of the same inputs is fast even if the hackathon key slows down (`QLOO_MODE=replay` serves the cache only if the key dies).
 
+## Activity log and monitoring — done (2026-10-31)
+
+- Every page and API request lands in `request_log` (no raw address: a daily-rotating visitor hash, trimmed user agent, referrer host, bot flag, brief id) and in the JSON console log that Log Analytics keeps.
+- `/admin` (opened once with `?token=<ADMIN_TOKEN>`, hidden otherwise) and `pnpm stats` show briefs, visitors, page views, bot hits, refused requests, run durations and spend, recent briefs, markets, top pages, referrers, 404 noise and the live queue. `docs/ops.md` has the Log Analytics queries and the capacity knobs.
+
 ## Capacity and queue — done (2026-10-31)
 
 - Four briefs run at once on Azure (`MAX_CONCURRENT_RUNS=4`) and eight more wait in a queue (`MAX_QUEUED_RUNS=8`); a waiting brief's page says "Queued · next in line" or "N ahead" and starts on its own. Only a full queue gets 429.

@@ -111,6 +111,8 @@ The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample br
 | `PUBLIC_MAP_STYLE_URL` | no | MapLibre style; OpenFreeMap Positron by default. |
 | `APP_BASE_URL`, `ORIGIN` | deploy | Public URL of the app; adapter-node reads `ORIGIN`. |
 | `INGEST_JOB_SECRET` | deploy | Bearer secret for `POST /api/jobs/ingest`; the scheduled job sends it. Unset means the endpoint answers 503. |
+| `ADMIN_TOKEN` | deploy | Opens `/admin` (activity and run statistics) once with `/admin?token=<value>`; unset hides the page. See `docs/ops.md`. |
+| `ACTIVITY_SALT` | deploy | Secret salt for the activity log's daily visitor hash; random per process when unset. |
 
 ## Market dashboards and ingestion
 
@@ -118,7 +120,7 @@ The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample br
 
 ## Deploy
 
-One Docker image on Azure Container Apps, Postgres on Neon, Claude on Vertex AI: `deploy/azure-container-apps.sh` creates the resource group, registry, environment, secrets and app, and [docs/deploy.md](docs/deploy.md) explains every setting. A Google Cloud Run script is kept as the alternative.
+One Docker image on Azure Container Apps, Postgres on Neon, Claude on Vertex AI: `deploy/azure-container-apps.sh` creates the resource group, registry, environment, secrets and app, and [docs/deploy.md](docs/deploy.md) explains every setting; [docs/ops.md](docs/ops.md) covers the activity log, `/admin`, the Log Analytics queries and the capacity knobs. A Google Cloud Run script is kept as the alternative.
 
 ## Repository layout
 

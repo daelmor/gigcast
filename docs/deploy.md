@@ -20,7 +20,7 @@ Load the local env file into the shell (it holds `QLOO_API_KEY`, `DATABASE_URL`,
 ./deploy/azure-container-apps.sh
 ```
 
-What it does, in order: resource group `rg-gigcast` in `eastus`; an Azure Container Registry (Basic, name derived from the subscription id); `az acr build` of the Dockerfile for linux/amd64 in the registry (the upload honours `.dockerignore`, so secrets and caches never leave the machine); a Container Apps environment `cae-gigcast` with its Log Analytics workspace; the container app `gigcast` with a system-assigned identity that pulls from the registry; the secrets `qloo-api-key`, `database-url` and `gcp-sa-json`, the last one mounted as the file `/mnt/secrets/gcp-sa-json` and pointed to by `GOOGLE_APPLICATION_CREDENTIALS`; finally `ORIGIN` and `APP_BASE_URL` set to the public origin (`PUBLIC_ORIGIN`, default `https://gigcast.ai`). Rerunning the script rebuilds the image with the current git SHA, refreshes the secrets and rolls a new revision.
+What it does, in order: resource group `rg-gigcast` in `eastus`; an Azure Container Registry (Basic, name derived from the subscription id); `az acr build` of the Dockerfile for linux/amd64 in the registry (the upload honours `.dockerignore`, so secrets and caches never leave the machine); a Container Apps environment `cae-gigcast` with its Log Analytics workspace; the container app `gigcast` with a system-assigned identity that pulls from the registry; the secrets `qloo-api-key`, `database-url`, `gcp-sa-json`, `ingest-job-secret`, `admin-token` and `activity-salt` (the last three generated on the first deploy and reused afterwards), `gcp-sa-json` mounted as the file `/mnt/secrets/gcp-sa-json` and pointed to by `GOOGLE_APPLICATION_CREDENTIALS`; finally `ORIGIN` and `APP_BASE_URL` set to the public origin (`PUBLIC_ORIGIN`, default `https://gigcast.ai`). Rerunning the script rebuilds the image with the current git SHA, refreshes the secrets and rolls a new revision.
 
 Settings and why:
 
@@ -51,7 +51,8 @@ Open `https://$FQDN/new`, pick a market and an artist, and watch the trace. The 
 
 ### Operations
 
-- Logs: `az containerapp logs show -n gigcast -g rg-gigcast --follow` (console) or query the Log Analytics workspace. Every line is JSON with a `requestId`; runs log `brief started`, `brief run finished` and `brief persisted` with the brief id.
+- Activity and monitoring: `/admin?token=<ADMIN_TOKEN>` (the token: `az containerapp secret show -n gigcast -g rg-gigcast --secret-name admin-token --query value -o tsv`), `pnpm stats`, and the Log Analytics queries in `docs/ops.md`.
+- Logs: `az containerapp logs show -n gigcast -g rg-gigcast --follow` (console) or query the Log Analytics workspace. Every line is JSON with a `requestId`; runs log `brief started`, `brief queued`, `brief run finished` and `brief persisted` with the brief id.
 - Rotate a secret: `az containerapp secret set -n gigcast -g rg-gigcast --secrets qloo-api-key=...` then `az containerapp revision restart` (or redeploy).
 - Rollback: `az containerapp revision list` and `az containerapp ingress traffic set --revision-weight <revision>=100`.
 - Ingress closes idle or very long HTTP requests after about four minutes; the SSE client reconnects with `Last-Event-ID` and the server replays, so a ten-minute brief still streams.

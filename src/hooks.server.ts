@@ -1,13 +1,25 @@
 /**
  * Server hooks: load the local env file in development, run migrations and
  * seed the known markets on start, attach a request id and a child logger to
- * every request, and log API requests as structured JSON.
+ * every request, log page and API requests as structured JSON and record
+ * them in the activity log.
  */
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { building, dev } from '$app/environment';
 import type { Handle, HandleServerError, ServerInit } from '@sveltejs/kit';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
+import {
+	activitySalt,
+	briefIdFromPath,
+	clientIp,
+	isBot,
+	referrerHost,
+	shouldRecord,
+	trimUserAgent,
+	visitorId
+} from '$lib/server/activity/record';
+import { enqueueRequestLog, flushRequestLog } from '$lib/server/activity/writer';
 import { activeRunCount } from '$lib/server/briefs/manager';
 import { failOrphanedRuns, upsertKnownMarkets } from '$lib/server/briefs/store';
 import { getDb } from '$lib/server/db';
@@ -38,9 +50,11 @@ export const init: ServerInit = async () => {
 	// On SIGTERM the Node adapter stops accepting connections and keeps the process alive for
 	// SHUTDOWN_TIMEOUT seconds (600 on Azure), so in-flight briefs finish and persist; viewers on
 	// the new replica follow them through the database. Aborting here would throw their work away.
-	process.once('SIGTERM', () =>
-		logger.warn({ activeRuns: activeRunCount() }, 'SIGTERM: letting active runs finish')
-	);
+	process.once('SIGTERM', () => {
+		logger.warn({ activeRuns: activeRunCount() }, 'SIGTERM: letting active runs finish');
+		void flushRequestLog();
+	});
+	process.on('beforeExit', () => void flushRequestLog());
 };
 
 /** Host of APP_BASE_URL, the canonical public origin; undefined when unset (dev, tests). */
@@ -73,16 +87,32 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const started = performance.now();
 	const response = await resolve(event);
 	response.headers.set('x-request-id', requestId);
-	if (event.url.pathname.startsWith('/api/') || response.status >= 400) {
+	const path = event.url.pathname;
+	if (shouldRecord(path)) {
+		const durationMs = Math.round(performance.now() - started);
+		const userAgent = event.request.headers.get('user-agent');
+		const bot = isBot(userAgent);
 		event.locals.log.info(
-			{
-				method: event.request.method,
-				path: event.url.pathname,
-				status: response.status,
-				durationMs: Math.round(performance.now() - started)
-			},
+			{ method: event.request.method, path, status: response.status, durationMs, bot },
 			'request'
 		);
+		// Best effort, off the request path; see src/lib/server/activity.
+		enqueueRequestLog({
+			method: event.request.method,
+			path,
+			status: response.status,
+			durationMs,
+			visitor: visitorId(
+				clientIp(event.request.headers, () => event.getClientAddress()),
+				userAgent,
+				activitySalt()
+			),
+			userAgent: trimUserAgent(userAgent),
+			referrerHost: referrerHost(event.request.headers.get('referer'), canonical ?? host),
+			bot,
+			briefId: briefIdFromPath(path),
+			requestId
+		});
 	}
 	return response;
 };

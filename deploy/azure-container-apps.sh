@@ -16,7 +16,8 @@
 # The GCP credentials and the two secrets are stored as Container Apps secrets; the JSON is
 # mounted as a file so the Google SDK reads it through GOOGLE_APPLICATION_CREDENTIALS.
 #
-# Overrides: RG, LOCATION, APP, ENV_NAME, ACR, MIN_REPLICAS, MAX_REPLICAS, JOB_NAME, INGEST_CRON, INGEST_JOB_SECRET.
+# Overrides: RG, LOCATION, APP, ENV_NAME, ACR, MIN_REPLICAS, MAX_REPLICAS, JOB_NAME, INGEST_CRON, INGEST_JOB_SECRET,
+# ADMIN_TOKEN (opens /admin), ACTIVITY_SALT (visitor hash).
 set -euo pipefail
 
 RG="${RG:-rg-gigcast}"
@@ -43,6 +44,14 @@ if [ -z "${INGEST_JOB_SECRET}" ]; then
   INGEST_JOB_SECRET="$(az containerapp secret show -n "${APP}" -g "${RG}" --secret-name ingest-job-secret --query value -o tsv 2>/dev/null || true)"
 fi
 INGEST_JOB_SECRET="${INGEST_JOB_SECRET:-$(openssl rand -hex 24)}"
+# Same pattern for the /admin token and the activity log's salt: reused from the running app,
+# generated on the first deploy. Read the token later with
+#   az containerapp secret show -n gigcast -g rg-gigcast --secret-name admin-token --query value -o tsv
+reuse_secret() { az containerapp secret show -n "${APP}" -g "${RG}" --secret-name "$1" --query value -o tsv 2>/dev/null || true; }
+ADMIN_TOKEN="${ADMIN_TOKEN:-$(reuse_secret admin-token)}"
+ADMIN_TOKEN="${ADMIN_TOKEN:-$(openssl rand -hex 24)}"
+ACTIVITY_SALT="${ACTIVITY_SALT:-$(reuse_secret activity-salt)}"
+ACTIVITY_SALT="${ACTIVITY_SALT:-$(openssl rand -hex 24)}"
 SUB_NAME="$(az account show --query name -o tsv)"
 # Registry names are global and alphanumeric; derive a stable one from the subscription.
 ACR="${ACR:-gigcast$(printf '%s' "$SUB_ID" | tr -d '-' | cut -c1-10)}"
@@ -88,12 +97,14 @@ ENV_VARS=(
   "QLOO_API_KEY=secretref:qloo-api-key"
   "DATABASE_URL=secretref:database-url"
   "INGEST_JOB_SECRET=secretref:ingest-job-secret"
+  "ADMIN_TOKEN=secretref:admin-token"
+  "ACTIVITY_SALT=secretref:activity-salt"
 )
 
 if az containerapp show -n "${APP}" -g "${RG}" -o none 2>/dev/null; then
   say "Updating secrets and the running app"
   az containerapp secret set -n "${APP}" -g "${RG}" -o none \
-    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}"
+    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}" "admin-token=${ADMIN_TOKEN}" "activity-salt=${ACTIVITY_SALT}"
   az containerapp registry set -n "${APP}" -g "${RG}" --server "${ACR}.azurecr.io" --identity system -o none
   az containerapp update -n "${APP}" -g "${RG}" -o none \
     --image "${IMAGE}" \
@@ -114,7 +125,7 @@ else
     --min-replicas "${MIN_REPLICAS}" --max-replicas "${MAX_REPLICAS}" \
     --termination-grace-period 600 \
     --cpu 1.0 --memory 2.0Gi \
-    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}" \
+    --secrets "qloo-api-key=${QLOO_API_KEY}" "database-url=${DATABASE_URL}" "gcp-sa-json=${SA_JSON}" "ingest-job-secret=${INGEST_JOB_SECRET}" "admin-token=${ADMIN_TOKEN}" "activity-salt=${ACTIVITY_SALT}" \
     --secret-volume-mount /mnt/secrets \
     --env-vars "${ENV_VARS[@]}"
 fi
