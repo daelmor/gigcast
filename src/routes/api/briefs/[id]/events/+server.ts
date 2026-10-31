@@ -8,7 +8,12 @@
  */
 import { error, type RequestHandler } from '@sveltejs/kit';
 import type { BriefStatus } from '$lib/api/contracts';
-import { getActiveRun, subscribe, type StoredEvent } from '$lib/server/briefs/manager';
+import {
+	getActiveRun,
+	queuePosition,
+	subscribe,
+	type StoredEvent
+} from '$lib/server/briefs/manager';
 import { getBriefEventsAfter, getBriefHead } from '$lib/server/briefs/store';
 
 const HEARTBEAT_MS = 15_000;
@@ -77,7 +82,8 @@ export const GET: RequestHandler = async ({ params, request, url, locals }) => {
 			const follow = async () => {
 				sendStored(await getBriefEventsAfter(id, lastId));
 				if (isTerminal(head.status)) return finish(head.status);
-				send('status', { status: head.status });
+				const position = queuePosition(id);
+				send('status', position ? { status: 'queued', position } : { status: head.status });
 
 				const activeRun = getActiveRun(id);
 				if (activeRun) {
@@ -85,7 +91,11 @@ export const GET: RequestHandler = async ({ params, request, url, locals }) => {
 					unsubscribe = subscribe(id, (message) => {
 						if (message.kind === 'event') sendStored([message.stored]);
 						else if (message.done) finish(message.status);
-						else send('status', { status: message.status });
+						else
+							send('status', {
+								status: message.status,
+								...(message.position ? { position: message.position } : {})
+							});
 					});
 					// The run may have finished between the lookup and the subscription.
 					if (!getActiveRun(id)) {

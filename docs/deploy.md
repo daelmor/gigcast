@@ -30,9 +30,11 @@ Settings and why:
 | CPU / memory | 1 vCPU / 2 GiB | The agent loop is I/O bound; heatmap payloads are the largest objects. |
 | Ingress | external, HTTPS, port 3000 | Judges open the demo without an account. Briefs are public read-only links by design. |
 | `MIGRATE_ON_START=true` | env | Drizzle migrations apply when the container starts; the `drizzle/` folder ships in the image. |
-| `MAX_CONCURRENT_RUNS=2` | env | Protects the Qloo monthly quota and the Vertex budget; extra requests get 429. |
+| `MAX_CONCURRENT_RUNS=4` | env | Briefs running at once. The replica idles below 0.15 vCPU and 700 MB with two briefs, so four fit; the Qloo client's shared limiter (8 req/s) and the Vertex retries bound the external side. |
+| `MAX_QUEUED_RUNS=8` | env | Briefs that wait for a slot instead of getting 429; a waiting brief's page shows its place and starts on its own. |
+| `COUNTERFACTUAL_RUN=off` | env | The tool-less comparison run is not shown since the product refresh; off saves one model call per brief. |
 
-Environment set by the script: `GOOGLE_CLOUD_PROJECT`, `ANTHROPIC_VERTEX_REGION=global`, `GOOGLE_APPLICATION_CREDENTIALS=/mnt/secrets/gcp-sa-json`, `QLOO_BASE_URL`, `QLOO_MODE=live`, `QLOO_CACHE_BACKEND=postgres`, `MIGRATE_ON_START=true`, `MAX_CONCURRENT_RUNS=2`, `LOG_LEVEL=info`, `NODE_ENV=production`, `PORT=3000`, `HOST=0.0.0.0`, plus `ORIGIN` and `APP_BASE_URL`. Secrets as env: `QLOO_API_KEY`, `DATABASE_URL`.
+Environment set by the script: `GOOGLE_CLOUD_PROJECT`, `ANTHROPIC_VERTEX_REGION=global`, `GOOGLE_APPLICATION_CREDENTIALS=/mnt/secrets/gcp-sa-json`, `QLOO_BASE_URL`, `QLOO_MODE=live`, `QLOO_CACHE_BACKEND=postgres`, `MIGRATE_ON_START=true`, `MAX_CONCURRENT_RUNS=4`, `MAX_QUEUED_RUNS=8`, `COUNTERFACTUAL_RUN=off`, `LOG_LEVEL=info`, `NODE_ENV=production`, `PORT=3000`, `HOST=0.0.0.0`, plus `ORIGIN` and `APP_BASE_URL`. Secrets as env: `QLOO_API_KEY`, `DATABASE_URL`.
 
 The script also creates the scheduled job `gigcast-ingest` (a `curlimages/curl` container, cron `0 */6 * * *`) that posts to `/api/jobs/ingest` with the shared secret `INGEST_JOB_SECRET`. The secret is generated on the first run when the variable is unset and stored on both the app and the job; `az containerapp job start -n gigcast-ingest -g rg-gigcast` runs an ingestion on demand.
 
@@ -53,6 +55,7 @@ Open `https://$FQDN/new`, pick a market and an artist, and watch the trace. The 
 - Rotate a secret: `az containerapp secret set -n gigcast -g rg-gigcast --secrets qloo-api-key=...` then `az containerapp revision restart` (or redeploy).
 - Rollback: `az containerapp revision list` and `az containerapp ingress traffic set --revision-weight <revision>=100`.
 - Ingress closes idle or very long HTTP requests after about four minutes; the SSE client reconnects with `Last-Event-ID` and the server replays, so a ten-minute brief still streams.
+- Capacity: four briefs run at once and eight more wait; `MAX_CONCURRENT_RUNS` and `MAX_QUEUED_RUNS` are plain env vars (`az containerapp update --set-env-vars`). Raising the CPU or memory needs the 1:2 ratio Container Apps requires (`--cpu 2.0 --memory 4.0Gi`); the metrics (`az monitor metrics list --metric UsageNanoCores WorkingSetBytes`) say when that is due.
 - Costs: Consumption plan, one always-on replica of 1 vCPU / 2 GiB. Set `MIN_REPLICAS=0` to scale to zero between demos, at the cost of a cold start and of runs dying if the only viewer closes the tab.
 - Switching models: set `CLAUDE_PLANNER_MODEL` on the app (`az containerapp update --set-env-vars`) once Claude 5.5 is enabled in `n1-data`.
 

@@ -2,7 +2,7 @@
  * Postgres persistence for briefs, their runs and the agent events, plus the
  * known-markets upsert. Thin functions over Drizzle; no business logic.
  */
-import { and, asc, desc, eq, gt, lt, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, inArray, lt, sql } from 'drizzle-orm';
 import type { BriefListItem, BriefRecord, BriefStatus, RunRecord } from '../../api/contracts.ts';
 import { agentEventSchema, type AgentEvent } from '../../brief/events.ts';
 import { briefInputSchema, briefSchema, type Brief, type BriefInput } from '../../brief/schema.ts';
@@ -377,8 +377,9 @@ export async function upsertKnownMarkets(): Promise<void> {
 }
 
 /**
- * Briefs left `running` by a dead process are marked failed on start. Only briefs older than
- * `staleMinutes` qualify: during a deploy the previous replica may still be finishing its runs.
+ * Briefs left `queued` or `running` by a dead process are marked failed on start. Only briefs
+ * older than `staleMinutes` qualify: during a deploy the previous replica may still be finishing
+ * its runs and draining its queue.
  */
 export async function failOrphanedRuns(reason: string, staleMinutes = 20): Promise<number> {
 	const db = getDb();
@@ -386,7 +387,7 @@ export async function failOrphanedRuns(reason: string, staleMinutes = 20): Promi
 	const orphans = await db
 		.select({ id: briefs.id })
 		.from(briefs)
-		.where(and(eq(briefs.status, 'running'), lt(briefs.createdAt, cutoff)));
+		.where(and(inArray(briefs.status, ['queued', 'running']), lt(briefs.createdAt, cutoff)));
 	for (const o of orphans) {
 		await db
 			.update(briefs)

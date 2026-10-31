@@ -74,8 +74,11 @@
 				return;
 			}
 			if (res.status === 429) {
+				const body = apiErrorSchema.safeParse(await res.json().catch(() => null));
 				banner = {
-					message: 'The agent is busy with other briefs right now. Try again in a few minutes.',
+					message: body.success
+						? body.data.error
+						: 'The agent is at capacity right now. Try again in a few minutes.',
 					retry: true
 				};
 			} else if (res.status === 400) {

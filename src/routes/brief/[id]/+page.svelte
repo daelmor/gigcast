@@ -42,6 +42,7 @@
 
 	const events = $derived(stream && !terminal ? stream.events : record.events);
 	const status = $derived(stream && !terminal ? stream.status : record.status);
+	const position = $derived(stream && !terminal ? stream.position : undefined);
 	// Two runs share the stream: the main brief and a second, tool-less run the document does
 	// not show. The trace follows the main run only.
 	const mainRunId = $derived(
@@ -95,7 +96,9 @@
 				body: JSON.stringify({ ...record.input, marketId: record.marketId ?? undefined })
 			});
 			if (res.status === 429) {
-				retryError = 'The agent is busy with other briefs right now. Try again in a few minutes.';
+				const body = (await res.json().catch(() => null)) as { error?: string } | null;
+				retryError =
+					body?.error ?? 'The agent is at capacity right now. Try again in a few minutes.';
 				return;
 			}
 			if (!res.ok) {
@@ -223,15 +226,23 @@
 		<header class="mb-space-6">
 			<div class="flex flex-wrap items-center gap-space-3">
 				<p class="type-label text-ink-subtle">Building the Booking Brief</p>
-				{#if status === 'running'}<Badge tone="live">Running</Badge>{/if}
+				{#if status === 'running'}<Badge tone="live">Running</Badge
+					>{:else if status === 'queued'}<Badge tone="neutral">Queued</Badge>{/if}
 			</div>
 			<h1 class="mt-space-2 type-heading-1 text-ink sm:type-display">
 				{record.input.artist} in {record.input.city}, {record.input.country}
 			</h1>
 			<p class="mt-space-3 max-w-2xl type-body text-ink-muted">
-				Date window {dateWindow}. The agent is querying the taste graph and composing the document;
-				a brief takes about five minutes. You can keep this page open or come back to this link
-				later.
+				{#if status === 'queued'}
+					Date window {dateWindow}. The agent is busy with other briefs; this one is
+					{#if position === 1}next in line{:else if position}number {position} in line{:else}waiting
+						for a free slot{/if} and starts on its own. You can keep this page open or come back to this
+					link later.
+				{:else}
+					Date window {dateWindow}. The agent is querying the taste graph and composing the
+					document; a brief takes about five minutes. You can keep this page open or come back to
+					this link later.
+				{/if}
 			</p>
 			{#if stream && !stream.connected && !stream.done}
 				<p class="mt-space-2 type-small text-caution">
@@ -245,7 +256,7 @@
 
 		<div class="grid gap-space-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
 			<div>
-				<RunProgress events={mainEvents} {status} />
+				<RunProgress events={mainEvents} {status} {position} />
 			</div>
 			<div>
 				<RunTrace events={mainEvents} live {status} />

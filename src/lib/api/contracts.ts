@@ -22,7 +22,12 @@ export const createBriefRequestSchema = briefInputSchema.extend({
 });
 export type CreateBriefRequest = z.infer<typeof createBriefRequestSchema>;
 
-export const createBriefResponseSchema = z.object({ id: z.string(), status: briefStatusSchema });
+export const createBriefResponseSchema = z.object({
+	id: z.string(),
+	status: briefStatusSchema,
+	/** Place in the queue when the brief is waiting for a slot; 1 is next. */
+	position: z.number().int().positive().optional()
+});
 export type CreateBriefResponse = z.infer<typeof createBriefResponseSchema>;
 
 // GET /api/briefs/:id -----------------------------------------------------
@@ -124,11 +129,14 @@ export type LocalitySearchResponse = z.infer<typeof localitySearchResponseSchema
 //
 // Every message has `id: <seq>` so EventSource resumes with Last-Event-ID.
 //   event: agent   data: AgentEvent (JSON)
-//   event: status  data: { status: BriefStatus }
+//   event: status  data: { status: BriefStatus, position?: number }  (position while queued)
 //   event: done    data: { status: BriefStatus }
 // A comment line (`: ping`) is sent every 15 seconds to keep proxies alive.
 
-export const sseStatusDataSchema = z.object({ status: briefStatusSchema });
+export const sseStatusDataSchema = z.object({
+	status: briefStatusSchema,
+	position: z.number().int().positive().optional()
+});
 export type SseStatusData = z.infer<typeof sseStatusDataSchema>;
 
 // Errors ------------------------------------------------------------------

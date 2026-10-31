@@ -9,12 +9,25 @@
 	interface Props {
 		events: AgentEvent[];
 		status: 'queued' | 'running' | 'complete' | 'partial' | 'failed';
+		/** Place in the queue while waiting; 1 is next. */
+		position?: number;
 	}
 
-	let { events, status }: Props = $props();
+	let { events, status, position }: Props = $props();
 
 	const states = $derived(sectionStates(events));
 	const running = $derived(status === 'running' || status === 'queued');
+	const heading = $derived.by(() => {
+		if (status === 'queued') {
+			if (position === 1) return 'Queued · next in line';
+			if (position) return `Queued · ${position - 1} ahead`;
+			return 'Queued';
+		}
+		if (status === 'running') return 'Building the brief';
+		if (status === 'failed') return 'Run failed';
+		if (status === 'partial') return 'Brief finished with gaps';
+		return 'Brief ready';
+	});
 
 	let now = $state(Date.now());
 	const mountedAt = Date.now();
@@ -35,10 +48,7 @@
 <Card>
 	<div aria-live="polite">
 		<div class="mb-space-3 flex items-center justify-between gap-space-3">
-			<h3 class="type-heading-3 text-ink">
-				{#if status === 'queued'}Queued{:else if status === 'running'}Building the brief{:else if status === 'failed'}Run
-					failed{:else if status === 'partial'}Brief finished with gaps{:else}Brief ready{/if}
-			</h3>
+			<h3 class="type-heading-3 text-ink">{heading}</h3>
 			<span class="type-small text-ink-subtle tabular-nums">{formatDuration(elapsed)}</span>
 		</div>
 		<ol class="flex flex-wrap gap-space-2">
