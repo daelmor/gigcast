@@ -3,6 +3,8 @@ import { createBriefRequestSchema, type ApiError } from '$lib/api/contracts';
 import { BriefBusyError, startBriefRun } from '$lib/server/briefs/manager';
 import { listRecentBriefs } from '$lib/server/briefs/store';
 
+const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? '' : 's'}`;
+
 const bad = (status: number, error: string, details?: string[]) =>
 	json({ error, details } satisfies ApiError, { status });
 
@@ -54,7 +56,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			);
 			return json(
 				{
-					error: `The agent is at capacity: ${err.running} briefs are running and ${err.queued} are waiting. Try again in a few minutes.`
+					error: `The agent is at capacity: ${count(err.running, 'brief')} running and ${count(err.queued, 'brief')} waiting. Try again in a few minutes.`
 				} satisfies ApiError,
 				{ status: 429, headers: { 'retry-after': '180' } }
 			);
