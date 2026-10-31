@@ -2,7 +2,7 @@
  * Postgres persistence for briefs, their runs and the agent events, plus the
  * known-markets upsert. Thin functions over Drizzle; no business logic.
  */
-import { and, asc, desc, eq, gt, lt, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, gte, lt, sql } from 'drizzle-orm';
 import type { BriefListItem, BriefRecord, BriefStatus, RunRecord } from '../../api/contracts.ts';
 import { agentEventSchema, type AgentEvent } from '../../brief/events.ts';
 import { briefInputSchema, briefSchema, type Brief, type BriefInput } from '../../brief/schema.ts';
@@ -19,14 +19,16 @@ export async function createBriefRecord(options: {
 	id: string;
 	input: BriefInput;
 	marketId?: string | null;
+	userId?: string | null;
 	status: BriefStatus;
 }): Promise<void> {
-	const { id, input, marketId, status } = options;
+	const { id, input, marketId, userId, status } = options;
 	await getDb()
 		.insert(briefs)
 		.values({
 			id,
 			marketId: marketId ?? null,
+			userId: userId ?? null,
 			artistName: input.artist,
 			artistEntityId: input.artistEntityId ?? null,
 			city: input.city,
@@ -39,6 +41,15 @@ export async function createBriefRecord(options: {
 			input,
 			status
 		});
+}
+
+/** Briefs a user started since a moment; the daily limit when authentication is on. */
+export async function countBriefsByUserSince(userId: string, since: Date): Promise<number> {
+	const rows = await getDb()
+		.select({ n: count() })
+		.from(briefs)
+		.where(and(eq(briefs.userId, userId), gte(briefs.createdAt, since)));
+	return Number(rows[0]?.n ?? 0);
 }
 
 export async function setBriefStatus(

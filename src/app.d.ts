@@ -11,6 +11,8 @@ declare global {
 		interface Locals {
 			requestId: string;
 			log: Logger;
+			/** Signed-in account, or null (nobody, or authentication is off). */
+			user: import('$lib/server/auth/session').AuthUser | null;
 		}
 		// interface PageData {}
 		// interface PageState {}

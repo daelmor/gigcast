@@ -19,6 +19,14 @@ const schema = z.object({
 	PUBLIC_MAP_STYLE_URL: z.string().url().optional(),
 	PUBLIC_MAP_STYLE_URL_DARK: z.string().url().optional(),
 	APP_BASE_URL: z.string().url().optional(),
+	// Creating a brief: off (anyone) or required (Google sign-in, see docs/auth.md). Reading is always public.
+	AUTH_MODE: z.enum(['off', 'required']).default('off'),
+	GOOGLE_CLIENT_ID: z.string().min(1).optional(),
+	GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
+	// Comma-separated emails or @domains allowed to sign in; unset allows every verified Google account.
+	AUTH_ALLOWED_EMAILS: z.string().optional(),
+	// Briefs one signed-in user may start per rolling 24 hours.
+	BRIEFS_PER_USER_PER_DAY: z.coerce.number().int().positive().default(10),
 	// Briefs running at the same time in one instance; more are refused with 429.
 	MAX_CONCURRENT_RUNS: z.coerce.number().int().positive().default(2),
 	// vertex (default) runs the real agent; fake replays a canned trace for end-to-end tests.

@@ -14,7 +14,16 @@
 	import PromoterFields from './PromoterFields.svelte';
 	import { buildPayload, emptyForm, issueField, validateDates } from './form';
 
-	let { prefill }: { prefill: { market: string | null; artist: string | null } } = $props();
+	let {
+		prefill,
+		signedIn = true,
+		authRequired = false
+	}: {
+		prefill: { market: string | null; artist: string | null };
+		/** Whether somebody is signed in; only matters when authentication is required. */
+		signedIn?: boolean;
+		authRequired?: boolean;
+	} = $props();
 
 	const form = $state(emptyForm());
 	// One-time prefill from ?market= and ?artist=.
@@ -73,9 +82,14 @@
 				await goto(resolve('/brief/[id]', { id }));
 				return;
 			}
-			if (res.status === 429) {
+			if (res.status === 401) {
+				banner = { message: 'Sign in to generate a brief.', retry: false };
+			} else if (res.status === 429) {
+				const body = apiErrorSchema.safeParse(await res.json().catch(() => null));
 				banner = {
-					message: 'The agent is busy with other briefs right now. Try again in a few minutes.',
+					message: body.success
+						? body.data.error
+						: 'The agent is busy with other briefs right now. Try again in a few minutes.',
 					retry: true
 				};
 			} else if (res.status === 400) {
@@ -148,18 +162,27 @@
 		</div>
 	{/if}
 
-	<div class="flex flex-col gap-space-3 sm:flex-row sm:items-center">
-		<Button variant="primary" type="submit" disabled={submitting}>
-			{#if submitting}
-				Starting…
-			{:else if banner?.retry}
-				Try again
-			{:else}
-				Generate brief
-			{/if}
-		</Button>
-		<p class="type-small text-ink-muted">
-			A brief takes about five minutes. You can watch the agent work.
-		</p>
-	</div>
+	{#if authRequired && !signedIn}
+		<Card class="flex flex-col gap-space-3 sm:flex-row sm:items-center sm:justify-between">
+			<p class="type-body text-ink">
+				Sign in to generate a brief. Reading finished briefs stays open to everyone.
+			</p>
+			<Button variant="primary" href="/auth/google?next=/new">Sign in with Google</Button>
+		</Card>
+	{:else}
+		<div class="flex flex-col gap-space-3 sm:flex-row sm:items-center">
+			<Button variant="primary" type="submit" disabled={submitting}>
+				{#if submitting}
+					Starting…
+				{:else if banner?.retry}
+					Try again
+				{:else}
+					Generate brief
+				{/if}
+			</Button>
+			<p class="type-small text-ink-muted">
+				A brief takes about five minutes. You can watch the agent work.
+			</p>
+		</div>
+	{/if}
 </form>
