@@ -81,9 +81,10 @@ export const CLAIM_RULES: ReadonlyArray<{ name: string; re: RegExp; to: string }
 		to: 'shows affinity for premium price levels'
 	},
 	{
-		name: 'cost-effective opener -> opener candidate',
-		re: /\bcost-effective opener\b/gi,
-		to: 'opener candidate (fee unknown)'
+		// Fees are not in the data; "cost-effective" only ever meant lower popularity.
+		name: 'cost-effective opener -> lower-popularity opener',
+		re: /\bcost-effective ((?:\w+ )?opener)\b/gi,
+		to: 'lower-popularity $1 (fee unknown)'
 	},
 	{
 		name: 'will sponsor -> sponsorship prospect',

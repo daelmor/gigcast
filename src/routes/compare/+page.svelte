@@ -5,6 +5,7 @@
 	import { comparisonSnapshot as snap } from '$lib/brief/fixtures/comparison-snapshot';
 	import type { ComparisonPick } from '$lib/brief/fixtures/comparison-snapshot';
 	import type { CounterfactualMatch, CounterfactualPick } from '$lib/brief/schema';
+	import { calibrateText } from '$lib/brief/wording';
 
 	const pct = (n: number) => Math.round(n * 100);
 
@@ -108,7 +109,8 @@
 		<details>
 			<summary class="cursor-pointer type-small font-semibold text-ink-muted">Why this pick</summary
 			>
-			<p class="mt-space-2 type-small text-ink-muted">{pick.why}</p>
+			<!-- gigcast's own prose gets the same read-time claim rules as the brief page. -->
+			<p class="mt-space-2 type-small text-ink-muted">{calibrateText(pick.why)}</p>
 		</details>
 	</Card>
 {/snippet}

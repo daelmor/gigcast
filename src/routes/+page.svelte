@@ -46,9 +46,9 @@
 	<p class="mt-space-3 max-w-3xl type-body">
 		gigcast turns an artist, a city and a date window into a Booking Brief a promoter can act on.
 		Behind it sits a taste graph of cultural affinities that links artists, brands, places and
-		neighbourhoods, so a brief can say where an artist's audience lives, which brands they
-		over-index on and which venues sit in the heat, with the data behind every claim. Everything
-		else is reasoning on top of those results, and it is labeled as such.
+		neighbourhoods, so a brief can say where an artist's audience affinity concentrates, which
+		brands they over-index on and which venues sit in the heat, with the data behind every claim.
+		Everything else is reasoning on top of those results, and it is labeled as such.
 	</p>
 	<p class="mt-space-4 type-small text-ink-muted">
 		A dated, side-by-side comparison: the model alone versus the agent with cultural-affinity
