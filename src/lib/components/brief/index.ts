@@ -1,4 +1,5 @@
 export { default as BriefDocument } from './BriefDocument.svelte';
+export { default as DecisionSnapshot } from './DecisionSnapshot.svelte';
 export { default as SectionHeader } from './SectionHeader.svelte';
 export { default as SourceMarks } from './SourceMarks.svelte';
 export { default as AudienceSection } from './AudienceSection.svelte';
