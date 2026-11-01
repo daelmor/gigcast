@@ -66,8 +66,8 @@ describe('calibrateClaims', () => {
 		expect(calibrateClaims('p90 = 0.95 signals a mid-to-upper-mid willingness to pay.')).toBe(
 			'p90 = 0.95 signals a mid-to-upper-mid price-level affinity.'
 		);
-		expect(calibrateClaims('used as a proxy for Willingness To Pay')).toBe(
-			'used as a proxy for price-level affinity'
+		expect(calibrateClaims('their Willingness To Pay is moderate')).toBe(
+			'their price-level affinity is moderate'
 		);
 		const negated = [
 			'reflects taste overlap, not willingness to pay a specific ticket price.',
@@ -75,6 +75,33 @@ describe('calibrateClaims', () => {
 			'never willingness to pay for this event.'
 		];
 		for (const text of negated) expect(calibrateClaims(text)).toBe(text);
+	});
+
+	it('keeps a negation with words in between, and does not build a tautology from a proxy', () => {
+		// Found on the Buenos Aires brief: an honest caveat that the old guard rewrote.
+		const caveat =
+			'Price-level affinity scores are relative audience preferences, not dollar-value willingness-to-pay.';
+		expect(calibrateClaims(caveat)).toBe(caveat);
+		expect(calibrateClaims("does not estimate the audience's willingness to pay")).toBe(
+			"does not estimate the audience's willingness to pay"
+		);
+		// Found on the Tampa brief: "price-level affinity used as a proxy for price-level affinity".
+		expect(
+			calibrateClaims(
+				'Heatmap price-level affinity (p50 0.76) used as a proxy for willingness to pay—not a direct dollar conversion.'
+			)
+		).toBe(
+			'Heatmap price-level affinity (p50 0.76) used as context for ticket-price planning—not a direct dollar conversion.'
+		);
+	});
+
+	it('keeps the capital when the rewritten phrase opened the sentence', () => {
+		expect(calibrateClaims('Deep demand drives the plan. Willingness to pay is high.')).toBe(
+			'Strong cultural affinity drives the plan. Price-level affinity is high.'
+		);
+		expect(calibrateClaims('deep demand drives the plan.')).toBe(
+			'strong cultural affinity drives the plan.'
+		);
 	});
 
 	it('does not claim where the audience lives', () => {

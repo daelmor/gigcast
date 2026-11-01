@@ -9,8 +9,9 @@
  *    rewrites the worst overclaims the planner used to write (sponsor drafts that "are producing"
  *    a concert, "willingness to pay" read off a price-level affinity, "the audience lives here").
  *    The list is short and precise on purpose: a safety net for briefs stored before the prompt
- *    said otherwise, not a style engine. Negated, honest uses ("not willingness to pay") are left
- *    alone.
+ *    said otherwise, not a style engine. Negated, honest uses ("not willingness to pay", "not a
+ *    dollar-value willingness-to-pay") are left alone, and a rewrite keeps the capital of the
+ *    phrase it replaces.
  */
 
 /** Keys whose values are identifiers, urls or tool names, never prose. */
@@ -43,8 +44,9 @@ export function neutralizeProvider(text: string): string {
 }
 
 /**
- * Overclaim rewrites. Each rule names the claim it removes; the replacement keeps the sentence
- * grammatical and says what the data supports instead.
+ * Overclaim rewrites, applied in order. Each rule names the claim it removes; the replacement
+ * keeps the sentence grammatical and says what the data supports instead. `$1`, `$2` refer to
+ * the rule's capture groups.
  */
 export const CLAIM_RULES: ReadonlyArray<{ name: string; re: RegExp; to: string }> = [
 	{
@@ -59,9 +61,16 @@ export const CLAIM_RULES: ReadonlyArray<{ name: string; re: RegExp; to: string }
 		to: '$1 are exploring bringing'
 	},
 	{
-		// Price-level affinity is consumption context, not a ticket-price curve; negations stay.
+		// "price-level affinity used as a proxy for willingness to pay" would turn into a tautology.
+		name: 'proxy for willingness to pay -> context for ticket-price planning',
+		re: /\b(?:a )?proxy for willingness[- ]to[- ]pay\b/gi,
+		to: 'context for ticket-price planning'
+	},
+	{
+		// Price-level affinity is consumption context, not a ticket-price curve. Negations stay,
+		// with up to three words between the negation and the phrase ("not a dollar-value ...").
 		name: 'willingness to pay -> price-level affinity',
-		re: /(?<!\b(?:not|nor|never) (?:a |an |the )?)\bwillingness[- ]to[- ]pay\b/gi,
+		re: /(?<!\b(?:not|nor|never)\b(?: [\w'’-]+){0,3} )\bwillingness[- ]to[- ]pay\b/gi,
 		to: 'price-level affinity'
 	},
 	{
@@ -93,10 +102,32 @@ export const CLAIM_RULES: ReadonlyArray<{ name: string; re: RegExp; to: string }
 	}
 ];
 
+function expand(template: string, groups: string[]): string {
+	return template.replace(/\$(\d)/g, (_, n: string) => groups[Number(n) - 1] ?? '');
+}
+
+/** How many capture groups a pattern has (the replace callback also receives offset and input). */
+function groupCount(re: RegExp): number {
+	return (new RegExp(`${re.source}|`).exec('')?.length ?? 1) - 1;
+}
+
 /** Rewrite the overclaims listed in CLAIM_RULES; everything else is untouched. */
 export function calibrateClaims(text: string): string {
 	let out = text;
-	for (const rule of CLAIM_RULES) out = out.replace(rule.re, rule.to);
+	for (const rule of CLAIM_RULES) {
+		const n = groupCount(rule.re);
+		out = out.replace(rule.re, (match: string, ...rest: unknown[]) => {
+			const groups = rest.slice(0, n).map((g) => (typeof g === 'string' ? g : ''));
+			const offset = rest[n] as number;
+			const input = rest[n + 1] as string;
+			const replaced = expand(rule.to, groups);
+			// A phrase that opened a sentence keeps its capital; mid-sentence capitals are not kept.
+			const opensSentence = /(^|[.!?]\s+|\n\s*)$/.test(input.slice(0, offset));
+			return opensSentence && /^[A-Z]/.test(match) && /^[a-z]/.test(replaced)
+				? replaced.charAt(0).toUpperCase() + replaced.slice(1)
+				: replaced;
+		});
+	}
 	return out;
 }
 
