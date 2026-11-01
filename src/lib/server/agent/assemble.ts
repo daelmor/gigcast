@@ -4,6 +4,8 @@
  * artist and locality, and verify every "grounded" pick against the entity
  * ids Qloo actually returned (downgrading to "inferred" when it cannot).
  */
+import { dedupeNeighbourhoods } from '../../brief/neighbourhoods.ts';
+import { CALENDAR_ITEM_REASON, splitCalendarRiskItems, urlKey } from '../../brief/risk-items.ts';
 import {
 	briefSchema,
 	type Brief,
@@ -16,6 +18,7 @@ import {
 	type SourceRef,
 	type Verification
 } from '../../brief/schema.ts';
+import { VERDICT_LABEL } from '../../brief/verdict.ts';
 import type { ToolArtifact, ToolCallRecord, ToolRegistry } from './tools.ts';
 
 export interface AssembleOptions {
@@ -83,8 +86,12 @@ export function buildArtifacts(registry: ToolRegistry): BriefArtifacts {
 		};
 
 	const hoods = largest(artifactsOfKind(registry, 'neighbourhoods'), (a) => a.items.length);
+	// The same place comes back under several entities; keep one per name, highest affinity.
 	if (hoods)
-		artifacts.neighbourhoods = { items: hoods.artifact.items, source: sourceRef(hoods.rec) };
+		artifacts.neighbourhoods = {
+			items: dedupeNeighbourhoods(hoods.artifact.items),
+			source: sourceRef(hoods.rec)
+		};
 
 	const demo = artifactsOfKind(registry, 'demographics')[0];
 	if (demo)
@@ -149,33 +156,39 @@ export function buildArtifacts(registry: ToolRegistry): BriefArtifacts {
 	return artifacts;
 }
 
-/** Normalize a url for matching a cited source against the feed (scheme, host case, trailing slash). */
-function urlKey(url: string): string {
-	try {
-		const u = new URL(url);
-		u.hash = '';
-		return `${u.hostname.toLowerCase().replace(/^www\./, '')}${u.pathname.replace(/\/$/, '')}${u.search}`;
-	} catch {
-		return url.trim();
-	}
-}
-
-/** Risk items must cite a url the risk_feed tool returned (news item or advisory); others are downgraded. */
+/**
+ * Risk items must cite a url the risk_feed tool returned (news item or advisory); others are
+ * downgraded. Calendar and climate context the model emitted as items (Open-Meteo, Nager.Date,
+ * weather with no feed url) is not an error to show: it leaves the list and is recorded here.
+ */
 export function verifyRiskItems(
 	draft: BriefDraft,
 	registry: ToolRegistry,
 	verification: Verification
 ): void {
-	const items = draft.risks?.items ?? [];
-	if (items.length === 0) return;
-	const known = new Set<string>();
-	for (const picked of artifactsOfKind(registry, 'risk')) {
-		for (const i of picked.artifact.feed.items) known.add(urlKey(i.url));
-		for (const a of picked.artifact.feed.advisories) known.add(urlKey(a.url));
+	if (!draft.risks || draft.risks.items.length === 0) return;
+	// No feed recorded at all (risk_feed never ran): only the calendar hosts decide what is
+	// context, and every grounded item is downgraded below as before.
+	const feeds = artifactsOfKind(registry, 'risk');
+	const known = feeds.length ? new Set<string>() : undefined;
+	for (const picked of feeds) {
+		for (const i of picked.artifact.feed.items) known?.add(urlKey(i.url));
+		for (const a of picked.artifact.feed.advisories) known?.add(urlKey(a.url));
 	}
-	for (const item of items) {
+	const { kept, dropped } = splitCalendarRiskItems(draft.risks.items, known);
+	for (const item of dropped) {
 		verification.checked++;
-		if (item.label === 'grounded' && !known.has(urlKey(item.sourceUrl))) {
+		verification.downgraded.push({
+			section: 'risks',
+			entityId: item.sourceUrl,
+			name: item.title,
+			reason: CALENDAR_ITEM_REASON
+		});
+	}
+	draft.risks.items = kept;
+	for (const item of kept) {
+		verification.checked++;
+		if (item.label === 'grounded' && !known?.has(urlKey(item.sourceUrl))) {
 			item.label = 'inferred';
 			verification.downgraded.push({
 				section: 'risks',
@@ -302,6 +315,27 @@ function verifyPicks(
 	}
 }
 
+/** The sections a verdict needs; without them the only honest verdict is insufficient_data. */
+export const VERDICT_CORE_SECTIONS = ['audience', 'lineup', 'sponsors'] as const;
+
+/**
+ * A verdict describes preliminary cultural fit. When a core section ended with no coverage the
+ * model has nothing to judge it on, whatever it emitted; the guard forces insufficient_data and
+ * records the change so the document can show it.
+ */
+export function enforceVerdict(draft: BriefDraft, verification: Verification): void {
+	const missing = VERDICT_CORE_SECTIONS.filter((s) => draft[s].note.label === 'no_coverage');
+	if (missing.length === 0 || draft.verdict === 'insufficient_data') return;
+	verification.checked++;
+	verification.downgraded.push({
+		section: 'verdict',
+		entityId: draft.verdict,
+		name: VERDICT_LABEL[draft.verdict],
+		reason: `the model emitted "${draft.verdict}" but ${missing.join(', ')} ended with no coverage; the verdict is insufficient_data`
+	});
+	draft.verdict = 'insufficient_data';
+}
+
 /** Verify grounded picks against the registry; mutates and returns the draft. */
 export function verifyDraft(draft: BriefDraft, registry: ToolRegistry): Verification {
 	const verification: Verification = { downgraded: [], checked: 0 };
@@ -312,6 +346,7 @@ export function verifyDraft(draft: BriefDraft, registry: ToolRegistry): Verifica
 	for (const hotspot of draft.audience.hotspots) {
 		hotspot.sources = hotspot.sources.filter((id) => registry.calls.has(id));
 	}
+	enforceVerdict(draft, verification);
 	return verification;
 }
 

@@ -14,10 +14,14 @@ import {
 	assembleBrief,
 	buildArtifacts,
 	buildResolution,
+	enforceVerdict,
 	fallbackDraft,
 	missingSections,
-	verifyDraft
+	verifyDraft,
+	verifyRiskItems
 } from './assemble.ts';
+import { CALENDAR_ITEM_REASON } from '../../brief/risk-items.ts';
+import type { Verification } from '../../brief/schema.ts';
 import { createAgentTools, ToolRegistry, type ToolCallRecord } from './tools.ts';
 
 const ARTIST_ID = 'BDA1B73F-10E7-4D09-AC51-B796CCEC5FF3';
@@ -191,7 +195,98 @@ describe('assembleBrief', () => {
 	});
 });
 
+describe('enforceVerdict', () => {
+	it('forces insufficient_data when a core section ended with no coverage and records it', () => {
+		const draft = structuredClone(sampleBrief.draft);
+		draft.sponsors.note = { label: 'no_coverage', summary: 'Nothing came back.', caveats: [] };
+		const verification: Verification = { downgraded: [], checked: 0 };
+		enforceVerdict(draft, verification);
+		expect(draft.verdict).toBe('insufficient_data');
+		expect(verification.checked).toBe(1);
+		expect(verification.downgraded).toEqual([
+			{
+				section: 'verdict',
+				entityId: 'promising',
+				name: 'Promising cultural fit',
+				reason:
+					'the model emitted "promising" but sponsors ended with no coverage; the verdict is insufficient_data'
+			}
+		]);
+	});
+
+	it('leaves the verdict alone when the core sections have coverage, or when it already is insufficient_data', () => {
+		const draft = structuredClone(sampleBrief.draft);
+		const verification: Verification = { downgraded: [], checked: 0 };
+		enforceVerdict(draft, verification);
+		expect(draft.verdict).toBe('promising');
+		draft.audience.note.label = 'no_coverage';
+		draft.verdict = 'insufficient_data';
+		enforceVerdict(draft, verification);
+		expect(verification.downgraded).toEqual([]);
+		// Venues or risks with no coverage are not core sections.
+		const partial = structuredClone(sampleBrief.draft);
+		partial.venuesAndPartners.note.label = 'no_coverage';
+		enforceVerdict(partial, verification);
+		expect(partial.verdict).toBe('promising');
+	});
+
+	it('is applied by verifyDraft', async () => {
+		const registry = await runResearch();
+		const draft = structuredClone(sampleBrief.draft);
+		draft.lineup.note.label = 'no_coverage';
+		const verification = verifyDraft(draft, registry);
+		expect(draft.verdict).toBe('insufficient_data');
+		expect(verification.downgraded.some((d) => d.section === 'verdict')).toBe(true);
+	});
+});
+
+describe('verifyRiskItems', () => {
+	it('moves calendar and climate items out of the list and records them as context, not errors', async () => {
+		const registry = await runResearch();
+		const draft = structuredClone(sampleBrief.draft);
+		const before = draft.risks!.items.length;
+		draft.risks!.items.push({
+			category: 'weather_climate',
+			severity: 2,
+			title: 'Mid-April climate: mild temperatures, low rain probability',
+			soWhat: 'Plan an outdoor option.',
+			sourceName: 'Open-Meteo ERA5 archive',
+			sourceUrl: 'https://open-meteo.com',
+			label: 'grounded'
+		});
+		const verification: Verification = { downgraded: [], checked: 0 };
+		verifyRiskItems(draft, registry, verification);
+		expect(draft.risks!.items).toHaveLength(before);
+		expect(draft.risks!.items.some((i) => i.sourceUrl === 'https://open-meteo.com')).toBe(false);
+		expect(verification.downgraded).toContainEqual({
+			section: 'risks',
+			entityId: 'https://open-meteo.com',
+			name: 'Mid-April climate: mild temperatures, low rain probability',
+			reason: CALENDAR_ITEM_REASON
+		});
+	});
+});
+
 describe('buildArtifacts', () => {
+	it('dedupes neighbourhoods by name, keeping the highest affinity', () => {
+		const registry = new ToolRegistry(5);
+		registry.calls.set(
+			'call_hoods',
+			emptyHandRecord('call_hoods', 'qloo_heatmap_neighbourhoods', {}, [
+				{
+					kind: 'neighbourhoods',
+					items: [
+						{ entityId: 'a', name: 'Brooklyn', affinity: 0.985 },
+						{ entityId: 'b', name: 'Brooklyn', affinity: 0.97 },
+						{ entityId: 'c', name: 'Crown Heights', affinity: 0.971 }
+					]
+				}
+			])
+		);
+		const artifacts = buildArtifacts(registry);
+		expect(artifacts.neighbourhoods?.items.map((h) => h.entityId)).toEqual(['a', 'c']);
+	});
+
 	it('collects the registry artifacts with their sources', async () => {
 		const registry = await runResearch();
 		const artifacts = buildArtifacts(registry);
