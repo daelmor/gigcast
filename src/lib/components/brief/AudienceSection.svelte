@@ -6,6 +6,7 @@
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
 	import { pct } from './format';
+	import { FLAT_NEIGHBOURHOODS_HEADING, rankNeighbourhoods } from '$lib/brief/neighbourhoods';
 	import { KNOWN_MARKETS } from '$lib/markets';
 	import type { Brief } from '$lib/brief/schema';
 
@@ -42,12 +43,9 @@
 		)
 	);
 
-	const hoods = $derived(
-		[...(brief.artifacts.neighbourhoods?.items ?? [])]
-			.sort((a, b) => b.affinity - a.affinity)
-			.slice(0, 8)
-	);
-	const hoodMax = $derived(Math.max(0.01, ...hoods.map((h) => h.affinity)));
+	const ranking = $derived(rankNeighbourhoods(brief.artifacts.neighbourhoods?.items ?? []));
+	const hoodMax = $derived(Math.max(0.01, ranking.items[0]?.affinity ?? 0));
+	const flatNames = $derived([...ranking.items].sort((x, y) => x.name.localeCompare(y.name)));
 </script>
 
 <section aria-labelledby="audience">
@@ -140,29 +138,44 @@
 			{/if}
 		</div>
 		<div>
-			<h3 class="mb-space-2 type-heading-3 text-ink">Top neighbourhoods</h3>
-			{#if hoods.length === 0}
+			<h3 class="mb-space-2 type-heading-3 text-ink">
+				{ranking.flat ? FLAT_NEIGHBOURHOODS_HEADING : 'Top neighbourhoods'}
+			</h3>
+			{#if ranking.items.length === 0}
 				<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 					No neighbourhood ranking was available.
 				</p>
 			{:else}
 				<Card class="break-inside-avoid">
-					<ul class="space-y-space-3">
-						{#each hoods as h (h.entityId)}
-							<li>
-								<div class="flex justify-between gap-space-2 type-small">
-									<span class="truncate text-ink">{h.name}</span>
-									<span class="text-ink-muted tabular-nums">{pct(h.affinity)}</span>
-								</div>
-								<div class="mt-1 h-2 overflow-hidden rounded-pill bg-surface-sunken">
-									<div
-										class="h-full rounded-pill bg-chart-1"
-										style:width="{(h.affinity / hoodMax) * 100}%"
-									></div>
-								</div>
-							</li>
-						{/each}
-					</ul>
+					{#if ranking.flat}
+						<p class="type-small text-ink-muted">
+							All {ranking.items.length} shown sit at about {pct(ranking.items[0].affinity)} affinity
+							(spread
+							{ranking.spread.toFixed(2)}).
+						</p>
+						<ul class="mt-space-3 flex flex-wrap gap-space-2">
+							{#each flatNames as h (h.entityId)}
+								<li><Chip>{h.name}</Chip></li>
+							{/each}
+						</ul>
+					{:else}
+						<ul class="space-y-space-3">
+							{#each ranking.items as h (h.entityId)}
+								<li>
+									<div class="flex justify-between gap-space-2 type-small">
+										<span class="truncate text-ink">{h.name}</span>
+										<span class="text-ink-muted tabular-nums">{pct(h.affinity)}</span>
+									</div>
+									<div class="mt-1 h-2 overflow-hidden rounded-pill bg-surface-sunken">
+										<div
+											class="h-full rounded-pill bg-chart-1"
+											style:width="{(h.affinity / hoodMax) * 100}%"
+										></div>
+									</div>
+								</li>
+							{/each}
+						</ul>
+					{/if}
 					{#if brief.artifacts.neighbourhoods}
 						<p class="mt-space-3 type-small text-ink-subtle">
 							<SourceMarks sources={[brief.artifacts.neighbourhoods.source.toolCallId]} />

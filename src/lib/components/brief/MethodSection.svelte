@@ -23,7 +23,7 @@
 		pricing: 'Pricing guidance',
 		risks: 'Risk panel'
 	};
-	const title = (s: string) => TITLES[s as BriefSection] ?? s;
+	const title = (s: string) => (s === 'verdict' ? 'Verdict' : (TITLES[s as BriefSection] ?? s));
 	const n = (v: number) => v.toLocaleString('en-US');
 
 	const rows = $derived([
@@ -42,7 +42,7 @@
 
 <section aria-labelledby="method">
 	<header class="mb-space-5 border-b border-line pb-space-4">
-		<p class="mb-space-1 type-label text-ink-subtle">Section 10 · Method</p>
+		<p class="mb-space-1 type-label text-ink-subtle">Section 9 · Method</p>
 		<h2 id="method" class="scroll-mt-24 type-heading-1 text-ink">Method and sources</h2>
 	</header>
 	<div class="grid gap-space-4 md:grid-cols-2">

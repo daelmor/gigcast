@@ -40,7 +40,7 @@
 	--critical-soft: #fce8ec;
 	--heat-1: #e4dcff;
 	--heat-2: #b49dff;
-	--heat-3: #7a4dff;
+	--heat-3: #a48bff;
 	--heat-4: #4800f8;
 	--heat-5: #1e0b6e;
 	--chart-1: var(--signal);
@@ -85,10 +85,10 @@
 	--caution-soft: var(--inferred-soft);
 	--critical: #ff7a8e;
 	--critical-soft: #3a1020;
-	--heat-1: #2a1f6b;
-	--heat-2: #4a2bc9;
-	--heat-3: #7a4dff;
-	--heat-4: #5fa8ff;
+	--heat-1: #4b3cb3;
+	--heat-2: #7458e8;
+	--heat-3: #a48bff;
+	--heat-4: #6cc4ff;
 	--heat-5: #00f0fa;
 	--chart-1: var(--signal);
 	--chart-2: #00f0fa;
@@ -132,10 +132,10 @@
 		--caution-soft: var(--inferred-soft);
 		--critical: #ff7a8e;
 		--critical-soft: #3a1020;
-		--heat-1: #2a1f6b;
-		--heat-2: #4a2bc9;
-		--heat-3: #7a4dff;
-		--heat-4: #5fa8ff;
+		--heat-1: #4b3cb3;
+		--heat-2: #7458e8;
+		--heat-3: #a48bff;
+		--heat-4: #6cc4ff;
 		--heat-5: #00f0fa;
 		--chart-1: var(--signal);
 		--chart-2: #00f0fa;

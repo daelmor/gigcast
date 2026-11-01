@@ -15,7 +15,7 @@
 <section aria-labelledby="pricing">
 	<SectionHeader
 		id="pricing"
-		kicker="Section 7 · Pricing"
+		kicker="Section 6 · Pricing"
 		title="Pricing guidance"
 		note={pricing.note}
 		calibration={CALIBRATION_COPY.pricing}

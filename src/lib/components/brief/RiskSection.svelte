@@ -62,7 +62,7 @@
 <section aria-labelledby="risks">
 	{#if unavailable}
 		<header class="mb-space-5 border-b border-line pb-space-4">
-			<p class="mb-space-1 type-label text-ink-subtle">Section 8 · Risk</p>
+			<p class="mb-space-1 type-label text-ink-subtle">Section 7 · Risk</p>
 			<div class="flex flex-wrap items-center gap-x-space-3 gap-y-space-2">
 				<h2 id="risks" class="scroll-mt-24 type-heading-1 text-ink">Risk panel</h2>
 				<EvidenceLabel label="no_coverage" />
@@ -94,7 +94,7 @@
 			<p class="mx-auto mt-space-2 max-w-xl type-small text-ink-subtle">{RISK_UNAVAILABLE}</p>
 		</div>
 	{:else}
-		<SectionHeader id="risks" kicker="Section 8 · Risk" title="Risk panel" {note} />
+		<SectionHeader id="risks" kicker="Section 7 · Risk" title="Risk panel" {note} />
 		<div class="space-y-space-5">
 			{#if feed && level}
 				<Card class="break-inside-avoid">

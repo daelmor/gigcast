@@ -11,7 +11,7 @@
 
 <section aria-labelledby="sources">
 	<header class="mb-space-5 border-b border-line pb-space-4">
-		<p class="mb-space-1 type-label text-ink-subtle">Section 11 · Sources</p>
+		<p class="mb-space-1 type-label text-ink-subtle">Section 10 · Sources</p>
 		<h2 id="sources" class="scroll-mt-24 type-heading-1 text-ink">Sources</h2>
 	</header>
 	{#if order.length === 0}
