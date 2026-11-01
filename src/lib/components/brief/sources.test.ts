@@ -25,8 +25,11 @@ describe('buildSourceIndex', () => {
 
 	it('numbers by first citation in document order and ignores unknown ids', () => {
 		const { indexByCallId } = buildSourceIndex(sampleBrief);
-		const first = sampleBrief.draft.audience.hotspots[0]?.sources[0];
-		if (first) expect(indexByCallId.get(first)).toBe(1);
+		// The decision snapshot cites the taste match (artist tags, city tags) before anything else.
+		expect(indexByCallId.get(sampleBrief.artifacts.artistTags!.source.toolCallId)).toBe(1);
+		expect(indexByCallId.get(sampleBrief.artifacts.cityTags!.source.toolCallId)).toBe(2);
+		const hotspot = sampleBrief.draft.audience.hotspots[0]?.sources[0];
+		if (hotspot) expect(indexByCallId.get(hotspot)).toBe(4);
 		expect(indexByCallId.has('not-a-call')).toBe(false);
 	});
 });

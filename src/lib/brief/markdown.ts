@@ -3,6 +3,11 @@
  * Node-only imports, so it can run in the browser.
  */
 import {
+	LINEUP_ARTIST_ONLY_NOTE,
+	LINEUP_ARTIST_ONLY_SUBTITLE,
+	lineupLocalityDifferentiated
+} from './lineup';
+import {
 	BRIEF_SECTIONS,
 	LABEL_HELP,
 	type ArtistPick,
@@ -15,6 +20,25 @@ import {
 	type SourceRef,
 	type SponsorPick
 } from './schema';
+import { buildDecisionSnapshot, NOT_AVAILABLE } from './snapshot';
+import { VERDICT_LABEL, VERDICT_MEANING } from './verdict';
+
+/**
+ * Calibration copy, shared word for word with the section components so the web document and
+ * the export say the same thing.
+ */
+export const CALIBRATION_COPY = {
+	demand: 'Cultural affinity is not ticket demand.',
+	pricing:
+		'Illustrative planning scenarios, not ticket-price predictions. Validate against comparable shows, production costs, capacity and local sales history.',
+	pricingContext:
+		'Place price levels near the heat are consumption context, not the basis of the tiers.',
+	sponsors:
+		'Audience affinity identifies outreach prospects, not confirmed sponsors or budgets. Any proposal or activation remains subject to brand and artist approval.',
+	venues:
+		'Capacity, availability and rental cost are not in the data; confirm them with the venue.',
+	drafts: 'Draft only; never sent.'
+} as const;
 
 export interface RenderBriefOptions {
 	/** Accepted for API stability; the trace is not part of `Brief`. */
@@ -152,8 +176,32 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 	out.push(`# Booking Brief: ${resolution.artist.name || input.artist} in ${input.city}`);
 	blank();
 	out.push(
-		`${input.dateFrom} to ${input.dateTo} | Verdict: **${words(draft.verdict)}** | ${draft.headline}`
+		`${input.dateFrom} to ${input.dateTo} | Verdict: **${VERDICT_LABEL[draft.verdict]}** | ${draft.headline}`
 	);
+
+	// Decision snapshot: derived from the brief, never generated.
+	const snap = buildDecisionSnapshot(brief);
+	heading(2, 'Decision snapshot');
+	out.push(`- Assessment: ${snap.assessment}`);
+	out.push(
+		`- Strongest cultural signal: ${snap.strongestSignal.text}${
+			snap.strongestSignal.label
+				? ` ${badge(snap.strongestSignal.label, snap.strongestSignal.sources)}`
+				: ''
+		}`
+	);
+	out.push(
+		`- Top sponsor prospect: ${
+			snap.topSponsor
+				? `${snap.topSponsor.text} ${badge(snap.topSponsor.label ?? 'grounded', snap.topSponsor.sources)}`
+				: NOT_AVAILABLE
+		}`
+	);
+	out.push(`- Critical unknowns: ${snap.unknowns.join(' ')}`);
+	out.push(`- Best next step: ${snap.nextStep}`);
+	out.push(`- Confidence: ${snap.confidence.culturalText} ${snap.confidence.businessText}`);
+	blank();
+	out.push(`_${VERDICT_MEANING}_`);
 
 	heading(2, 'Key points');
 	for (const point of draft.keyPoints) out.push(`- ${point}`);
@@ -210,6 +258,8 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 	renderers.demandAndFit = () => {
 		const d = draft.demandAndFit;
 		heading(2, SECTION_TITLES.demandAndFit);
+		out.push(`_${CALIBRATION_COPY.demand}_`);
+		blank();
 		note(d.note);
 		const demandLines: string[] = [];
 		if (isPresent(d.popularity)) demandLines.push(`- Popularity: ${num(d.popularity)}`);
@@ -272,6 +322,10 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 
 	renderers.lineup = () => {
 		heading(2, SECTION_TITLES.lineup);
+		if (lineupLocalityDifferentiated(brief) === false) {
+			out.push(`_${LINEUP_ARTIST_ONLY_SUBTITLE}: ${LINEUP_ARTIST_ONLY_NOTE}_`);
+			blank();
+		}
 		note(draft.lineup.note);
 		const pickLine = (p: ArtistPick) =>
 			`- **${p.name}**${parenthesize([words(p.role), isPresent(p.affinity) ? `affinity ${num(p.affinity)}` : undefined])} ${badge(p.label, p.sources)}${suffix(p.why)}`;
@@ -281,6 +335,8 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 
 	renderers.sponsors = () => {
 		heading(2, SECTION_TITLES.sponsors);
+		out.push(`_${CALIBRATION_COPY.sponsors}_`);
+		blank();
 		note(draft.sponsors.note);
 		const sponsorHeading = (s: SponsorPick) =>
 			`${s.name}${parenthesize([s.category, isPresent(s.affinity) ? `affinity ${num(s.affinity)}` : undefined])} ${badge(s.label, s.sources)}`;
@@ -298,6 +354,8 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 
 	renderers.venuesAndPartners = () => {
 		heading(2, SECTION_TITLES.venuesAndPartners);
+		out.push(`_${CALIBRATION_COPY.venues}_`);
+		blank();
 		note(draft.venuesAndPartners.note);
 		const placeLine = (p: PlacePick) =>
 			`- **${p.name}**${parenthesize([
@@ -313,6 +371,8 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 	renderers.pricing = () => {
 		const pr = draft.pricing;
 		heading(2, SECTION_TITLES.pricing);
+		out.push(`_${CALIBRATION_COPY.pricing}_`);
+		blank();
 		note(pr.note);
 		if (pr.tiers.length > 0) {
 			out.push(
@@ -321,6 +381,8 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 					pr.tiers.map((t) => [t.name, `${t.price} ${pr.currency}`, pct(t.share), t.rationale])
 				)
 			);
+			blank();
+			out.push(CALIBRATION_COPY.pricingContext);
 			blank();
 		}
 		if (pr.assumptions.length > 0) {

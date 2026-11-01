@@ -130,6 +130,69 @@ describe('renderBriefMarkdown', () => {
 		expect(out).not.toContain('not available in this build');
 	});
 
+	it('opens with the decision snapshot and the calibrated verdict label', () => {
+		expect(md).toContain('| Verdict: **Promising cultural fit** |');
+		const snapshot = md.slice(md.indexOf('## Decision snapshot'), md.indexOf('## Key points'));
+		expect(snapshot).toContain('- Assessment: Promising cultural fit. ');
+		expect(snapshot).toMatch(
+			/- Strongest cultural signal: Taste match with the city 86% \[grounded\]\[S\d+\]/
+		);
+		expect(snapshot).toContain(
+			'- Top sponsor prospect: Adidas (affinity 91%), audience affinity only; interest not confirmed'
+		);
+		expect(snapshot).toContain('- Critical unknowns: Artist fee and availability');
+		expect(snapshot).toContain(
+			'- Best next step: Request venue availability and an artist fee quote before any sponsor outreach.'
+		);
+		expect(snapshot).toContain(
+			'- Confidence: Cultural evidence strong: 5 of 5 sections grounded. Business case not validated'
+		);
+		expect(snapshot).toContain('never financial approval');
+	});
+
+	it('carries the calibration notes in the demand, lineup, sponsors, venues and pricing sections', () => {
+		expect(md).toContain('_Cultural affinity is not ticket demand._');
+		expect(md).toContain(
+			'_Audience affinity identifies outreach prospects, not confirmed sponsors or budgets. Any proposal or activation remains subject to brand and artist approval._'
+		);
+		expect(md).toContain(
+			'_Capacity, availability and rental cost are not in the data; confirm them with the venue._'
+		);
+		expect(md).toContain(
+			'_Illustrative planning scenarios, not ticket-price predictions. Validate against comparable shows, production costs, capacity and local sales history._'
+		);
+		expect(md).toContain(
+			'Place price levels near the heat are consumption context, not the basis of the tiers.'
+		);
+		// The fixture candidates carry no explainability, so no locality note is printed.
+		expect(md).not.toContain('not locality-differentiated');
+	});
+
+	it('prints the artist-only lineup note when the explainability is the headliner alone', () => {
+		const brief = structuredClone(sampleBrief);
+		for (const c of brief.artifacts.lineupCandidates!.items)
+			c.explainability = {
+				'signal.interests.entities': [{ entityId: brief.resolution.artist.entityId, score: 1 }]
+			};
+		expect(renderBriefMarkdown(brief)).toContain(
+			'_Artist compatibility (not locality-differentiated): '
+		);
+	});
+
+	it('contains none of the forbidden demand, price, fee or commitment phrases', () => {
+		for (const phrase of [
+			/\baudience lives (here|in)\b/i,
+			/\bdeep demand\b/i,
+			/\baccepts? premium prices?\b/i,
+			/\bcost-effective opener\b/i,
+			/\bwill sponsor\b/i,
+			/\bwe are producing\b/i,
+			/\bwillingness to pay\b/i,
+			/\bQloo\b/
+		])
+			expect(md, String(phrase)).not.toMatch(phrase);
+	});
+
 	it('never prints undefined or null', () => {
 		expect(md).not.toMatch(/undefined|null|NaN/);
 		const sparse: Brief = {
