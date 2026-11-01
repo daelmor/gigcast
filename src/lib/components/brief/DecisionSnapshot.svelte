@@ -14,7 +14,8 @@
 	const row = 'sm:grid sm:grid-cols-[12rem_minmax(0,1fr)] sm:gap-space-4';
 </script>
 
-<section aria-labelledby="snapshot" class="break-inside-avoid">
+<!-- A region, not a section: in print every section starts a new page and the snapshot belongs on the first page with the header. -->
+<div role="region" aria-labelledby="snapshot" class="break-inside-avoid">
 	<header class="mb-space-4">
 		<p class="mb-space-1 type-label text-ink-subtle">Read this first</p>
 		<h2 id="snapshot" class="scroll-mt-24 type-heading-1 text-ink">Decision snapshot</h2>
@@ -76,4 +77,4 @@
 		</dl>
 		<p class="mt-space-3 type-small text-ink-subtle">{VERDICT_MEANING}</p>
 	</Card>
-</section>
+</div>
