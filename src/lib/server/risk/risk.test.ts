@@ -109,7 +109,7 @@ describe('score', () => {
 	it('squashes sums into 0..100 and counts recent items', () => {
 		expect(squash(0)).toBe(0);
 		expect(squash(4)).toBe(63);
-		// A week of six fresh severity-2 items stays quiet; two fresh severity-4 items read as watch.
+		// A week of six fresh severity-2 items stays quiet; two fresh severity-4 items read as elevated.
 		expect(squash(6 * decayWeight(2, 0.8, 1))).toBeLessThan(25);
 		expect(squash(2 * decayWeight(4, 0.8, 1))).toBeGreaterThanOrEqual(20);
 		const score = riskScore(

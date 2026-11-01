@@ -3,7 +3,7 @@
 	import Card from '../ui/Card.svelte';
 	import Chip from '../ui/Chip.svelte';
 	import { riskLevel } from '../ui/tones';
-	import { categoryLabel } from './labels';
+	import { categoryLabel, RISK_SCORE_NOTE } from './labels';
 	import type { RiskScore } from '$lib/brief/schema';
 
 	let { score }: { score: RiskScore } = $props();
@@ -51,8 +51,5 @@
 			{/each}
 		</ul>
 	{/if}
-	<p class="mt-space-3 type-small text-ink-subtle">
-		Recent, severe items weigh more; older items decay. It is a news-volume signal, not a safety
-		judgment.
-	</p>
+	<p class="mt-space-3 type-small text-ink-subtle">{RISK_SCORE_NOTE}</p>
 </Card>

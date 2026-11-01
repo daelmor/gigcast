@@ -1,6 +1,17 @@
 /**
  * Market risk score: severity-weighted, confidence-weighted, time-decayed
  * sum of classified items, squashed into 0 to 100. Pure.
+ *
+ * The score is a news-volume signal, not a safety level: the words are quiet,
+ * elevated and high news volume (src/lib/brief/risk-level.ts).
+ *
+ * TODO(calibration): the sum is absolute, so a dense-media city (New York
+ * City scored 100 from 145 stored items) reads "high news volume" on an
+ * ordinary week while a market with three outlets never leaves "quiet". The
+ * real fix is to normalize the weighted sum by the market's own baseline (the
+ * ingested items per day over the trailing weeks, or the median weight of its
+ * feed), so the score is relative to each city rather than to the feed size.
+ * Deferred on 2026-11-01; see docs/decisions.md.
  */
 import type { RiskScore } from '../../brief/schema.ts';
 
@@ -31,7 +42,8 @@ export function decayWeight(
 
 /**
  * 0..100 from a sum of weights. A quiet week of severity-2 items stays under 25;
- * a couple of fresh severity-4 items read as "watch"; event-threatening news reads "loud".
+ * a couple of fresh severity-4 items read as "elevated"; a dense feed of severe items reads
+ * "high news volume".
  */
 export function squash(sum: number): number {
 	return Math.round(100 * (1 - Math.exp(-sum / 4)));

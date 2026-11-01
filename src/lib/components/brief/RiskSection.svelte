@@ -9,7 +9,7 @@
 	import ExternalLink from '../risk/ExternalLink.svelte';
 	import HolidayList from '../risk/HolidayList.svelte';
 	import SeverityDots from '../risk/SeverityDots.svelte';
-	import { categoryLabel } from '../risk/labels';
+	import { categoryLabel, RISK_SCORE_NOTE } from '../risk/labels';
 	import SectionHeader from './SectionHeader.svelte';
 	import { RISK_UNAVAILABLE, formatDate } from './format';
 	import type { Brief, SectionNote } from '$lib/brief/schema';
@@ -135,10 +135,7 @@
 							{/each}
 						</ul>
 					{/if}
-					<p class="mt-space-3 type-small text-ink-subtle">
-						Recent, severe items weigh more; older items decay. It is a news-volume signal, not a
-						safety judgment.
-					</p>
+					<p class="mt-space-3 type-small text-ink-subtle">{RISK_SCORE_NOTE}</p>
 				</Card>
 			{/if}
 			{#if groups.length === 0}
