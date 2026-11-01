@@ -17,6 +17,7 @@
 	];
 
 	const parts = [
+		'Decision snapshot',
 		'Audience map',
 		'Demand and fit',
 		'Lineup',
@@ -168,7 +169,7 @@
 					local knowledge, and none of it says who the audience is or where they live.
 				</p>
 				<p>
-					gigcast turns an artist, a city and dates into a Booking Brief with eight parts:
+					gigcast turns an artist, a city and dates into a Booking Brief with nine parts:
 					{parts.join(', ').toLowerCase()}. Each claim is labeled grounded, inferred or no coverage.
 					It is for promoters, talent buyers and venue bookers who need a first read on a market
 					before they commit money, and want to see what each claim rests on.
