@@ -3,6 +3,9 @@
  * Verdicts and run statuses share the tones on purpose: positive and grounded mean "the data
  * backs this", caution and inferred mean "reasoning on top of it".
  */
+import { riskLevelWord, type RiskLevelWord } from '$lib/brief/risk-level';
+import type { Verdict } from '$lib/brief/verdict';
+
 export type Tone = 'positive' | 'caution' | 'critical' | 'neutral' | 'live';
 
 export const TONE_CLASSES: Record<Tone, string> = {
@@ -13,18 +16,13 @@ export const TONE_CLASSES: Record<Tone, string> = {
 	live: 'bg-beam text-on-beam'
 };
 
-export type Verdict = 'promising' | 'mixed' | 'weak' | 'insufficient_data';
+// The verdict words live with the brief contract so the Markdown export says the same thing.
+export { VERDICT_LABEL, type Verdict } from '$lib/brief/verdict';
 export const VERDICT_TONE: Record<Verdict, Tone> = {
 	promising: 'positive',
 	mixed: 'caution',
 	weak: 'critical',
 	insufficient_data: 'neutral'
-};
-export const VERDICT_LABEL: Record<Verdict, string> = {
-	promising: 'Promising',
-	mixed: 'Mixed',
-	weak: 'Weak',
-	insufficient_data: 'Insufficient data'
 };
 
 export type RunStatus = 'queued' | 'running' | 'complete' | 'partial' | 'failed';
@@ -43,11 +41,13 @@ export const STATUS_LABEL: Record<RunStatus, string> = {
 	failed: 'Failed'
 };
 
-/** The risk score word and tone: quiet under 25, watch under 60, loud otherwise. */
-export function riskLevel(score: number): { word: 'quiet' | 'watch' | 'loud'; tone: Tone } {
-	if (score < 25) return { word: 'quiet', tone: 'positive' };
-	if (score < 60) return { word: 'watch', tone: 'caution' };
-	return { word: 'loud', tone: 'critical' };
+/** The risk score word and tone: quiet under 25, elevated under 60, high news volume otherwise. */
+export function riskLevel(score: number): { word: RiskLevelWord; tone: Tone } {
+	const word = riskLevelWord(score);
+	return {
+		word,
+		tone: word === 'quiet' ? 'positive' : word === 'elevated' ? 'caution' : 'critical'
+	};
 }
 
 export type Confidence = 'low' | 'medium' | 'high';

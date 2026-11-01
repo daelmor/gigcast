@@ -10,6 +10,7 @@
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
 	import { ordinal, pct, words } from './format';
+	import { CALIBRATION_COPY } from '$lib/brief/markdown';
 	import type { Brief } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
@@ -113,7 +114,13 @@
 </script>
 
 <section aria-labelledby="demand">
-	<SectionHeader id="demand" kicker="Section 2 · Demand" title="Demand and fit" note={d.note} />
+	<SectionHeader
+		id="demand"
+		kicker="Section 2 · Demand"
+		title="Demand and fit"
+		note={d.note}
+		calibration={CALIBRATION_COPY.demand}
+	/>
 	<div class="grid gap-space-4 md:grid-cols-2">
 		<!-- Popularity -->
 		<Card class="break-inside-avoid">

@@ -5,6 +5,7 @@
 	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
 	import { STATUS_LABEL, STATUS_TONE, VERDICT_LABEL, VERDICT_TONE } from '../ui/tones';
 	import AudienceSection from './AudienceSection.svelte';
+	import DecisionSnapshot from './DecisionSnapshot.svelte';
 	import DemandSection from './DemandSection.svelte';
 	import LineupSection from './LineupSection.svelte';
 	import MethodSection from './MethodSection.svelte';
@@ -42,6 +43,7 @@
 	} as const;
 
 	const toc = $derived<{ id: string; title: string; label?: Label }[]>([
+		{ id: 'snapshot', title: 'Decision snapshot' },
 		{ id: 'audience', title: 'Audience map', label: draft.audience.note.label },
 		{ id: 'demand', title: 'Demand and fit', label: draft.demandAndFit.note.label },
 		{ id: 'lineup', title: 'Lineup', label: draft.lineup.note.label },
@@ -169,6 +171,7 @@
 			</div>
 		</header>
 
+		<DecisionSnapshot {brief} />
 		<AudienceSection {brief} />
 		<DemandSection {brief} />
 		<LineupSection {brief} />

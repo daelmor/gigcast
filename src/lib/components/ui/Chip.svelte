@@ -2,7 +2,7 @@
 	/**
 	 * Quiet token for sample artists, tags and filters. Static when `pressed` is undefined;
 	 * a toggle button with aria-pressed otherwise. Chips are neutral on purpose: urgency comes
-	 * from SeverityDots and the quiet / watch / loud word, never from a category hue.
+	 * from SeverityDots and the quiet / elevated / high news volume word, never from a category hue.
 	 */
 	import type { Snippet } from 'svelte';
 

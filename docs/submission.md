@@ -1,6 +1,12 @@
 # Devpost submission text
 
-Working copy of the description for the Qloo Agentic Hackathon entry. Keep it in English; update the live URL and numbers before submitting.
+Submitted to Devpost on 2026-10-30. The text below is the working copy as of that date and is kept unchanged on purpose: the Devpost entry cannot be edited after submission. Since then (calibration pass, 2026-10-31, see [STATUS.md](../STATUS.md)):
+
+- The "Would this work without Qloo?" panel (item 8 below) is no longer rendered per brief; the tool-less run is optional (`COUNTERFACTUAL_RUN`, off) and the comparison is a dated snapshot at `/compare`.
+- Every brief now opens with a derived decision snapshot, the verdict reads "Promising cultural fit" / "Conditional — verify before booking" / "Weak cultural fit" / "Insufficient evidence", and the copy says that affinity is not ticket demand, a price, a fee or a sponsor commitment.
+- Stored briefs are calibrated at read time (overclaim rewrites, calendar items out of the risk list, neighbourhoods deduped); new briefs follow a calibrated prompt.
+
+Working copy of the description for the Qloo Agentic Hackathon entry. Keep it in English.
 
 ## Project name
 

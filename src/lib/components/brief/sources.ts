@@ -4,6 +4,7 @@
  * artifact order, so [S3] means the same thing in the web and in the Markdown.
  */
 import type { Brief, SourceRef } from '$lib/brief/schema';
+import { buildDecisionSnapshot } from '$lib/brief/snapshot';
 
 export interface SourceIndex {
 	order: SourceRef[];
@@ -49,6 +50,11 @@ export function buildSourceIndex(brief: Brief): SourceIndex {
 	};
 
 	const { draft, artifacts: a } = brief;
+	// The decision snapshot sits above the sections and cites first, as in the Markdown.
+	const snapshot = buildDecisionSnapshot(brief);
+	cite(snapshot.fitSignal.sources);
+	cite(snapshot.coverage?.sources);
+	cite(snapshot.topSponsor?.sources);
 	for (const h of draft.audience.hotspots) cite(h.sources);
 	cite([a.heatmap?.source.toolCallId]);
 	const d = draft.demandAndFit;

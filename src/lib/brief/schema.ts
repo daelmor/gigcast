@@ -367,7 +367,7 @@ export const travelAdvisorySchema = z.object({
 export type TravelAdvisory = z.infer<typeof travelAdvisorySchema>;
 
 export const riskScoreSchema = z.object({
-	/** 0 (quiet) to 100 (loud), from decayed severity-weighted items. */
+	/** 0 (quiet) to 100 (high news volume), from decayed severity-weighted items. */
 	value: z.number().int().min(0).max(100),
 	byCategory: z.record(z.string(), z.number().int().min(0).max(100)),
 	itemCount: z.number().int().nonnegative(),

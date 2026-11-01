@@ -129,6 +129,8 @@
 
 <svelte:head>
 	<title>{title} · gigcast</title>
+	<meta property="og:title" content={data.og.title} />
+	<meta property="og:description" content={data.og.description} />
 	<meta
 		name="description"
 		content="Booking Brief for {record.input.artist} in {record.input.city}, {record.input

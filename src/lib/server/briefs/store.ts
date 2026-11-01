@@ -4,10 +4,13 @@
  */
 import { and, asc, desc, eq, gt, inArray, lt, sql } from 'drizzle-orm';
 import type { BriefListItem, BriefRecord, BriefStatus, RunRecord } from '../../api/contracts.ts';
+import { calibrateBrief } from '../../brief/calibrate.ts';
 import { agentEventSchema, type AgentEvent } from '../../brief/events.ts';
+import { renderBriefMarkdown } from '../../brief/markdown.ts';
 import { briefInputSchema, briefSchema, type Brief, type BriefInput } from '../../brief/schema.ts';
+import { isVerdict } from '../../brief/verdict.ts';
 import { KNOWN_MARKETS } from '../../markets.ts';
-import { neutralizeProse, neutralizeProvider } from '../../brief/wording.ts';
+import { calibrateText } from '../../brief/wording.ts';
 import { getDb } from '../db/index.ts';
 import { agentEvents, briefRuns, briefs, markets, type BriefRun } from '../db/schema.ts';
 import { logger } from '../log.ts';
@@ -244,15 +247,22 @@ export async function getBriefRecord(id: string): Promise<BriefRecord | undefine
 	let brief: Brief | null = null;
 	if (row.brief) {
 		const parsed = briefSchema.safeParse(row.brief);
-		// Prose the model wrote (and briefs stored before the wording rule) may name the data
-		// provider; the product only does so where provenance is shown.
-		if (parsed.success) brief = neutralizeProse(parsed.data);
+		// Briefs stored before the prompt was calibrated still read like new ones: provider
+		// wording, overclaims, calendar items and duplicate neighbourhoods are fixed at read time.
+		if (parsed.success) brief = calibrateBrief(parsed.data);
 		else
 			logger.error(
 				{ briefId: id, issues: parsed.error.issues.slice(0, 3) },
 				'stored brief fails schema'
 			);
 	}
+	// The Markdown is re-rendered from the calibrated brief (pure, a few milliseconds) so the
+	// export carries the snapshot and the calibration notes; the stored text is the fallback.
+	const markdown = brief
+		? renderBriefMarkdown(brief)
+		: row.markdown
+			? calibrateText(row.markdown)
+			: row.markdown;
 	return {
 		id: row.id,
 		status: row.status as BriefStatus,
@@ -261,35 +271,52 @@ export async function getBriefRecord(id: string): Promise<BriefRecord | undefine
 		marketId: row.marketId,
 		input,
 		brief,
-		markdown: row.markdown ? neutralizeProvider(row.markdown) : row.markdown,
+		markdown,
 		runs: runs.map(toRunRecord),
 		events,
 		lastEventId
 	};
 }
 
+/**
+ * Recent public briefs, newest first, one per artist and locality: the same request run several
+ * times shows once, as its newest complete brief (or its newest brief when none completed).
+ * Done in the query with a window function; nothing is deleted.
+ */
 export async function listRecentBriefs(limit = 12, marketId?: string): Promise<BriefListItem[]> {
-	const rows = await getDb()
-		.select({
-			id: briefs.id,
-			status: briefs.status,
-			marketId: briefs.marketId,
-			artistName: briefs.artistName,
-			city: briefs.city,
-			country: briefs.country,
-			localityName: briefs.localityName,
-			dateFrom: briefs.dateFrom,
-			dateTo: briefs.dateTo,
-			createdAt: briefs.createdAt,
-			brief: briefs.brief
-		})
-		.from(briefs)
-		.where(
-			marketId
-				? and(eq(briefs.isPublic, true), eq(briefs.marketId, marketId))
-				: eq(briefs.isPublic, true)
-		)
-		.orderBy(desc(briefs.createdAt))
+	const db = getDb();
+	const groupKey = sql`lower(${briefs.artistName}) || '|' || coalesce(${briefs.localityEntityId}, ${briefs.marketId}, lower(coalesce(${briefs.city}, '')))`;
+	const ranked = db.$with('ranked').as(
+		db
+			.select({
+				id: briefs.id,
+				status: briefs.status,
+				marketId: briefs.marketId,
+				artistName: briefs.artistName,
+				city: briefs.city,
+				country: briefs.country,
+				localityName: briefs.localityName,
+				dateFrom: briefs.dateFrom,
+				dateTo: briefs.dateTo,
+				createdAt: briefs.createdAt,
+				brief: briefs.brief,
+				rank: sql<number>`row_number() over (partition by ${groupKey} order by case when ${briefs.status} = 'complete' then 0 else 1 end, ${briefs.createdAt} desc)`.as(
+					'rank'
+				)
+			})
+			.from(briefs)
+			.where(
+				marketId
+					? and(eq(briefs.isPublic, true), eq(briefs.marketId, marketId))
+					: eq(briefs.isPublic, true)
+			)
+	);
+	const rows = await db
+		.with(ranked)
+		.select()
+		.from(ranked)
+		.where(eq(ranked.rank, 1))
+		.orderBy(desc(ranked.createdAt))
 		.limit(limit);
 	return rows.map((r) => {
 		const draft = (r.brief as { draft?: { headline?: string; verdict?: string } } | null)?.draft;
@@ -304,14 +331,8 @@ export async function listRecentBriefs(limit = 12, marketId?: string): Promise<B
 			localityName: r.localityName,
 			dateFrom: r.dateFrom,
 			dateTo: r.dateTo,
-			headline: draft?.headline ? neutralizeProvider(draft.headline) : null,
-			verdict:
-				verdict === 'promising' ||
-				verdict === 'mixed' ||
-				verdict === 'weak' ||
-				verdict === 'insufficient_data'
-					? verdict
-					: null,
+			headline: draft?.headline ? calibrateText(draft.headline) : null,
+			verdict: isVerdict(verdict) ? verdict : null,
 			createdAt: iso(r.createdAt) ?? new Date(0).toISOString()
 		};
 	});

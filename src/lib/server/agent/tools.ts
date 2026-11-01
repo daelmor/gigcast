@@ -786,7 +786,7 @@ export function createAgentTools({
 	const neighbourhoods = betaZodTool({
 		name: 'qloo_heatmap_neighbourhoods',
 		description:
-			'The same audience heatmap aggregated by named localities (neighbourhoods, districts) instead of cells: name and affinity, top 15. Good for naming where the audience lives.',
+			'The same audience heatmap aggregated by named localities (neighbourhoods, districts) instead of cells: name and affinity, top 15. Good for naming the areas with elevated affinity.',
 		inputSchema: z.object({
 			artist_ids: ids,
 			locality_id: localityId,

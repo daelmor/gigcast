@@ -3,6 +3,7 @@
 	import EChart from './EChart.svelte';
 	import { theme, watchTheme } from '$lib/client/theme-colors.svelte';
 	import { priceLevelDistribution } from './price-levels';
+	import { CALIBRATION_COPY } from '$lib/brief/markdown';
 	import type { Brief } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
@@ -78,6 +79,6 @@
 	{/if}
 	<figcaption class="mt-3 type-small text-ink-subtle">
 		Price levels of the places returned near the heat ({dist.total}
-		{dist.total === 1 ? 'place' : 'places'}), the proxy behind the tiers.
+		{dist.total === 1 ? 'place' : 'places'}). {CALIBRATION_COPY.pricingContext}
 	</figcaption>
 </figure>

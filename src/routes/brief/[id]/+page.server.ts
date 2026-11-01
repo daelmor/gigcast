@@ -8,5 +8,12 @@ export const load: PageServerLoad = async ({ params, setHeaders }) => {
 	if (record.status === 'running' || record.status === 'queued') {
 		setHeaders({ 'cache-control': 'no-store' });
 	}
-	return { record };
+	const { input } = record;
+	return {
+		record,
+		og: {
+			title: `${input.artist} · ${input.city} · ${input.dateFrom} to ${input.dateTo}`,
+			description: `Booking Brief for ${input.artist} in ${input.city}, ${input.country}: audience map, lineup, sponsors, venues, pricing and risks, every claim labeled grounded, inferred or no coverage.`
+		}
+	};
 };

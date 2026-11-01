@@ -3,6 +3,7 @@
 	import PriceLevelChart from './PriceLevelChart.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 	import { pct } from './format';
+	import { CALIBRATION_COPY } from '$lib/brief/markdown';
 	import type { Brief } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
@@ -14,14 +15,11 @@
 <section aria-labelledby="pricing">
 	<SectionHeader
 		id="pricing"
-		kicker="Section 7 · Pricing"
+		kicker="Section 6 · Pricing"
 		title="Pricing guidance"
 		note={pricing.note}
+		calibration={CALIBRATION_COPY.pricing}
 	/>
-	<p class="mb-space-3 type-small text-ink-subtle">
-		A heuristic built on audience signals, not a price from the data. Treat it as a starting point
-		for your own numbers.
-	</p>
 	{#if pricing.tiers.length === 0}
 		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			No price tiers were suggested.

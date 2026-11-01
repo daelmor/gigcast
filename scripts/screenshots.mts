@@ -11,7 +11,7 @@ import path from 'node:path';
 import { chromium } from '@playwright/test';
 
 const [outDir = '.cache/screenshots/after', base = 'http://localhost:5173', ...pageArgs] = process.argv.slice(2);
-const pages = pageArgs.length ? pageArgs : ['/', '/new', '/about', '/dev/preview', '/dev/market-preview', '/dev/ui'];
+const pages = pageArgs.length ? pageArgs : ['/', '/new', '/about', '/compare', '/dev/preview', '/dev/market-preview', '/dev/ui'];
 const widths = [1280, 390];
 const themes = ['light', 'dark'] as const;
 

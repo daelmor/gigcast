@@ -2,7 +2,7 @@
 
 Qloo-grounded Booking Briefs for concert promoters.
 
-A promoter picks an artist, a city and a date window. An agent on Claude (Vertex AI) calls Qloo's Taste AI and produces a document the promoter can take to a sponsor the same day: where the artist's audience lives (heatmap), demand and fit, a lineup, sponsors with outreach drafts, venues and partners near the heat, ticket tiers, a risk panel, and the full agent trace. Every claim carries one of three labels: **grounded** (a Qloo result the server verified against the entity ids Qloo returned), **inferred** (the model's reasoning on top of grounded data) or **no coverage** (Qloo returned nothing usable, and the brief says so instead of inventing).
+A promoter picks an artist, a city and a date window. An agent on Claude (Vertex AI) calls Qloo's Taste AI and produces a document the promoter can take to a sponsor the same day: a decision snapshot, where the artist's audience affinity concentrates (heatmap), cultural fit, a lineup, sponsor prospects with outreach drafts, venues and partners near the heat, pricing scenarios, a risk panel, and the full agent trace. Affinity is cultural overlap, never ticket demand, a price, a fee or a sponsor commitment, and the document says so wherever the two could be confused. Every claim carries one of three labels: **grounded** (a Qloo result the server verified against the entity ids Qloo returned), **inferred** (the model's reasoning on top of grounded data) or **no coverage** (Qloo returned nothing usable, and the brief says so instead of inventing).
 
 Built for the Qloo Agentic Hackathon. Progress lives in [STATUS.md](STATUS.md); routine decisions in [docs/decisions.md](docs/decisions.md); what the Qloo API really does in [docs/qloo-findings.md](docs/qloo-findings.md).
 
@@ -11,9 +11,10 @@ Built for the Qloo Agentic Hackathon. Progress lives in [STATUS.md](STATUS.md); 
 1. `/new` resolves the market (quick picks or a locality search with a country check, because "Panama City" resolves to Florida) and the artist (autocomplete through Qloo `/search`), takes the dates and optional promoter numbers, and calls `POST /api/briefs`.
 2. The server starts the agent loop: Claude on the Anthropic SDK tool runner with twelve typed Qloo tools plus `emit_brief`, streaming, adaptive thinking, a cached system prompt and a tool budget. Every tool records the Qloo request behind it.
 3. Events stream to the browser over SSE (`/api/briefs/:id/events`) and are persisted with the brief; `/brief/:id` shows the live trace, then the document.
-4. In parallel, a second run answers the lineup and sponsor question with every tool removed. The server checks each of those LLM-only names against what Qloo actually returned, and the brief shows the two columns side by side: what the model guessed and what the data says.
+4. Optionally (`COUNTERFACTUAL_RUN=on`; off by default and off on the live site), a second run answers the lineup and sponsor question with every tool removed, and the server checks each of those model-only names against what Qloo actually returned. The result is stored with the brief but no longer rendered per brief: the comparison lives at [`/compare`](https://gigcast.ai/compare) as a dated snapshot of one such run.
 5. Two more tools cover what Qloo does not know: `market_calendar` (public holidays, long weekends and the climate observed on the dates in previous years) and `risk_feed` (local news ingested from Google News and local outlets, classified by Claude Haiku into risk categories with severity and a one-line "so what", plus US and UK travel advisories and a decayed market risk score). Every risk in the brief links to its source; the server rejects any that the feed did not return.
-6. The server attaches the raw artifacts (heatmap cells, neighbourhoods, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, renders Markdown, and stores everything in Postgres. The brief is a public read-only link, printable to PDF, with the sponsor outreach drafts on their own page.
+6. The server attaches the raw artifacts (heatmap cells, neighbourhoods deduped by name, demographics, trend series, candidate lists), verifies every `grounded` pick and downgrades what it cannot verify, keeps calendar and climate context out of the risk list, forces the verdict to `insufficient_data` when the audience, lineup or sponsor section ended with no coverage, derives the decision snapshot (assessment, strongest cultural signal, top sponsor prospect, critical unknowns, next step, confidence) from the brief itself, renders Markdown, and stores everything in Postgres. The brief is a public read-only link, printable to PDF, with the sponsor outreach drafts on their own page.
+7. Briefs stored before the calibration pass of 2026-10-31 are calibrated at read time (`src/lib/brief/calibrate.ts`): provider wording, a short list of overclaim rewrites ("we are producing" becomes "we are exploring a potential", "willingness to pay" becomes "price-level affinity"), calendar items out of the risk list, neighbourhoods deduped, and the Markdown re-rendered from the calibrated brief. No migration.
 
 ## Why Qloo is load-bearing
 
@@ -27,9 +28,9 @@ Qloo's Taste AI is one affinity graph across artists, brands, places, localities
 | Lineup | `urn:entity:artist` with `signal.location`, `/v2/insights/compare` | Compatible artists in that city with explainability weights; shared tags behind a pairing. |
 | Sponsors | `urn:entity:brand` with `signal.location` and `signal.demographics.age` | Brands this audience over-indexes on, also for the dominant age bucket. |
 | Venues and partners | `urn:entity:place` with `filter.location` and place tags | Venues, bars, hotels and restaurants near the heat with price level and rating. |
-| Pricing | the heatmap price-level dimension and the places' price levels | The willingness-to-pay proxy behind the tiers. |
+| Pricing | the heatmap price-level dimension and the places' price levels | Consumption context for the pricing scenarios; never a ticket-price curve. |
 
-Without those calls the same questions get plausible guesses. The brief proves it on screen: a second run with every tool removed sits next to the grounded picks, and each LLM-only name is checked against what Qloo returned. In the first live comparison for Ricardo Arjona in Guatemala City, three of five LLM-only lineup picks appeared in Qloo's results and none of the five guessed sponsors did, while the grounded run's sponsors came straight from the audience's brand affinities.
+Without those calls the same questions get plausible guesses. [`/compare`](https://gigcast.ai/compare) shows it with a dated, pre-computed comparison for one brief (Natalia Lafourcade in Mexico City, run on 2026-10-30, same artist, city, dates and model for both arms): the model alone against the agent with the taste graph, each model-alone name checked against what Qloo returned. In that run two of five model-alone lineup names were also picked by the grounded run and three of five appear in Qloo's results; none of the five model-alone sponsor brands appear in the top-20 brand results, while the grounded picks came from the audience's brand affinities in the city. A name absent from a top-N list is not wrong, and grounding does not prove ticket demand or commercial feasibility. Earlier comparisons are logged in [docs/decisions.md](docs/decisions.md).
 
 ## Architecture
 
@@ -37,7 +38,7 @@ Without those calls the same questions get plausible guesses. The brief proves i
 flowchart LR
   B[Browser<br/>SvelteKit, MapLibre, ECharts] -->|POST /api/briefs, SSE| S[SvelteKit server<br/>Azure Container Apps]
   S -->|tool runner, streaming| C[Claude on Vertex AI<br/>12 Qloo tools + market_calendar + risk_feed + emit_brief]
-  S -->|no tools, in parallel| CF[Counterfactual run]
+  S -.->|optional, off by default| CF[Tool-less run]
   C -->|typed client, whitelist, cache| Q[(Qloo API)]
   C --> R[Risk layer]
   R --> N[Google News RSS, local outlets]
@@ -105,7 +106,7 @@ The end-to-end suite uses `AGENT_RUNNER=fake`, a canned trace plus the sample br
 | `QLOO_MODE` | no | `live` (cache first, API on miss), `replay` (cache only), `refresh`. |
 | `QLOO_CACHE_BACKEND` / `QLOO_CACHE_DIR` | no | `postgres` (default) or `file` for offline work and tests. |
 | `MAX_CONCURRENT_RUNS` / `MAX_QUEUED_RUNS` | no | Briefs running at once per instance (default 2) and how many more wait in a queue (default 6); beyond that requests get 429. |
-| `COUNTERFACTUAL_RUN` | no | `on` runs the tool-less counterfactual next to every brief; `off` (default) saves the call. |
+| `COUNTERFACTUAL_RUN` | no | `on` runs the tool-less counterfactual next to every brief and stores it in the brief JSON; `off` (default, and on the live site) saves the call. `/compare` renders a stored snapshot either way. |
 | `AGENT_RUNNER` | no | `vertex` (default) or `fake` for tests. |
 | `MIGRATE_ON_START` | no | `true` applies Drizzle migrations on boot (Cloud Run). |
 | `PUBLIC_MAP_STYLE_URL` | no | MapLibre style; OpenFreeMap Positron by default. |

@@ -5,11 +5,17 @@
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
 	import { pct, words } from './format';
+	import {
+		LINEUP_ARTIST_ONLY_NOTE,
+		LINEUP_ARTIST_ONLY_SUBTITLE,
+		lineupLocalityDifferentiated
+	} from '$lib/brief/lineup';
 	import type { ArtistPick, Brief, Candidate } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
 
 	const lineup = $derived(brief.draft.lineup);
+	const artistOnly = $derived(lineupLocalityDifferentiated(brief) === false);
 	const candidates = $derived(brief.artifacts.lineupCandidates?.items ?? []);
 	const byId = $derived(new Map(candidates.map((c) => [c.entityId.toLowerCase(), c])));
 	const subjectId = $derived(brief.resolution.artist.entityId.toLowerCase());
@@ -36,7 +42,15 @@
 </script>
 
 <section aria-labelledby="lineup">
-	<SectionHeader id="lineup" kicker="Section 3 · Lineup" title="Lineup" note={lineup.note} />
+	<SectionHeader
+		id="lineup"
+		kicker="Section 3 · Lineup"
+		title="Lineup"
+		note={lineup.note}
+		calibration={artistOnly
+			? `${LINEUP_ARTIST_ONLY_SUBTITLE}. ${LINEUP_ARTIST_ONLY_NOTE}`
+			: undefined}
+	/>
 	{#if lineup.picks.length === 0}
 		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
 			No lineup suggestions in this brief. {lineup.note.label === 'no_coverage'

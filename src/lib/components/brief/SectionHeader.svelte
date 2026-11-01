@@ -8,9 +8,11 @@
 		note: SectionNote;
 		/** Eyebrow above the title, for example "Section 1 · Audience". */
 		kicker?: string;
+		/** Calibration line: what the numbers below do and do not mean. */
+		calibration?: string;
 	}
 
-	let { id, title, note, kicker }: Props = $props();
+	let { id, title, note, kicker, calibration }: Props = $props();
 </script>
 
 <header class="mb-space-5 border-b border-line pb-space-4">
@@ -21,6 +23,9 @@
 		<h2 {id} class="scroll-mt-24 type-heading-1 text-ink">{title}</h2>
 		<EvidenceLabel label={note.label} />
 	</div>
+	{#if calibration}
+		<p class="mt-space-2 max-w-3xl type-small font-semibold text-ink-muted">{calibration}</p>
+	{/if}
 	<p class="mt-space-3 max-w-3xl type-body text-ink-muted">{note.summary}</p>
 	{#if note.caveats.length > 0}
 		<ul class="mt-space-2 max-w-3xl list-disc space-y-0.5 pl-5 type-small text-ink-subtle italic">

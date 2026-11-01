@@ -29,6 +29,4 @@ export function categoryLabel(category: string): string {
 	return (RISK_CATEGORY_LABELS as Record<string, string>)[category] ?? category.replace(/_/g, ' ');
 }
 
-export function riskLevelWord(value: number): 'quiet' | 'watch' | 'loud' {
-	return value < 25 ? 'quiet' : value < 60 ? 'watch' : 'loud';
-}
+export { riskLevelWord, RISK_SCORE_NOTE } from '$lib/brief/risk-level';

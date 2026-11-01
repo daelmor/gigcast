@@ -4,6 +4,7 @@
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
 	import { num } from './format';
+	import { CALIBRATION_COPY } from '$lib/brief/markdown';
 	import type { Brief, PlacePick } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
@@ -28,9 +29,10 @@
 <section aria-labelledby="venues">
 	<SectionHeader
 		id="venues"
-		kicker="Section 6 · Venues"
+		kicker="Section 5 · Venues"
 		title="Venues and partners"
 		note={venues.note}
+		calibration={CALIBRATION_COPY.venues}
 	/>
 	{#if groups.length === 0}
 		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
@@ -52,9 +54,11 @@
 									<div class="shrink-0 text-right type-small text-ink-muted tabular-nums">
 										{#if p.priceLevel !== undefined}
 											<p aria-label="Price level {p.priceLevel} of 4">
-												<span class="font-semibold text-ink">{'$'.repeat(p.priceLevel)}</span><span
-													class="text-line-strong">{'$'.repeat(4 - p.priceLevel)}</span
-												>
+												<span class="font-semibold text-ink" aria-hidden="true"
+													>{'$'.repeat(p.priceLevel)}</span
+												><span class="text-ink opacity-30" aria-hidden="true"
+													>{'$'.repeat(4 - p.priceLevel)}</span
+												><span class="sr-only">Price level {p.priceLevel} of 4</span>
 											</p>
 										{/if}
 										{#if p.rating !== undefined}

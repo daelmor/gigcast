@@ -21,7 +21,7 @@
 				'Tool runner: 12 Qloo tools,',
 				'market_calendar, risk_feed,',
 				'emit_brief',
-				'Counterfactual run: no tools'
+				'Optional tool-less run (off)'
 			]
 		},
 		{ x: 790, y: 40, w: 150, h: 90, title: 'Qloo API', lines: ['Taste AI graph'] },

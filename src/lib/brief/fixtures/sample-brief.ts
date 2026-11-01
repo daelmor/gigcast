@@ -65,7 +65,7 @@ const hotelsRef = ref(
 );
 
 const sponsorBody = (brand: string, angle: string) =>
-	`Hola equipo de ${brand},\n\nEstamos organizando un concierto de Ricardo Arjona en Ciudad de Guatemala del 20 al 22 de noviembre de 2026. ${angle}\n\nNos gustaria compartir una propuesta de patrocinio con visibilidad en escenario, activaciones en el lobby y contenido digital. Podemos coordinar una llamada esta semana?\n\nSaludos cordiales,\nEquipo de produccion`;
+	`Hola equipo de ${brand},\n\nEstamos explorando un posible concierto de Ricardo Arjona en Ciudad de Guatemala del 20 al 22 de noviembre de 2026, sujeto a confirmacion del artista y del recinto. ${angle}\n\nNos gustaria conversar sobre un posible patrocinio; cualquier propuesta o activacion quedaria sujeta a la aprobacion de la marca y del artista. Podemos coordinar una llamada esta semana?\n\nSaludos cordiales,\nEquipo de produccion`;
 
 const rawBrief: Brief = {
 	version: 1,
@@ -115,10 +115,11 @@ const rawBrief: Brief = {
 		}
 	},
 	draft: {
-		headline: 'Arjona in Guatemala City: strong home-market demand with a clear sponsor fit',
+		headline:
+			'Arjona in Guatemala City: strong home-market cultural fit with clear sponsor prospects',
 		verdict: 'promising',
 		keyPoints: [
-			'Arjona is the top local artist in Guatemala City and his audience concentrates around Zona 10 and Zona 4.',
+			'Arjona is the top local artist in Guatemala City and his audience affinity concentrates around Zona 10 and Zona 4.',
 			'The core audience skews 35 to 54; the 25 to 34 band is the growth lever.',
 			'Gaby Moreno is the strongest grounded co-headliner; the younger support slot is inferred only.',
 			'Adidas, Puma and Converse show the highest brand affinity in the city.',
@@ -128,7 +129,7 @@ const rawBrief: Brief = {
 			note: {
 				label: 'grounded',
 				summary:
-					'Qloo returned 855 heatmap cells for the locality with Arjona as the signal. Affinity peaks in the central business district and the historic centre.',
+					'The taste graph returned 855 heatmap cells for the locality with Arjona as the signal. Affinity peaks in the central business district and the historic centre.',
 				caveats: ['Heatmap cells are coarse geohashes, not venue-level data.']
 			},
 			hotspots: [
@@ -164,7 +165,7 @@ const rawBrief: Brief = {
 			note: {
 				label: 'grounded',
 				summary:
-					'Arjona is highly popular locally and his tag profile overlaps strongly with the city. Demand is stable with a mild upward drift.',
+					'Arjona is highly popular locally and his tag profile overlaps strongly with the city. The trend is stable with a mild upward drift.',
 				caveats: ['Trending series has only three points.']
 			},
 			popularity: 0.93,
@@ -280,8 +281,8 @@ const rawBrief: Brief = {
 			note: {
 				label: 'grounded',
 				summary:
-					'Qloo has thin venue inventory for Guatemala City, so most picks are bars and hotels close to the hotspots.',
-				caveats: ['Only one place of each kind was verified against Qloo results.']
+					'The taste graph has thin venue inventory for Guatemala City, so most picks are bars and hotels close to the hotspots.',
+				caveats: ['Only one place of each kind was verified against taste graph results.']
 			},
 			picks: [
 				{
@@ -291,7 +292,7 @@ const rawBrief: Brief = {
 					address: 'Zona 5, Ciudad de Guatemala',
 					lat: 14.6258,
 					lon: -90.5036,
-					why: 'The promoter venue; capacity of 12,000 matches the demand estimate.',
+					why: 'The promoter venue; the 12,000 capacity is the promoter figure, not a data result.',
 					label: 'inferred',
 					sources: ['toolu_01H']
 				},
@@ -323,7 +324,7 @@ const rawBrief: Brief = {
 					kind: 'bundle_partner',
 					address: 'Zona 10, Ciudad de Guatemala',
 					priceLevel: 3,
-					why: 'Ticket and dinner bundle partner; plausible but not directly ranked by Qloo.',
+					why: 'Ticket and dinner bundle partner; plausible but not directly ranked by the taste graph.',
 					label: 'inferred',
 					sources: ['toolu_01H']
 				}
@@ -348,7 +349,7 @@ const rawBrief: Brief = {
 					name: 'Preferente',
 					price: 500,
 					share: 0.35,
-					rationale: 'Core 35 to 54 fans in Zona 10 and Zona 4 show higher spend.'
+					rationale: 'Core 35 to 54 fans in Zona 10 and Zona 4 show higher price-level affinity.'
 				},
 				{
 					name: 'VIP',
@@ -359,7 +360,7 @@ const rawBrief: Brief = {
 			],
 			assumptions: [
 				'Capacity of 12,000 per night.',
-				'Price level 3 to 4 cells correlate with VIP demand.'
+				'Price level 3 to 4 cells are consumption context for a VIP tier, not a demand signal.'
 			]
 		},
 		risks: {
@@ -403,7 +404,7 @@ const rawBrief: Brief = {
 					severity: 3,
 					title: 'Anuncian gira de Ricardo Arjona: dos fechas confirmadas en el Domo Polideportivo',
 					soWhat:
-						'A second announced date in the same market can split demand and sponsor attention.',
+						'A second announced date in the same market can split the audience and sponsor attention.',
 					sourceName: 'Soy502',
 					sourceUrl: 'https://www.soy502.com/articulo/arjona-gira-fechas-domo-polideportivo',
 					publishedAt: '2026-10-24T18:30:00.000Z',
