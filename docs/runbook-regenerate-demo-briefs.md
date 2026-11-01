@@ -41,6 +41,10 @@ post '{"artist":"Rick Ross","city":"Tampa","country":"US","dateFrom":"2027-03-26
 
 Watch progress on https://gigcast.ai (the "Recent briefs" list shows Running and Queued) or with `curl -s "$B?limit=12"`.
 
+## Done on 2026-11-01
+
+Steps 1 to 3 were run on 2026-11-01 (PR #20 merged as `5c5ebc9`, deployed, the six briefs regenerated from the API in one burst so two of them queued). Results: `brief_OC6b4IqHiK` Natalia Lafourcade (`mixed`: the risk feed carried an October 2026 retirement announcement, so availability dominates), `brief_RjSmDPHv7f` Criolo, `brief_k2luc3u4Iw` Dante Spinetta, `brief_g_GQdaN3Ty` Janelle Monáe, `brief_MgSLJrw2pC` Bad Bunny and `brief_JF-PI2-k7f` Rick Ross (all `promising`); 339 to 579 s each. The dedupe dry run would have kept the OLD Natalia Lafourcade brief (three more grounded items), so the retirement was done by id instead (`.cache/ops/retire-old-featured.mts`, same backup format, backup in `.cache/backups/briefs-retire-2026-11-01T02-35-39-935Z.json`): five old briefs deleted and `brief_EKSh8E9vLF` unlisted (`is_public = false`) rather than deleted, because `/compare` cites it as the evidence brief and its "Open the brief" link must keep working. Unlisted briefs stay reachable by link and leave every list.
+
 ## 3. Only after all six are `complete`: dedupe, then check the landing
 
 `pnpm briefs:dedupe` reads `DATABASE_URL` from the local env file, which points at Neon: this is the one sanctioned production write of the runbook. The dry run prints each artist-and-locality group and which brief it would keep (the most complete, newest among equals); `--yes` backs the losers up to `.cache/backups/<timestamp>/` as JSON before deleting them.
@@ -51,6 +55,8 @@ pnpm briefs:dedupe --yes    # backs up to .cache/backups, then deletes the old c
 ```
 
 Then reload https://gigcast.ai and confirm that "See a finished brief" opens the new ids for the six markets and that "Recent briefs" shows each artist and city once. (The list already collapses duplicates in the query, so a stale duplicate would only show up on `/market/:slug` counts, not on the landing.)
+
+Before `--yes`, read the dry run: the dedupe keeps the most complete brief, not the newest, so a regenerated brief with fewer grounded items loses to the old one. When that happens, or when an old brief is cited by `/compare`, retire by id (delete with a backup, or unlist with `is_public = false`) instead of running `--yes`.
 
 If a regenerated brief ends `partial` or `failed`, open it and press "Run this brief again" before deduping; the dedupe keeps the most complete copy, so a failed rerun never replaces a complete brief.
 
