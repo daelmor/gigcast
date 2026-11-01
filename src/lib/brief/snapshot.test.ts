@@ -6,7 +6,9 @@ import {
 	buildDecisionSnapshot,
 	criticalUnknowns,
 	headlineClause,
+	NO_NEIGHBOURHOODS,
 	NOT_AVAILABLE,
+	signalBand,
 	SPONSOR_SUFFIX
 } from './snapshot.ts';
 import { VERDICT_LABEL, VERDICT_NEXT_STEP } from './verdict.ts';
@@ -16,6 +18,25 @@ const noCoverage = (summary: string): SectionNote => ({
 	summary,
 	caveats: []
 });
+
+/** The sample brief with a neighbourhood ranking attached (the fixture has none). */
+function withNeighbourhoods(
+	items = [
+		{ entityId: 'z10', name: 'Zona 10', affinity: 0.9 },
+		{ entityId: 'z4', name: 'Zona 4', affinity: 0.7 }
+	]
+): Brief {
+	const brief = structuredClone(sampleBrief);
+	brief.artifacts.neighbourhoods = { items, source: sampleBrief.artifacts.heatmap!.source };
+	return brief;
+}
+
+function withTasteScore(brief: Brief, score: number): Brief {
+	const out = structuredClone(brief);
+	out.draft.demandAndFit.tasteMatch!.score = score;
+	out.draft.demandAndFit.tasteMatch!.label = 'grounded';
+	return out;
+}
 
 describe('headlineClause', () => {
 	it('takes the claim after an "Artist in City" title', () => {
@@ -42,6 +63,18 @@ describe('headlineClause', () => {
 		const clause = headlineClause(long);
 		expect(clause.length).toBeLessThanOrEqual(161);
 		expect(clause.endsWith('…')).toBe(true);
+	});
+});
+
+describe('signalBand', () => {
+	it('is low below 0.30, moderate up to 0.60, strong above', () => {
+		expect(signalBand(0)).toBe('low');
+		expect(signalBand(0.29)).toBe('low');
+		expect(signalBand(0.3)).toBe('moderate');
+		expect(signalBand(0.45)).toBe('moderate');
+		expect(signalBand(0.6)).toBe('moderate');
+		expect(signalBand(0.61)).toBe('strong');
+		expect(signalBand(1)).toBe('strong');
 	});
 });
 
@@ -76,9 +109,11 @@ describe('buildDecisionSnapshot', () => {
 		expect(snap.assessment).toBe(
 			`${VERDICT_LABEL.promising}. Strong home-market cultural fit with clear sponsor prospects.`
 		);
-		expect(snap.strongestSignal.kind).toBe('taste_match');
-		expect(snap.strongestSignal.text).toBe('Taste match with the city 86%');
-		expect(snap.strongestSignal.sources).toEqual(['toolu_01E', 'toolu_01D']);
+		expect(snap.fitSignal.kind).toBe('taste_match');
+		expect(snap.fitSignal.text).toBe('Taste match with the city: 86% (strong)');
+		expect(snap.fitSignal.band).toBe('strong');
+		expect(snap.fitSignal.sources).toEqual(['toolu_01E', 'toolu_01D']);
+		expect(snap.coverage).toBeUndefined();
 		expect(snap.topSponsor?.name).toBe('Adidas');
 		expect(snap.topSponsor?.text).toBe(`Adidas (affinity 91%), ${SPONSOR_SUFFIX}`);
 		// The fixture promoter supplied a venue with capacity and a price range, no past sales.
@@ -92,49 +127,82 @@ describe('buildDecisionSnapshot', () => {
 		expect(snap.confidence.businessText).toMatch(/^Business case not validated/);
 	});
 
+	it('qualifies the signal by band', () => {
+		expect(buildDecisionSnapshot(withTasteScore(sampleBrief, 0.15)).fitSignal.text).toBe(
+			'Taste match with the city: 15% (low)'
+		);
+		expect(buildDecisionSnapshot(withTasteScore(sampleBrief, 0.45)).fitSignal.text).toBe(
+			'Taste match with the city: 45% (moderate)'
+		);
+		expect(buildDecisionSnapshot(withTasteScore(sampleBrief, 0.95)).fitSignal.text).toBe(
+			'Taste match with the city: 95% (strong)'
+		);
+	});
+
+	it('adds the highest-affinity neighbourhood and reads mixed when the signal is low', () => {
+		const snap = buildDecisionSnapshot(withTasteScore(withNeighbourhoods(), 0.15));
+		expect(snap.fitSignal.band).toBe('low');
+		expect(snap.coverage).toEqual({
+			text: 'Zona 10, affinity 90%',
+			label: 'grounded',
+			sources: [sampleBrief.artifacts.heatmap!.source.toolCallId]
+		});
+		expect(snap.confidence.cultural).toBe('mixed');
+		expect(snap.confidence.culturalText).toBe(
+			'Cultural evidence mixed: 5 of 5 sections grounded, but the cultural fit signal is low.'
+		);
+		// Moderate and strong signals add no second line and leave the evidence reading alone.
+		const moderate = buildDecisionSnapshot(withTasteScore(withNeighbourhoods(), 0.45));
+		expect(moderate.coverage).toBeUndefined();
+		expect(moderate.confidence.cultural).toBe('strong');
+	});
+
+	it('says so when a low signal has no neighbourhood ranking, and never upgrades sparse evidence', () => {
+		const noHoods = buildDecisionSnapshot(withTasteScore(sampleBrief, 0.1));
+		expect(noHoods.coverage).toEqual({ text: NO_NEIGHBOURHOODS, sources: [] });
+		const sparse = withTasteScore(withNeighbourhoods(), 0.1);
+		sparse.draft.lineup.note = noCoverage('Nothing.');
+		sparse.draft.sponsors.note = noCoverage('Nothing.');
+		expect(buildDecisionSnapshot(sparse).confidence.cultural).toBe('sparse');
+	});
+
 	it('lists every unknown when there are no promoter inputs', () => {
 		const brief: Brief = { ...sampleBrief, input: { ...sampleBrief.input, promoter: undefined } };
 		expect(buildDecisionSnapshot(brief).unknowns).toHaveLength(4);
 	});
 
 	it('falls back to the neighbourhood signal, then the brand, when the taste match is not grounded', () => {
-		const brief = structuredClone(sampleBrief);
+		const brief = withNeighbourhoods();
 		brief.draft.demandAndFit.tasteMatch!.label = 'inferred';
-		brief.artifacts.neighbourhoods = {
-			items: [
-				{ entityId: 'z10', name: 'Zona 10', affinity: 0.9 },
-				{ entityId: 'z4', name: 'Zona 4', affinity: 0.7 }
-			],
-			source: sampleBrief.artifacts.heatmap!.source
-		};
-		const hood = buildDecisionSnapshot(brief).strongestSignal;
+		const hood = buildDecisionSnapshot(brief).fitSignal;
 		expect(hood.kind).toBe('neighbourhood');
-		expect(hood.text).toBe('Strongest neighbourhood: Zona 10, affinity 90%');
+		expect(hood.text).toBe('Strongest neighbourhood: Zona 10, affinity 90% (strong)');
+		expect(hood.band).toBe('strong');
 		brief.artifacts.neighbourhoods = undefined;
-		const brand = buildDecisionSnapshot(brief).strongestSignal;
+		const brand = buildDecisionSnapshot(brief).fitSignal;
 		expect(brand.kind).toBe('brand');
-		expect(brand.text).toBe('Top brand affinity: Adidas 91%');
+		expect(brand.text).toBe('Top brand affinity: Adidas 91% (strong)');
 		brief.draft.sponsors.picks = [];
 		const none = buildDecisionSnapshot(brief);
-		expect(none.strongestSignal.text).toBe(NOT_AVAILABLE);
+		expect(none.fitSignal.text).toBe(NOT_AVAILABLE);
+		expect(none.fitSignal.band).toBeUndefined();
+		expect(none.coverage).toBeUndefined();
 		expect(none.topSponsor).toBeUndefined();
 	});
 
 	it('says broad coverage when the neighbourhoods do not differ', () => {
-		const brief = structuredClone(sampleBrief);
-		brief.draft.demandAndFit.tasteMatch = undefined;
-		brief.artifacts.neighbourhoods = {
-			items: Array.from({ length: 10 }, (_, i) => ({
+		const brief = withNeighbourhoods(
+			Array.from({ length: 10 }, (_, i) => ({
 				entityId: `h${i}`,
 				name: `Comuna ${i}`,
 				affinity: 0.804
-			})),
-			source: sampleBrief.artifacts.heatmap!.source
-		};
-		const signal = buildDecisionSnapshot(brief).strongestSignal;
+			}))
+		);
+		brief.draft.demandAndFit.tasteMatch = undefined;
+		const signal = buildDecisionSnapshot(brief).fitSignal;
 		expect(signal.kind).toBe('neighbourhood');
 		expect(signal.text).toBe(
-			'Broad audience affinity across 8 neighbourhoods at about 80%, with no meaningful differentiation'
+			'Broad audience affinity across 8 neighbourhoods at about 80% (strong), with no meaningful differentiation'
 		);
 	});
 
@@ -167,7 +235,7 @@ describe('buildDecisionSnapshot', () => {
 		expect(snap.assessment).toBe(
 			`${VERDICT_LABEL.insufficient_data}. The agent did not deliver a full brief.`
 		);
-		expect(snap.strongestSignal.text).toBe(NOT_AVAILABLE);
+		expect(snap.fitSignal.text).toBe(NOT_AVAILABLE);
 		expect(snap.topSponsor).toBeUndefined();
 		expect(snap.confidence.cultural).toBe('sparse');
 		expect(snap.unknowns).toHaveLength(4);

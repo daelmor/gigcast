@@ -135,8 +135,9 @@ describe('renderBriefMarkdown', () => {
 		const snapshot = md.slice(md.indexOf('## Decision snapshot'), md.indexOf('## Key points'));
 		expect(snapshot).toContain('- Assessment: Promising cultural fit. ');
 		expect(snapshot).toMatch(
-			/- Strongest cultural signal: Taste match with the city 86% \[grounded\]\[S\d+\]/
+			/- Cultural fit signal: Taste match with the city: 86% \(strong\) \[grounded\]\[S\d+\]/
 		);
+		expect(snapshot).not.toContain('Highest-affinity neighbourhood');
 		expect(snapshot).toContain(
 			'- Top sponsor prospect: Adidas (affinity 91%), audience affinity only; interest not confirmed'
 		);

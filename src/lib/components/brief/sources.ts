@@ -52,7 +52,8 @@ export function buildSourceIndex(brief: Brief): SourceIndex {
 	const { draft, artifacts: a } = brief;
 	// The decision snapshot sits above the sections and cites first, as in the Markdown.
 	const snapshot = buildDecisionSnapshot(brief);
-	cite(snapshot.strongestSignal.sources);
+	cite(snapshot.fitSignal.sources);
+	cite(snapshot.coverage?.sources);
 	cite(snapshot.topSponsor?.sources);
 	for (const h of draft.audience.hotspots) cite(h.sources);
 	cite([a.heatmap?.source.toolCallId]);

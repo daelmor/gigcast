@@ -20,6 +20,7 @@ import {
 	type SourceRef,
 	type SponsorPick
 } from './schema';
+import { RISK_SCORE_NOTE, riskLevelWord } from './risk-level';
 import { buildDecisionSnapshot, NOT_AVAILABLE } from './snapshot';
 import { VERDICT_LABEL, VERDICT_MEANING } from './verdict';
 
@@ -183,13 +184,10 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 	const snap = buildDecisionSnapshot(brief);
 	heading(2, 'Decision snapshot');
 	out.push(`- Assessment: ${snap.assessment}`);
-	out.push(
-		`- Strongest cultural signal: ${snap.strongestSignal.text}${
-			snap.strongestSignal.label
-				? ` ${badge(snap.strongestSignal.label, snap.strongestSignal.sources)}`
-				: ''
-		}`
-	);
+	const line = (l: { text: string; label?: Label; sources: string[] }) =>
+		`${l.text}${l.label ? ` ${badge(l.label, l.sources)}` : ''}`;
+	out.push(`- Cultural fit signal: ${line(snap.fitSignal)}`);
+	if (snap.coverage) out.push(`- Highest-affinity neighbourhood: ${line(snap.coverage)}`);
 	out.push(
 		`- Top sponsor prospect: ${
 			snap.topSponsor
@@ -412,7 +410,7 @@ export function renderBriefMarkdown(brief: Brief, options: RenderBriefOptions = 
 		const feed = a.riskFeed;
 		if (feed) {
 			out.push(
-				`Market risk score ${feed.score.value}/100 from ${feed.score.itemCount} classified items (${feed.score.recentCount} in the last week)${feed.ingestedAt ? `, news ingested ${feed.ingestedAt.slice(0, 10)}` : ''}.${citeRef(feed.source)}`
+				`Market risk score ${feed.score.value}/100 (${riskLevelWord(feed.score.value)}) from ${feed.score.itemCount} classified items (${feed.score.recentCount} in the last week)${feed.ingestedAt ? `, news ingested ${feed.ingestedAt.slice(0, 10)}` : ''}.${citeRef(feed.source)} ${RISK_SCORE_NOTE}`
 			);
 			if (feed.advisories.length) {
 				blank();

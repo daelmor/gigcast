@@ -10,6 +10,7 @@ import { VERDICT_LABEL, VERDICT_NEXT_STEP, type Verdict } from './verdict';
 
 export const NOT_AVAILABLE = 'Not available';
 export const SPONSOR_SUFFIX = 'audience affinity only; interest not confirmed';
+export const NO_NEIGHBOURHOODS = 'No neighbourhood ranking available';
 
 /** The five sections whose labels say how much cultural evidence the brief rests on. */
 export const CULTURAL_SECTIONS = [
@@ -21,6 +22,15 @@ export const CULTURAL_SECTIONS = [
 ] as const;
 
 export type CulturalEvidence = 'strong' | 'mixed' | 'sparse';
+
+/** How strong the chosen fit signal is: low below 0.30, moderate up to 0.60, strong above. */
+export type SignalBand = 'low' | 'moderate' | 'strong';
+
+export function signalBand(value: number): SignalBand {
+	if (value < 0.3) return 'low';
+	if (value <= 0.6) return 'moderate';
+	return 'strong';
+}
 
 export interface SnapshotLine {
 	text: string;
@@ -34,9 +44,14 @@ export interface DecisionSnapshot {
 	/** Verdict label plus one clause from the headline. */
 	assessment: string;
 	headlineClause: string;
-	strongestSignal: SnapshotLine & {
+	/** Taste match, else the top neighbourhood, else the top brand affinity; with its band. */
+	fitSignal: SnapshotLine & {
 		kind: 'taste_match' | 'neighbourhood' | 'brand' | 'none';
+		value?: number;
+		band?: SignalBand;
 	};
+	/** Only when the fit signal is low: where any coverage is, from the neighbourhood ranking. */
+	coverage?: SnapshotLine;
 	topSponsor: (SnapshotLine & { name: string; affinity?: number }) | undefined;
 	/** Deterministic, from what the promoter did not supply. */
 	unknowns: string[];
@@ -51,6 +66,7 @@ export interface DecisionSnapshot {
 }
 
 const pct = (v: number): string => `${Math.round(v * 100)}%`;
+const withBand = (v: number): string => `${pct(v)} (${signalBand(v)})`;
 
 const CLAUSE_MAX = 160;
 
@@ -92,6 +108,25 @@ export function criticalUnknowns(promoter: PromoterInputs | undefined): string[]
 	return out;
 }
 
+/** The neighbourhood line used both as a fit signal and as the coverage line under a low signal. */
+function neighbourhoodLine(
+	brief: Brief,
+	mode: 'signal' | 'coverage'
+): (SnapshotLine & { value: number }) | undefined {
+	const hoods = brief.artifacts.neighbourhoods;
+	if (!hoods || hoods.items.length === 0) return undefined;
+	const ranking = rankNeighbourhoods(hoods.items);
+	const top = ranking.items[0];
+	const value = top.affinity;
+	const amount = mode === 'signal' ? withBand(value) : pct(value);
+	const text = ranking.flat
+		? `Broad audience affinity across ${ranking.items.length} neighbourhoods at about ${amount}, with no meaningful differentiation`
+		: mode === 'signal'
+			? `Strongest neighbourhood: ${top.name}, affinity ${amount}`
+			: `${top.name}, affinity ${amount}`;
+	return { text, value, label: 'grounded', sources: [hoods.source.toolCallId] };
+}
+
 export function buildDecisionSnapshot(brief: Brief): DecisionSnapshot {
 	const { draft, artifacts, input } = brief;
 	const verdict = draft.verdict;
@@ -100,50 +135,49 @@ export function buildDecisionSnapshot(brief: Brief): DecisionSnapshot {
 		? `${VERDICT_LABEL[verdict]}. ${clause}.`
 		: `${VERDICT_LABEL[verdict]}.`;
 
-	// Strongest cultural signal, in order of preference, from grounded data that is present.
-	let strongestSignal: DecisionSnapshot['strongestSignal'] = {
-		kind: 'none',
-		text: NOT_AVAILABLE,
-		sources: []
-	};
+	// Cultural fit signal, in order of preference, from grounded data that is present.
+	let fitSignal: DecisionSnapshot['fitSignal'] = { kind: 'none', text: NOT_AVAILABLE, sources: [] };
 	const taste = draft.demandAndFit.tasteMatch;
+	const hoodSignal =
+		draft.audience.note.label === 'grounded' ? neighbourhoodLine(brief, 'signal') : undefined;
 	if (taste && typeof taste.score === 'number' && taste.label === 'grounded') {
-		strongestSignal = {
+		fitSignal = {
 			kind: 'taste_match',
-			text: `Taste match with the city ${pct(taste.score)}`,
+			text: `Taste match with the city: ${withBand(taste.score)}`,
+			value: taste.score,
+			band: signalBand(taste.score),
 			label: 'grounded',
 			sources: [
 				artifacts.artistTags?.source.toolCallId,
 				artifacts.cityTags?.source.toolCallId
 			].filter((x): x is string => !!x)
 		};
-	} else if (
-		artifacts.neighbourhoods &&
-		artifacts.neighbourhoods.items.length > 0 &&
-		draft.audience.note.label === 'grounded'
-	) {
-		const ranking = rankNeighbourhoods(artifacts.neighbourhoods.items);
-		const top = ranking.items[0];
-		strongestSignal = {
-			kind: 'neighbourhood',
-			text: ranking.flat
-				? `Broad audience affinity across ${ranking.items.length} neighbourhoods at about ${pct(top.affinity)}, with no meaningful differentiation`
-				: `Strongest neighbourhood: ${top.name}, affinity ${pct(top.affinity)}`,
-			label: 'grounded',
-			sources: [artifacts.neighbourhoods.source.toolCallId]
-		};
+	} else if (hoodSignal) {
+		fitSignal = { kind: 'neighbourhood', band: signalBand(hoodSignal.value), ...hoodSignal };
 	} else {
 		const brand = draft.sponsors.picks.find(
 			(p) => p.label === 'grounded' && typeof p.affinity === 'number'
 		);
 		if (brand) {
-			strongestSignal = {
+			const value = brand.affinity as number;
+			fitSignal = {
 				kind: 'brand',
-				text: `Top brand affinity: ${brand.name} ${pct(brand.affinity as number)}`,
+				text: `Top brand affinity: ${brand.name} ${withBand(value)}`,
+				value,
+				band: signalBand(value),
 				label: 'grounded',
 				sources: brand.sources
 			};
 		}
+	}
+
+	// A low fit still has somewhere the affinity concentrates; show it next to the weak signal.
+	let coverage: SnapshotLine | undefined;
+	if (fitSignal.band === 'low') {
+		const line = neighbourhoodLine(brief, 'coverage');
+		coverage = line
+			? { text: line.text, label: line.label, sources: line.sources }
+			: { text: NO_NEIGHBOURHOODS, sources: [] };
 	}
 
 	const sponsor = draft.sponsors.picks.find((p) => p.label === 'grounded');
@@ -165,11 +199,14 @@ export function buildDecisionSnapshot(brief: Brief): DecisionSnapshot {
 		if (label === 'no_coverage') noCoverage++;
 	}
 	const total = CULTURAL_SECTIONS.length;
-	const cultural: CulturalEvidence =
+	let cultural: CulturalEvidence =
 		grounded === total ? 'strong' : noCoverage >= 2 || grounded <= 2 ? 'sparse' : 'mixed';
+	// Five grounded sections do not make a weak fit strong: a low signal reads mixed at best.
+	const lowSignal = fitSignal.band === 'low';
+	if (lowSignal && cultural === 'strong') cultural = 'mixed';
 	const culturalText = `Cultural evidence ${cultural}: ${grounded} of ${total} sections grounded${
 		noCoverage ? `, ${noCoverage} with no coverage` : ''
-	}.`;
+	}${lowSignal ? ', but the cultural fit signal is low' : ''}.`;
 	const businessText = input.promoter?.pastSales?.length
 		? 'Business case not validated: promoter-supplied sales history is in the inputs but was not verified.'
 		: 'Business case not validated: no sales history, fee, capacity or cost data in this brief.';
@@ -178,7 +215,8 @@ export function buildDecisionSnapshot(brief: Brief): DecisionSnapshot {
 		verdict,
 		assessment,
 		headlineClause: clause,
-		strongestSignal,
+		fitSignal,
+		coverage,
 		topSponsor,
 		unknowns: criticalUnknowns(input.promoter),
 		nextStep: VERDICT_NEXT_STEP[verdict],

@@ -32,15 +32,27 @@
 				</dd>
 			</div>
 			<div class={row}>
-				<dt class="type-label text-ink-subtle">Strongest cultural signal</dt>
+				<dt class="type-label text-ink-subtle">Cultural fit signal</dt>
 				<dd class="mt-space-1 type-body text-ink sm:mt-0">
-					{snap.strongestSignal.text}
-					{#if snap.strongestSignal.label}
-						<EvidenceLabel label={snap.strongestSignal.label} size="sm" />
-						<SourceMarks sources={snap.strongestSignal.sources} />
+					{snap.fitSignal.text}
+					{#if snap.fitSignal.label}
+						<EvidenceLabel label={snap.fitSignal.label} size="sm" />
+						<SourceMarks sources={snap.fitSignal.sources} />
 					{/if}
 				</dd>
 			</div>
+			{#if snap.coverage}
+				<div class={row}>
+					<dt class="type-label text-ink-subtle">Highest-affinity neighbourhood</dt>
+					<dd class="mt-space-1 type-body text-ink sm:mt-0">
+						{snap.coverage.text}
+						{#if snap.coverage.label}
+							<EvidenceLabel label={snap.coverage.label} size="sm" />
+							<SourceMarks sources={snap.coverage.sources} />
+						{/if}
+					</dd>
+				</div>
+			{/if}
 			<div class={row}>
 				<dt class="type-label text-ink-subtle">Top sponsor prospect</dt>
 				<dd class="mt-space-1 type-body text-ink sm:mt-0">
