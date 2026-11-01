@@ -221,6 +221,10 @@
 
 	<section aria-labelledby="sources-title">
 		<h2 id="sources-title" class="type-heading-1">Sources</h2>
+		<p class="mt-space-2 type-small text-ink-subtle">
+			Numbers are the brief's own source numbers, so [S10] here is [S10] on the brief page; only the
+			sources the lineup and sponsor picks cite are listed.
+		</p>
 		<ol class="mt-space-4 space-y-space-2">
 			{#each snap.sources as s (s.n)}
 				<li
