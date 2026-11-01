@@ -5,6 +5,7 @@
 	import Chip from '../ui/Chip.svelte';
 	import EvidenceLabel from '../ui/EvidenceLabel.svelte';
 	import { pct } from './format';
+	import { CALIBRATION_COPY } from '$lib/brief/markdown';
 	import type { Brief } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
@@ -41,7 +42,7 @@
 
 	<div class="mt-space-5 rounded-lg bg-caution-soft p-space-4 type-small text-caution">
 		These are drafts written by the model from the affinity signals in the brief. Review and edit
-		them before use. gigcast never sends anything: the email link only opens your own email app.
+		them before use. gigcast never sends anything: the email link only opens your own email app. {CALIBRATION_COPY.sponsors}
 	</div>
 
 	{#if picks.length === 0}

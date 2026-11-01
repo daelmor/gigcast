@@ -4,6 +4,7 @@
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
 	import { num } from './format';
+	import { CALIBRATION_COPY } from '$lib/brief/markdown';
 	import type { Brief, PlacePick } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
@@ -31,6 +32,7 @@
 		kicker="Section 6 · Venues"
 		title="Venues and partners"
 		note={venues.note}
+		calibration={CALIBRATION_COPY.venues}
 	/>
 	{#if groups.length === 0}
 		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">

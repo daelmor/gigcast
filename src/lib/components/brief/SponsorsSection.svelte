@@ -7,6 +7,7 @@
 	import SectionHeader from './SectionHeader.svelte';
 	import SourceMarks from './SourceMarks.svelte';
 	import { pct } from './format';
+	import { CALIBRATION_COPY } from '$lib/brief/markdown';
 	import type { Brief } from '$lib/brief/schema';
 
 	let { brief }: { brief: Brief } = $props();
@@ -33,6 +34,7 @@
 		kicker="Section 4 · Sponsors"
 		title="Sponsors"
 		note={sponsors.note}
+		calibration={CALIBRATION_COPY.sponsors}
 	/>
 	{#if sponsors.picks.length === 0}
 		<p class="rounded-lg bg-surface-sunken p-space-4 type-small text-ink-muted">
